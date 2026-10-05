@@ -46,6 +46,20 @@ body.cinema main{max-width:100%;padding:0 0 44px}
 .cine-controls .choice{margin-top:12px;min-height:52px;text-align:center}
 @media(min-width:600px){.scene-tall{min-height:320px}.cine-art{min-height:56vh}.cine-script .prologue-text{max-height:40vh;font-size:17px}}
 @media(prefers-reduced-motion:reduce){.kenburns,.typecaret{animation:none}}
+/* ---- Milestone 2: inventory + scavenging prototype ---- */
+.inv-tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0}
+.inv-tabs button{min-height:56px;text-align:center;font-weight:900;letter-spacing:.12em}
+.inv-tabs button.selected{background:#5d7648;border-color:#e5efbc}
+.inv-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:10px 0}
+@media(min-width:600px){.inv-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.slot{min-height:64px;font-size:13px}
+.slot small{display:block;color:#a3af94;font-size:11px;margin-top:3px}
+.slot.sel{background:#5d7648;border-color:#e5efbc}
+.slot.empty{opacity:.25;min-height:44px}
+.detail{border:1px solid #91b279;border-radius:8px;padding:12px;margin:12px 0;background:#22301f}
+.detail h3{margin:4px 0 6px;color:#e5f5c4}
+.found{border:2px solid #e8c96a;border-radius:8px;padding:14px;margin:14px 0;background:#2a2417}
+.found h3{color:#f4dcb0;margin:6px 0}
 </style></head><body><main><header><div class="eyebrow">CONTINUITY NETWORK // 2089</div><h1>THE LONG ROAD</h1><div class="row"><span class="muted">EVERY MILE COSTS SOMETHING.</span><span class="tag">ALPHA 0.2.2</span></div></header><div id="app"></div><div class="footer">An original prototype. Saves locally in this browser. No accounts or network required.</div></main><div id="toast" role="status"></div><script>
 const $=s=>document.querySelector(s),app=$('#app');let g=null,selected='',difficulty='story',sex='Male',car='eagle';const cars={eagle:{name:'AMC Eagle',fuel:32,food:17,water:17,parts:5,hp:75,eff:1.0,wear:3,desc:'Balanced wagon. Efficient and adaptable.'},wagon:{name:'Jeep Wagoneer',fuel:48,food:23,water:22,parts:6,hp:100,eff:1.6,wear:2,desc:'Heavy hauler. Tough, thirsty, and spacious.'},raptor:{name:'Baby Raptor',fuel:40,food:14,water:16,parts:4,hp:90,eff:1.3,wear:1,desc:'Off-road specialist. Fast but cramped.'},m4:{name:'BMW M4',fuel:36,food:11,water:13,parts:3,hp:65,eff:1.4,wear:5,desc:'Highway rocket. Fragile on ruined roads.'}};const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const btn=(t,fn,cls='')=>`<button class="${cls}" onclick="${fn}">${t}</button>`;
 const ASSETS='assets/';
@@ -116,7 +130,17 @@ if(s.v<5){s.v=5;
 if(Array.isArray(s.crew))s.crew=s.crew.filter(function(c){return c&&c.name!=='Eli';});
 var _lp=['opening','road','crew','journal','quest','battle','event','end','arrival','breakdown'];
 if(_lp.indexOf(s.phase)>=0)s.phase='phase1_done';
-}return s}
+}
+// M6 (Milestone 2): simulation state — individual inventories, survival,
+// scavenging. Conservative: fills only what's missing; empty packs, neutral
+// hunger/thirst/health, no speculative content.
+if(s.v<6){s.v=6;initSimState(s);}
+return s}
+
+
+/* Combined Milestone 2 sim-state initializer. Defensive: only fills fields
+   that are missing, so v5 saves migrate cleanly and new games start sane. */
+function initSimState(s){initInvState(s);initSurvState(s);if(!s.scav)s.scav={};if(!('found'in s))s.found=null;if(s.together===undefined)s.together=true;return s}
 
 
 var CONSEQUENCE_KINDS=['decision','encounter','settlement','npc','mercy','quest'];
@@ -136,7 +160,7 @@ function encounterState(id){if(!g.encounters)g.encounters={};if(!g.encounters[id
 
 function noteTreatment(id,key){const n=npcState(id);if(!Array.isArray(n.treatment))n.treatment=[];if(n.treatment.indexOf(key)<0)n.treatment.push(key);return n.treatment}
 
-function start(){document.body.classList.remove('cinema');let existing=localStorage.getItem('longroad_v01');screen(`${scene('bg-title.webp')}<div class="panel"><h2>COLORADO IS CALLING.</h2><p>Sixty years after the collapse began in the shadow of the autonomous defense network CUSTODIAN, a transmission reaches Mercy, Texas. It promises clean water in Colorado. Your settlement has nineteen days left.</p><p class="hero">Four survivors. One vehicle. 780 miles. The road remembers.</p>${btn('NEW JOURNEY','prologue(0)','primary')}${existing?btn('CONTINUE SAVED JOURNEY','resume()','choice'):''}</div>`)}
+function start(){document.body.classList.remove('cinema');let existing=localStorage.getItem('longroad_v01');screen(`${scene('bg-title.webp')}<div class="panel"><h2>COLORADO IS CALLING.</h2><p>Sixty years after the collapse began in the shadow of the autonomous defense network CUSTODIAN, a transmission reaches Mercy, Texas. It promises clean water in Colorado. Your settlement has nineteen days left.</p><p class="hero">Four survivors. One vehicle. 780 miles. The road remembers.</p>${btn('NEW JOURNEY','prologue(0)','primary')}${existing?btn('CONTINUE SAVED JOURNEY','resume()','choice'):''}${hasProtoSave()?btn('CONTINUE PROTOTYPE','resumeProto()','choice'):''}<div class="eyebrow">PROTOTYPE SYSTEMS</div>${btn('SCAVENGING PROTOTYPE','scavProto()','choice')}</div>`)}
 
 function create(){document.body.classList.remove('cinema');selected='';screen(`<h2>01 / YOUR SURVIVOR</h2><p>Choose your character. Your name will appear throughout the journey.</p><div class="panel"><div class="grid">${btn('MALE','setSex("Male")','choice selected',)}${btn('FEMALE','setSex("Female")','choice')}</div><label for="name">SURVIVOR NAME</label><input id="name" class="field" maxlength="20" placeholder="Enter your name" autocomplete="off"><small>Both characters have the same abilities and story opportunities.</small>${btn('CONTINUE','chooseDifficulty()','primary')}</div>`)}
 
@@ -152,13 +176,13 @@ function chooseCar(){screen(`<h2>03 / MERCY MOTOR POOL</h2><p>Pick the vehicle t
 
 function setCar(v){car=v;document.querySelectorAll('.choice').forEach((b,i)=>b.classList.toggle('selected',Object.keys(cars)[i]===v))}
 
-function begin(){const c=cars[car];g={v:5,name:playerName,sex,difficulty,car,day:1,miles:0,fuel:c.fuel,food:c.food,water:c.water,parts:c.parts,hp:c.hp,meds:3,ammo:9,health:100,pfat:0,injury:'healthy',woundedDays:0,antibiotics:2,rationing:false,crew:[{name:'Josh',hp:100,trust:0,fatigue:0,injury:'healthy',woundedDays:0,neglectDone:false},{name:'Mara',hp:100,trust:0,fatigue:0,injury:'healthy',woundedDays:0,neglectDone:false}],flags:{},log:[],phase:'hank_repair',enemy:null,checkpoint:null,quests:newQuests(),discoveries:[],chapter:1,consequences:[],settlements:{},npcs:{},encounters:{},mercy:{contact:'none',infoTransmitted:[],supportSent:{},lastKnown:'stable'},route:sex==='Female'?'evelyn':'jack',spouseName:sex==='Female'?'Daniel':'Claire'};log('The last broadcast reaches Mercy.');save();hankRepair()}
+function begin(){const c=cars[car];g={v:6,name:playerName,sex,difficulty,car,day:1,miles:0,fuel:c.fuel,food:c.food,water:c.water,parts:c.parts,hp:c.hp,meds:3,ammo:9,health:100,pfat:0,injury:'healthy',woundedDays:0,antibiotics:2,rationing:false,crew:[{name:'Josh',hp:100,trust:0,fatigue:0,injury:'healthy',woundedDays:0,neglectDone:false},{name:'Mara',hp:100,trust:0,fatigue:0,injury:'healthy',woundedDays:0,neglectDone:false}],flags:{},log:[],phase:'hank_repair',enemy:null,checkpoint:null,quests:newQuests(),discoveries:[],chapter:1,consequences:[],settlements:{},npcs:{},encounters:{},mercy:{contact:'none',infoTransmitted:[],supportSent:{},lastKnown:'stable'},route:sex==='Female'?'evelyn':'jack',spouseName:sex==='Female'?'Daniel':'Claire'};initSimState(g);log('The last broadcast reaches Mercy.');save();hankRepair()}
 
 function resume(){document.body.classList.remove('cinema');try{g=JSON.parse(localStorage.getItem('longroad_v01'));if(!g||!g.crew)throw Error();g=migrateSave(g);updateQuests(true);render()}catch(e){notify('No valid save found.');start()}}
 
 function newGame(){if(!confirm('Start a new journey? This replaces your current saved game.'))return;localStorage.removeItem('longroad_v01');g=null;start()}
 
-function render(){if(!g)return start();switch(g.phase){case'hank_repair':return hankRepair();case'mercy_hub':return mercyHub();case'mercy_workshop':return mercyWorkshop();case'mercy_clinic':return mercyClinic();case'mercy_water':return mercyWater();case'ruth_crisis':return ruthCrisis();case'mercy_day':return mercyDay();case'day_josh':return dayJosh();case'day_mara':return dayMara();case'day_ruth':return dayRuth();case'day_eli':return dayEli();case'departure':return departure();case'phase1_done':return phase1Done();default:return phase1Done()}}
+function render(){if(!g)return start();switch(g.phase){case'hank_repair':return hankRepair();case'mercy_hub':return mercyHub();case'mercy_workshop':return mercyWorkshop();case'mercy_clinic':return mercyClinic();case'mercy_water':return mercyWater();case'ruth_crisis':return ruthCrisis();case'mercy_day':return mercyDay();case'day_josh':return dayJosh();case'day_mara':return dayMara();case'day_ruth':return dayRuth();case'day_eli':return dayEli();case'departure':return departure();case'phase1_done':return phase1Done();case'scav':return scavScene();case'scavend':return scavEnd(false);case'inv':return invScreen();default:return phase1Done()}}
 /* Legacy road-loop phases (opening/road/crew/journal/quest/battle/event/end/arrival/breakdown)
    were retired in Milestone 1; v5 migration remaps them to phase1_done before render runs. */
 const PROLOGUE=[
@@ -394,6 +418,106 @@ function phase1Done(){g.phase='phase1_done';g.flags.phase1=true;save();
 screen(`${scene('bg-mercy.webp')}<div class="panel"><p>Mercy shrinks in the mirror — the walls, the gardens in old tires, a hundred and eighty-six people. Nineteen days.</p><p>Somewhere behind you, a kid is standing in the road dust, pretending not to watch.</p><p>In Josh's pocket: a dead phone, and a note that says <i>15's the one.</i></p><p>Ahead: Colorado. ${g.spouseName}. Eight hundred miles.</p><div class="eyebrow">CHAPTER ONE: THE VOICE</div><h2>TO BE CONTINUED</h2><p class="muted">Your progress is saved. The story continues in the next update.</p>${btn('TITLE SCREEN','start()','primary')}</div>`)}
 
 
+/* data/items.js — Item catalog + schema (Milestone 2).
+   ---------------------------------------------------------------------------
+   ITEM SCHEMA (future 300-item catalog drops in here unchanged):
+     id:      unique string key
+     name:    display name
+     kind:    'water' | 'food' | 'med' | 'ammo' | 'tool' | 'weapon' | 'utility' | 'story'
+     size:    inventory slots one stack occupies (capacity model: a stack costs
+             `size` slots regardless of quantity; no weight simulation)
+     stack:   max units per stack (1 = not stackable)
+     desc:    short practical description
+     inspect: longer text shown on INSPECT (flavor / environmental storytelling)
+     use:     consumable effect, if any:
+                {thirst:-N} | {hunger:-N} | {cure:'bleeding'|'infection'|'illness'|'limb'}
+                | {stabilize:true}  (improves overall health one step, not a full heal)
+     equip:   'weapon' | 'utility' for equippable items (minimal paper-doll:
+              Weapon + Utility only; no armor/clothing complexity)
+
+   Every item must earn its place: survival, equipment, or storytelling purpose.
+   This is the STARTER set for the Milestone 2 proof-of-concept only. */
+
+const ITEMS = {
+  water_bottle: {
+    name: 'Bottled Water', kind: 'water', size: 1, stack: 4,
+    desc: 'Sealed plastic bottle. Dusty, but the cap holds.',
+    inspect: 'The label is sun-bleached past reading. Whatever was in the Mercy cistern tasted of rust; this tastes of nothing, which is better.',
+    use: { thirst: -1 },
+  },
+  canned_food: {
+    name: 'Canned Food', kind: 'food', size: 1, stack: 3,
+    desc: 'Dented can. Label long gone.',
+    inspect: 'You shake it. Something solid shifts inside. Out here, mystery you can eat is a gift.',
+    use: { hunger: -1 },
+  },
+  mre: {
+    name: 'Packaged Meal (MRE)', kind: 'food', size: 1, stack: 2,
+    desc: 'Military ration pack. Dense, salty, complete.',
+    inspect: 'The packaging says it expired eleven years ago. The packaging has been wrong about everything else too.',
+    use: { hunger: -2 },
+  },
+  bandage: {
+    name: 'Bandage', kind: 'med', size: 1, stack: 4,
+    desc: 'Clean rolled gauze.',
+    inspect: 'Mara would approve of the fold job. Stops bleeding. Does nothing for anything else.',
+    use: { cure: 'bleeding' },
+  },
+  antiseptic: {
+    name: 'Antiseptic', kind: 'med', size: 1, stack: 2,
+    desc: 'Small brown bottle. Stings going on.',
+    inspect: 'Smells like a Mercy clinic morning. Kills infection in a wound. Useless against hunger, thirst, or bad decisions.',
+    use: { cure: 'infection' },
+  },
+  medkit: {
+    name: 'Field Medkit', kind: 'med', size: 2, stack: 1,
+    desc: 'Canvas roll: sutures, salve, splints, strong hands in a bag.',
+    inspect: 'Everything Mara wishes she had more of. Stabilizes a hurt person — it will not make them whole.',
+    use: { stabilize: true },
+  },
+  splint: {
+    name: 'Limb Splint', kind: 'med', size: 2, stack: 1,
+    desc: 'Rigid brace with straps.',
+    inspect: 'Two flat boards and someone\'s belt, basically. Holds a bad limb still enough to travel on.',
+    use: { cure: 'limb' },
+  },
+  knife: {
+    name: 'Hunting Knife', kind: 'weapon', size: 2, stack: 1,
+    desc: 'Worn sheath, honest edge.',
+    inspect: 'Not a fighting knife — a working one. Opens cans, cuts rope, and, if it comes to it, ends arguments.',
+    equip: 'weapon',
+  },
+  tire_iron: {
+    name: 'Tire Iron', kind: 'weapon', size: 2, stack: 1,
+    desc: 'Heavy steel. Josh\'s answer to most problems.',
+    inspect: 'Scratched and true. Josh has fixed half of Mercy with this and threatened the other half. He\'d want it back.',
+    equip: 'weapon',
+  },
+  flashlight: {
+    name: 'Flashlight', kind: 'utility', size: 1, stack: 1,
+    desc: 'Hand-crank torch. No batteries to die.',
+    inspect: 'Thirty seconds of cranking buys you ten minutes of light. Dark corners stop being a gamble.',
+    equip: 'utility',
+  },
+  rope: {
+    name: 'Rope Coil', kind: 'utility', size: 2, stack: 1,
+    desc: 'Twenty feet of braided nylon.',
+    inspect: 'Frayed at one end, strong everywhere else. Holds packs shut, rigs shelters, hauls what you can\'t carry.',
+    equip: 'utility',
+  },
+  ammo_9mm: {
+    name: '9mm Rounds', kind: 'ammo', size: 1, stack: 10,
+    desc: 'Loose cartridges in a cloth wrap.',
+    inspect: 'Nine millimeters of "not today." Only useful if someone\'s holding the thing that fires them.',
+  },
+  dead_phone: {
+    name: 'Dead Phone', kind: 'story', size: 1, stack: 1,
+    desc: 'A dead phone. Screen dark.',
+    inspect: 'A kid\'s handwriting on a scrap of tape: 15\'s the one. It doesn\'t turn on. You carry it anyway.',
+  },
+};
+
+function itemDef(id) { return ITEMS[id] || null; }
 /* sim/combat.js — Preserved combat primitives (Milestone 1).
    beginBattle / battle / combat are the turn-based encounter primitives from the
    retired legacy road loop, preserved verbatim for the future encounter engine
@@ -433,6 +557,998 @@ function makeRng(seed) {
   };
   next.seed = seed >>> 0;
   return next;
+}
+/* sim/difficulty.js — Difficulty architecture (Milestone 2).
+   Three canonical modes. Difficulty modifies resource scarcity, survival
+   pressure, risk, consequences, and recovery margins — never enemy hit points,
+   and never the authored story/world (identical across modes).
+
+   The pre-existing new-game screen offers 'story' / 'survival' / 'hard'
+   (legacy labels, Chapter One setup — left untouched). normDiff() maps those
+   to the canonical modes so old and new code agree:
+     story    -> STORY
+     survival -> SURVIVOR
+     hard     -> HARDCORE SURVIVAL
+   Unknown/missing values default to SURVIVOR (the intended default).
+
+   Modifier fields:
+     thirstEvery / hungerEvery : sim ticks per hunger/thirst stage advance
+                                 (lower = harsher; thirst always faster)
+     riskMult / noiseMult      : scavenging pressure scaling
+     lootBonus                 : flat qty adjustment on authored loot
+                                 (+1 story, 0 survivor, -1 hardcore)
+     neglectEvery              : ticks at Starving/Dehydrated per health decline
+     recoverEvery              : ticks well-fed/hydrated/treated per health recovery */
+
+const DIFF_MODS = {
+  story:    { label: 'STORY',            thirstEvery: 4, hungerEvery: 6, riskMult: 0.6, noiseMult: 0.6, lootBonus:  1, neglectEvery: 3, recoverEvery: 2 },
+  survivor: { label: 'SURVIVOR',         thirstEvery: 2, hungerEvery: 3, riskMult: 1.0, noiseMult: 1.0, lootBonus:  0, neglectEvery: 2, recoverEvery: 3 },
+  hardcore: { label: 'HARDCORE SURVIVAL', thirstEvery: 1, hungerEvery: 2, riskMult: 1.5, noiseMult: 1.5, lootBonus: -1, neglectEvery: 1, recoverEvery: 4 },
+};
+
+const DIFF_ALIASES = {
+  story: 'story', survival: 'survivor', survivor: 'survivor',
+  hard: 'hardcore', hardcore: 'hardcore',
+};
+
+function normDiff(d) { return DIFF_ALIASES[d] || 'survivor'; }
+
+function diffMods(d) { return DIFF_MODS[normDiff(d === undefined ? (typeof g !== 'undefined' && g ? g.difficulty : undefined) : d)]; }
+
+/* Authored loot quantity adjusted by difficulty. Applied to the first stack of
+   a loot grant (keeps prototype loot legible); never drops below 0. */
+function lootQtyFor(base, d, first) {
+  const bonus = first ? diffMods(d).lootBonus : 0;
+  return Math.max(0, base + bonus);
+}
+/* sim/inventory.js — Individual character inventories (Milestone 2).
+   ---------------------------------------------------------------------------
+   No shared magical inventory. Josh and Mara each carry their own items;
+   equipped gear stays on the character wearing it. The player manages both.
+
+   Capacity model: INV_SLOTS (10, a balance value — not canon) per character.
+   One stack occupies `size` slots regardless of quantity. Consumables stack
+   up to their item's `stack` max. No weight simulation.
+
+   State: g.inv = { josh: {slots:[{item,qty}...], equipment:{weapon,utility}},
+                    mara: {slots:[...], equipment:{...}} }
+          g.together (bool, default true) — GIVE only when together and
+                    circumstances permit; separation keeps inventories apart.
+          g.found — temporary FOUND state when loot doesn't fit:
+                    {who, item, qty, rest:[{item,qty}], loc}
+   Transfer/separation future-proofing: every op takes an explicit character;
+   nothing ever reads "the" inventory. */
+
+const INV_SLOTS = 10;
+
+function initInvState(s) {
+  if (!s.inv) s.inv = {};
+  ['josh', 'mara'].forEach(function (k) {
+    if (!s.inv[k]) s.inv[k] = { slots: [], equipment: { weapon: null, utility: null } };
+    if (!Array.isArray(s.inv[k].slots)) s.inv[k].slots = [];
+    if (!s.inv[k].equipment) s.inv[k].equipment = { weapon: null, utility: null };
+  });
+  if (s.together === undefined) s.together = true;
+  if (!('found' in s)) s.found = null;
+  return s.inv;
+}
+
+function invKey(who) {
+  const w = String(who || '').toLowerCase();
+  return w === 'mara' ? 'mara' : 'josh';
+}
+
+function invState(who) {
+  initInvState(g);
+  return g.inv[invKey(who)];
+}
+
+function invUsedSlots(who) {
+  const inv = invState(who);
+  let used = 0;
+  inv.slots.forEach(function (s) { const d = itemDef(s.item); used += d ? d.size : 1; });
+  return used;
+}
+
+function invFreeSlots(who) { return INV_SLOTS - invUsedSlots(who); }
+
+/* Pure add against a slot array (dry-run safe). Returns {slots, added, leftover}. */
+function invAddTo(slots, itemId, qty) {
+  const def = itemDef(itemId);
+  const out = slots.map(function (s) { return { item: s.item, qty: s.qty }; });
+  if (!def || qty <= 0) return { slots: out, added: 0, leftover: qty };
+  let remaining = qty, added = 0;
+  function used() {
+    let u = 0;
+    out.forEach(function (s) { const d = itemDef(s.item); u += d ? d.size : 1; });
+    return u;
+  }
+  if (def.stack > 1) {
+    for (let i = 0; i < out.length && remaining > 0; i++) {
+      if (out[i].item === itemId && out[i].qty < def.stack) {
+        const take = Math.min(def.stack - out[i].qty, remaining);
+        out[i].qty += take; remaining -= take; added += take;
+      }
+    }
+  }
+  while (remaining > 0) {
+    if (used() + def.size > INV_SLOTS) break;
+    const take = def.stack > 1 ? Math.min(def.stack, remaining) : 1;
+    out.push({ item: itemId, qty: take });
+    remaining -= take; added += take;
+  }
+  return { slots: out, added: added, leftover: remaining };
+}
+
+function invAdd(who, itemId, qty) {
+  const inv = invState(who);
+  const r = invAddTo(inv.slots, itemId, qty);
+  inv.slots = r.slots;
+  return { added: r.added, leftover: r.leftover };
+}
+
+function invFits(who, itemId, qty) {
+  return invAddTo(invState(who).slots, itemId, qty).leftover === 0;
+}
+
+function invRemove(who, itemId, qty) {
+  const inv = invState(who);
+  let remaining = qty, removed = 0;
+  for (let i = inv.slots.length - 1; i >= 0 && remaining > 0; i--) {
+    if (inv.slots[i].item === itemId) {
+      const take = Math.min(inv.slots[i].qty, remaining);
+      inv.slots[i].qty -= take; remaining -= take; removed += take;
+      if (inv.slots[i].qty <= 0) inv.slots.splice(i, 1);
+    }
+  }
+  return removed;
+}
+
+function invCount(who, itemId) {
+  let n = 0;
+  invState(who).slots.forEach(function (s) { if (s.item === itemId) n += s.qty; });
+  return n;
+}
+
+function invHas(who, itemId, qty) { return invCount(who, itemId) >= (qty || 1); }
+
+function invOther(who) { return invKey(who) === 'josh' ? 'mara' : 'josh'; }
+
+function charName(who) { return invKey(who) === 'josh' ? 'Josh' : 'Mara'; }
+
+/* --- Contextual actions ---------------------------------------------------
+   itemActions returns only actions currently applicable:
+     use     — consumable with a relevant effect right now
+     equip   — weapon/utility not currently equipped (or swap)
+     unequip — currently equipped
+     give    — together and the other character has room
+     inspect — always
+     drop    — always */
+function itemActions(who, itemId) {
+  const def = itemDef(itemId);
+  if (!def) return [];
+  const k = invKey(who), inv = invState(k), acts = [];
+  const surv = survOf(k);
+  if (def.use) {
+    let usable = false;
+    if (def.use.thirst && surv.thirst > 0) usable = true;
+    if (def.use.hunger && surv.hunger > 0) usable = true;
+    if (def.use.cure && surv.conditions.indexOf(def.use.cure) >= 0) usable = true;
+    if (def.use.stabilize && (surv.health !== 'healthy' || surv.conditions.indexOf('illness') >= 0)) usable = true;
+    if (usable) acts.push('use');
+  }
+  if (def.equip) {
+    acts.push(inv.equipment[def.equip] === itemId ? 'unequip' : 'equip');
+  }
+  if (g.together !== false && invHas(k, itemId, 1)) acts.push('give');
+  acts.push('inspect');
+  acts.push('drop');
+  return acts;
+}
+
+/* USE: consumable effects dispatch into the survival system. Returns {ok, msg}. */
+function invUseItem(who, itemId) {
+  const k = invKey(who), def = itemDef(itemId);
+  if (!def || !def.use) return { ok: false, msg: 'That can\'t be used.' };
+  if (!invHas(k, itemId, 1)) return { ok: false, msg: charName(k) + ' doesn\'t have that.' };
+  const surv = survOf(k);
+  if (def.use.thirst && surv.thirst <= 0) return { ok: false, msg: 'Not thirsty — save it.' };
+  if (def.use.hunger && surv.hunger <= 0) return { ok: false, msg: 'Not hungry — save it.' };
+  if (def.use.cure && surv.conditions.indexOf(def.use.cure) < 0)
+    return { ok: false, msg: 'No ' + def.use.cure + ' to treat.' };
+  const msg = survApplyUse(k, def);
+  invRemove(k, itemId, 1);
+  return { ok: true, msg: msg };
+}
+
+function invEquip(who, itemId) {
+  const k = invKey(who), def = itemDef(itemId), inv = invState(k);
+  if (!def || !def.equip) return { ok: false, msg: 'That can\'t be equipped.' };
+  if (!invHas(k, itemId, 1)) return { ok: false, msg: charName(k) + ' doesn\'t have that.' };
+  const slot = def.equip, cur = inv.equipment[slot];
+  if (cur === itemId) return { ok: false, msg: 'Already equipped.' };
+  invRemove(k, itemId, 1);
+  if (cur) {
+    if (!invFits(k, cur, 1)) { // no room to stow the old one — undo
+      invAdd(k, itemId, 1);
+      return { ok: false, msg: 'No room to stow the ' + itemDef(cur).name + '.' };
+    }
+    invAdd(k, cur, 1);
+  }
+  inv.equipment[slot] = itemId;
+  return { ok: true, msg: def.name + ' equipped (' + slot + ').' };
+}
+
+function invUnequip(who, slot) {
+  const k = invKey(who), inv = invState(k), cur = inv.equipment[slot];
+  if (!cur) return { ok: false, msg: 'Nothing equipped there.' };
+  if (!invFits(k, cur, 1)) return { ok: false, msg: 'No room in ' + charName(k) + '\'s pack.' };
+  inv.equipment[slot] = null;
+  invAdd(k, cur, 1);
+  return { ok: true, msg: itemDef(cur).name + ' stowed.' };
+}
+
+/* GIVE: only when together. Nothing moves unless the receiver has room. */
+function invGive(from, to, itemId, qty) {
+  const f = invKey(from), t = invKey(to);
+  if (f === t) return { ok: false, msg: 'That\'s the same person.' };
+  if (g.together === false)
+    return { ok: false, msg: charName(f) + ' and ' + charName(t) + ' are separated — no handoffs.' };
+  const n = Math.min(qty || 1, invCount(f, itemId));
+  if (n <= 0) return { ok: false, msg: charName(f) + ' doesn\'t have that.' };
+  if (!invFits(t, itemId, n))
+    return { ok: false, msg: charName(t) + ' has no room for it.' };
+  invRemove(f, itemId, n);
+  invAdd(t, itemId, n);
+  const def = itemDef(itemId);
+  return { ok: true, msg: charName(f) + ' gives ' + charName(t) + ' ' + n + '× ' + def.name + '.' };
+}
+
+/* DROP: leaves the item at the current scavenging location's ground (loot
+   persists there); otherwise it is simply discarded. */
+function invDrop(who, itemId, qty) {
+  const k = invKey(who);
+  const n = Math.min(qty || 1, invCount(k, itemId));
+  if (n <= 0) return { ok: false, msg: 'Nothing to drop.' };
+  invRemove(k, itemId, n);
+  const def = itemDef(itemId);
+  if (g.scavLoc && g.scav && g.scav[g.scavLoc]) scavGroundAdd(g.scavLoc, itemId, n);
+  return { ok: true, msg: n + '× ' + def.name + ' set down.' };
+}
+
+function invInspect(itemId) {
+  const def = itemDef(itemId);
+  if (!def) return '';
+  return def.inspect || def.desc;
+}
+
+/* --- FOUND state ----------------------------------------------------------
+   When loot doesn't fit, nothing is auto-discarded. g.found holds the
+   overflow until the player resolves it: TAKE (if room now) / GIVE (other
+   character) / USE (consumable) / LEAVE (drops to the location's ground).
+   `rest` carries any further ungranted loot behind this item. */
+function setFound(who, itemId, qty, rest, loc) {
+  g.found = { who: invKey(who), item: itemId, qty: qty, rest: rest || [], loc: loc || null };
+}
+
+function clearFound() { g.found = null; }
+
+function foundActions() {
+  if (!g.found) return [];
+  const f = g.found, def = itemDef(f.item), acts = [];
+  if (invFits(f.who, f.item, f.qty)) acts.push('take');
+  const other = invOther(f.who);
+  if (g.together !== false && invFits(other, f.item, f.qty)) acts.push('give');
+  if (def && def.use && itemActions(f.who, f.item).indexOf('use') >= 0) acts.push('use');
+  acts.push('leave');
+  return acts;
+}
+
+/* Resolves the current FOUND item; then continues with any queued rest. */
+function resolveFound(action) {
+  const f = g.found;
+  if (!f) return { ok: false, msg: 'Nothing to resolve.' };
+  const def = itemDef(f.item), other = invOther(f.who);
+  let msg = '';
+  if (action === 'take') {
+    if (!invFits(f.who, f.item, f.qty)) return { ok: false, msg: 'Still no room.' };
+    invAdd(f.who, f.item, f.qty);
+    msg = charName(f.who) + ' takes ' + f.qty + '× ' + def.name + '.';
+  } else if (action === 'give') {
+    if (g.together === false || !invFits(other, f.item, f.qty))
+      return { ok: false, msg: 'Can\'t hand it over right now.' };
+    invAdd(other, f.item, f.qty);
+    msg = charName(other) + ' takes ' + f.qty + '× ' + def.name + '.';
+  } else if (action === 'use') {
+    const r = invUseItem(f.who, f.item);
+    if (!r.ok) return r;
+    msg = r.msg;
+    if (f.qty > 1 && invFits(f.who, f.item, f.qty - 1)) {
+      invAdd(f.who, f.item, f.qty - 1);
+      msg += ' The rest fits now.';
+    } else if (f.qty > 1) {
+      if (f.loc) scavGroundAdd(f.loc, f.item, f.qty - 1);
+      msg += ' The rest is set down.';
+    }
+  } else { // leave
+    if (f.loc) scavGroundAdd(f.loc, f.item, f.qty);
+    msg = f.qty + '× ' + def.name + ' left behind.';
+  }
+  const rest = f.rest || [];
+  clearFound();
+  if (rest.length) grantLoot(f.who, rest, f.loc);
+  return { ok: true, msg: msg };
+}
+
+/* Grants a loot list in order; first overflow opens the FOUND state.
+   loot = [{item, qty}...]. Returns true if everything fit. */
+function grantLoot(who, loot, loc) {
+  const k = invKey(who);
+  for (let i = 0; i < loot.length; i++) {
+    const r = invAdd(k, loot[i].item, loot[i].qty);
+    if (r.leftover > 0) {
+      setFound(k, loot[i].item, r.leftover, loot.slice(i + 1), loc);
+      return false;
+    }
+  }
+  return true;
+}
+/* sim/survival.js — Hunger, thirst, health, conditions (Milestone 2).
+   ---------------------------------------------------------------------------
+   Per-character, gradual, deterministic — no arcade meters, no randomness.
+   Time advances in discrete ticks (a search action, a rest, a journey leg).
+
+   Hunger: 0 Fed → 1 Hungry → 2 Very Hungry → 3 Starving
+   Thirst: 0 Hydrated → 1 Thirsty → 2 Very Thirsty → 3 Dehydrated
+   Thirst always deteriorates faster than hunger (per difficulty tuning).
+
+   Health: healthy → hurt → badly_hurt → critical (ordinal, not a 0-100 bar).
+   Conditions coexist with overall health: bleeding, infection, illness,
+   exhaustion, limb (limb impairment/injury).
+
+   Pressure model:
+   - Bleeding worsens health every 2 ticks until bandaged.
+   - Infection worsens health every 3 ticks until treated.
+   - At Starving/Dehydrated, health declines every `neglectEvery` ticks.
+   - Recovery needs the combination: fed AND hydrated AND no acute condition
+     (bleeding/infection/illness) AND time — then health improves slowly.
+   Treatment stabilizes; it never insta-heals. Food/water are physical items
+   consumed through the inventory system (invUseItem -> survApplyUse).
+
+   State: g.surv = { josh: {hunger, thirst, health, conditions[],
+                             thirstAcc, hungerAcc, negAcc, recAcc,
+                             bleedAcc, infAcc}, mara: {...} } */
+
+const HUNGER_LABELS = ['Fed', 'Hungry', 'Very Hungry', 'Starving'];
+const THIRST_LABELS = ['Hydrated', 'Thirsty', 'Very Thirsty', 'Dehydrated'];
+const HEALTH_LABELS = { healthy: 'Healthy', hurt: 'Hurt', badly_hurt: 'Badly Hurt', critical: 'Critical' };
+const HEALTH_ORDER = ['healthy', 'hurt', 'badly_hurt', 'critical'];
+const COND_LABELS = { bleeding: 'Bleeding', infection: 'Infection', illness: 'Illness', exhaustion: 'Exhaustion', limb: 'Limb Injury' };
+
+function initSurvState(s) {
+  if (!s.surv) s.surv = {};
+  ['josh', 'mara'].forEach(function (k) {
+    if (!s.surv[k]) s.surv[k] = {
+      hunger: 0, thirst: 0, health: 'healthy', conditions: [],
+      thirstAcc: 0, hungerAcc: 0, negAcc: 0, recAcc: 0, bleedAcc: 0, infAcc: 0,
+    };
+    const c = s.surv[k];
+    ['hunger', 'thirst', 'health', 'conditions', 'thirstAcc', 'hungerAcc', 'negAcc', 'recAcc', 'bleedAcc', 'infAcc']
+      .forEach(function (f) { if (c[f] === undefined) c[f] = (f === 'conditions' ? [] : (f === 'health' ? 'healthy' : 0)); });
+  });
+  return s.surv;
+}
+
+function survOf(who) {
+  initSurvState(g);
+  return g.surv[invKey(who)];
+}
+
+function hungerLabel(i) { return HUNGER_LABELS[Math.max(0, Math.min(3, i))]; }
+function thirstLabel(i) { return THIRST_LABELS[Math.max(0, Math.min(3, i))]; }
+function healthLabel(h) { return HEALTH_LABELS[h] || h; }
+function condLabel(c) { return COND_LABELS[c] || c; }
+
+function healthWorsen(s) {
+  const i = HEALTH_ORDER.indexOf(s.health);
+  if (i >= 0 && i < HEALTH_ORDER.length - 1) s.health = HEALTH_ORDER[i + 1];
+}
+
+function healthImprove(s) {
+  const i = HEALTH_ORDER.indexOf(s.health);
+  if (i > 0) s.health = HEALTH_ORDER[i - 1];
+}
+
+function survAddCondition(who, cond) {
+  const s = survOf(who);
+  if (COND_LABELS[cond] && s.conditions.indexOf(cond) < 0) s.conditions.push(cond);
+  return s.conditions;
+}
+
+function survRemoveCondition(who, cond) {
+  const s = survOf(who);
+  const i = s.conditions.indexOf(cond);
+  if (i >= 0) s.conditions.splice(i, 1);
+  return s.conditions;
+}
+
+/* Advances survival pressure by n ticks. Deterministic; difficulty-scaled.
+   Returns an array of human-readable developments (for scene feedback). */
+function simTick(n) {
+  initSurvState(g);
+  const mods = diffMods();
+  const notes = [];
+  ['josh', 'mara'].forEach(function (k) {
+    const s = g.surv[k], nm = charName(k);
+    s.thirstAcc += n;
+    while (s.thirstAcc >= mods.thirstEvery) {
+      s.thirstAcc -= mods.thirstEvery;
+      if (s.thirst < 3) { s.thirst++; if (s.thirst === 3) notes.push(nm + ' is dehydrated. This is dangerous.'); }
+    }
+    s.hungerAcc += n;
+    while (s.hungerAcc >= mods.hungerEvery) {
+      s.hungerAcc -= mods.hungerAcc;
+      if (s.hunger < 3) { s.hunger++; if (s.hunger === 3) notes.push(nm + ' is starving. They need food.'); }
+    }
+    if (s.conditions.indexOf('bleeding') >= 0) {
+      s.bleedAcc += n;
+      while (s.bleedAcc >= 2) { s.bleedAcc -= 2; healthWorsen(s); notes.push(nm + ' is losing blood.'); }
+    }
+    if (s.conditions.indexOf('infection') >= 0) {
+      s.infAcc += n;
+      while (s.infAcc >= 3) { s.infAcc -= 3; healthWorsen(s); notes.push(nm + '\'s infection is spreading.'); }
+    }
+    if (s.thirst === 3 || s.hunger === 3) {
+      s.negAcc += n;
+      while (s.negAcc >= mods.neglectEvery) {
+        s.negAcc -= mods.neglectEvery;
+        const before = s.health;
+        healthWorsen(s);
+        if (s.health !== before) notes.push(nm + ' is weakening (' + healthLabel(s.health).toLowerCase() + ').');
+      }
+    } else { s.negAcc = 0; }
+    const acute = s.conditions.some(function (c) { return c === 'bleeding' || c === 'infection' || c === 'illness'; });
+    if (s.thirst === 0 && s.hunger === 0 && !acute && s.health !== 'healthy') {
+      s.recAcc += n;
+      while (s.recAcc >= mods.recoverEvery) {
+        s.recAcc -= mods.recoverEvery;
+        const before = s.health;
+        healthImprove(s);
+        if (s.health !== before) notes.push(nm + ' is recovering (' + healthLabel(s.health).toLowerCase() + ').');
+      }
+    } else { s.recAcc = 0; }
+  });
+  return notes;
+}
+
+/* Consumable effects from invUseItem. Applies the item's use block; the
+   caller removes the item from inventory. Returns a message. */
+function survApplyUse(who, def) {
+  const k = invKey(who), s = survOf(k), nm = charName(k), u = def.use;
+  const parts = [];
+  if (u.thirst) {
+    const before = s.thirst;
+    s.thirst = Math.max(0, s.thirst + u.thirst);
+    if (s.thirst < before) parts.push('thirst eased (' + thirstLabel(s.thirst).toLowerCase() + ')');
+  }
+  if (u.hunger) {
+    const before = s.hunger;
+    s.hunger = Math.max(0, s.hunger + u.hunger);
+    if (s.hunger < before) parts.push('hunger eased (' + hungerLabel(s.hunger).toLowerCase() + ')');
+  }
+  if (u.cure) {
+    survRemoveCondition(k, u.cure);
+    parts.push(condLabel(u.cure).toLowerCase() + ' treated');
+  }
+  if (u.stabilize) {
+    survRemoveCondition(k, 'illness');
+    const before = s.health;
+    healthImprove(s);
+    parts.push(s.health !== before ? 'stabilized (' + healthLabel(s.health).toLowerCase() + ')' : 'cleaned and dressed, holding steady');
+  }
+  return nm + ' uses ' + def.name + ': ' + (parts.join('; ') || 'no effect') + '.';
+}
+
+/* Rest: clears exhaustion. Time still passes (caller applies ticks);
+   resting somewhere unsafe carries its own risk, handled by the caller. */
+function restChar(who) {
+  const k = invKey(who);
+  const had = survOf(k).conditions.indexOf('exhaustion') >= 0;
+  survRemoveCondition(k, 'exhaustion');
+  return charName(k) + (had ? ' rests and shakes off the exhaustion.' : ' rests a while.');
+}
+
+/* One-line status for HUD/scene headers. */
+function survStatusLine(who) {
+  const k = invKey(who), s = survOf(k);
+  let line = charName(k) + ' · ' + thirstLabel(s.thirst) + ' · ' + hungerLabel(s.hunger) + ' · ' + healthLabel(s.health);
+  if (s.conditions.length) line += ' · [' + s.conditions.map(condLabel).join(', ').toUpperCase() + ']';
+  return line;
+}
+
+/* Early, understandable feedback before severe penalties (brief §4). */
+function survWarning(who) {
+  const s = survOf(who), nm = charName(who), out = [];
+  if (s.thirst === 2) out.push(nm + ' is very thirsty — water soon, or this turns.');
+  if (s.thirst === 3) out.push(nm + ' is dehydrated. They are running out of time.');
+  if (s.hunger === 2) out.push(nm + ' is very hungry — food is becoming urgent.');
+  if (s.hunger === 3) out.push(nm + ' is starving. Their hands are starting to shake.');
+  s.conditions.forEach(function (c) {
+    if (c === 'bleeding') out.push(nm + ' is bleeding — it needs a bandage.');
+    if (c === 'infection') out.push(nm + '\'s wound is infected — it needs antiseptic.');
+    if (c === 'illness') out.push(nm + ' is ill — a medkit could stabilize them.');
+    if (c === 'exhaustion') out.push(nm + ' is exhausted — they need rest.');
+    if (c === 'limb') out.push(nm + '\'s limb is injured — a splint would help.');
+  });
+  return out;
+}
+/* sim/scavenging.js — Touch-first scavenging PROTOTYPE (Milestone 2).
+   ---------------------------------------------------------------------------
+   This is a SEPARATE proof-of-concept scene, not Chapter Two. It does not
+   touch Chapter One. Entry: title screen → SCAVENGING PROTOTYPE.
+
+   Interaction model: tap a recognizable searchable area (shelves, fridge,
+   backpack, cabinet) — never a generic SEARCH button, never pixel hunting.
+   Each search offers two approaches:
+     SEARCH QUIETLY — slower (more time passes), low noise
+     FORCE IT       — fast, but loud
+   Time, risk, and noise are the decisions — not reflexes.
+
+   RISK/TIME: danger accumulating while the crew stays in an unsafe place.
+     High risk raises the chance/severity of complications; hitting the
+     threshold forces a scare that ends the run — it does not guarantee a
+     fight (there is no combat in this prototype).
+   NOISE: immediate attention from actions. Loud actions now make later
+     actions riskier (risk gains scale with current noise).
+
+   Loot persistence: searched areas stay searched; items left behind sit on
+   the location's ground; re-entering never regenerates loot. Prototype saves
+   under the isolated key 'longroad_proto' — real saves are never touched.
+
+   Loot here is authored and fixed (no RNG in Chapter One, and none needed
+   for this proof-of-concept); difficulty adjusts quantity via lootQtyFor. */
+
+const PROTO_KEY = 'longroad_proto';
+
+const SCAV_AREAS = {
+  shelves: {
+    name: 'Store shelves',
+    desc: 'Toppled shelving, cans scattered like dice. Most labels are gone; the rest lie.',
+    loot: [['canned_food', 2], ['water_bottle', 1]],
+    quiet: { risk: 8, noise: 3, ticks: 2, text: 'You work the shelves quietly, testing each can by weight.' },
+    force: { risk: 6, noise: 14, ticks: 1, text: 'You sweep the shelves fast. Cans clatter across concrete.' },
+  },
+  fridge: {
+    name: 'Refrigerator',
+    desc: 'A cooler with the door swollen shut. Something inside shifted when you knocked.',
+    loot: [['mre', 1]],
+    quiet: { risk: 10, noise: 4, ticks: 3, text: 'You ease the cooler door with the tire iron, a millimeter at a time.' },
+    force: { risk: 7, noise: 20, ticks: 1, text: 'You rip the cooler open. The seal breaks with a crack like a gunshot.' },
+  },
+  backpack: {
+    name: 'Abandoned backpack',
+    desc: 'Left by the door, straps cut. Somebody left in a hurry, or didn\'t leave at all.',
+    loot: [['bandage', 1], ['ammo_9mm', 4]],
+    quiet: { risk: 6, noise: 2, ticks: 1, text: 'You go through the backpack pocket by pocket.' },
+    force: { risk: 6, noise: 10, ticks: 1, text: 'You upend the backpack and shake it out.' },
+  },
+  cabinet: {
+    name: 'Under-counter cabinet',
+    desc: 'Cleaning supplies and one locked metal box, long since jimmied.',
+    loot: [['antiseptic', 1], ['rope', 1]],
+    quiet: { risk: 8, noise: 3, ticks: 2, text: 'You pick through the cabinet without rushing.' },
+    force: { risk: 6, noise: 16, ticks: 1, text: 'You tear the cabinet doors off their hinges.' },
+  },
+};
+
+const SCAV_LOCS = {
+  roadside: {
+    name: 'ROADSIDE STOP — PROTOTYPE',
+    desc: 'A gas station dead longer than you\'ve been alive. The pumps are husks. The store door hangs open like a mouth. You don\'t have to go in. That\'s the whole decision.',
+    areas: ['shelves', 'fridge', 'backpack', 'cabinet'],
+  },
+};
+
+function initScavState(s) {
+  if (!s.scav) s.scav = {};
+  return s.scav;
+}
+
+/* Combined sim-state initializer (inventories + survival + scavenging).
+   Defensive: only fills what's missing, so old saves migrate cleanly. */
+function initSimState(s) {
+  initInvState(s);
+  initSurvState(s);
+  initScavState(s);
+  if (!('found' in s)) s.found = null;
+  if (s.together === undefined) s.together = true;
+  return s;
+}
+
+function scavLocState(locId) {
+  initScavState(g);
+  if (!g.scav[locId]) g.scav[locId] = { searched: {}, ground: [], risk: 0, noise: 0, noiseWarned: false };
+  return g.scav[locId];
+}
+
+function scavGroundAdd(locId, itemId, qty) {
+  const loc = scavLocState(locId);
+  const ex = loc.ground.find(function (s) { return s.item === itemId; });
+  if (ex) ex.qty += qty; else loc.ground.push({ item: itemId, qty: qty });
+}
+
+function scavTakeGround(idx) {
+  const loc = scavLocState(g.scavLoc);
+  const s = loc.ground[idx];
+  if (!s) { scavScene(); return; }
+  const who = g.invWho || 'josh';
+  const r = invAdd(who, s.item, s.qty);
+  if (r.leftover > 0) {
+    s.qty = r.leftover;
+    setFound(who, s.item, r.leftover, [], g.scavLoc);
+    loc.ground.splice(idx, 1); // the found item now carries the remainder
+  } else {
+    loc.ground.splice(idx, 1);
+  }
+  saveProto();
+  scavScene();
+}
+
+/* --- prototype entry ---------------------------------------------------- */
+let protoDiff = 'survivor';
+
+function setProtoDiff(v) {
+  protoDiff = v;
+  document.querySelectorAll('#protoDiff button').forEach(function (b) {
+    b.classList.toggle('selected', b.dataset.mode === v);
+  });
+}
+
+function scavProto() {
+  document.body.classList.remove('cinema');
+  protoDiff = 'survivor';
+  screen('<h2>SCAVENGING PROTOTYPE</h2><div class="panel"><p>A Milestone 2 proof-of-concept. Separate from the story — nothing here touches your saved journey.</p><p class="muted">Find → Carry → Choose → Consume/Use → Consequence. One roadside stop. Two pairs of hands. Whatever you find, you carry.</p><div id="protoDiff"></div>' +
+    btn('BEGIN PROTOTYPE', 'scavProtoStart()', 'primary') +
+    btn('BACK TO TITLE', 'start()', 'choice') + '</div>');
+  const pd = document.querySelector('#protoDiff');
+  if (pd) {
+    pd.innerHTML =
+      diffOption('story', 'STORY', 'Forgiving. Slower hunger and thirst, calmer scavenging, more to find.') +
+      diffOption('survivor', 'SURVIVOR', 'The intended experience. Balanced scarcity and pressure.') +
+      diffOption('hardcore', 'HARDCORE SURVIVAL', 'Faster deterioration, scarcer finds, thinner margins.');
+  }
+}
+
+function diffOption(mode, label, text) {
+  return '<h3>' + label + '</h3><p>' + text + '</p>' +
+    '<button class="choice' + (protoDiff === mode ? ' selected' : '') + '" data-mode="' + mode + '" onclick="setProtoDiff(\'' + mode + '\')">' +
+    (protoDiff === mode ? '✓ ' : '') + 'SELECT ' + label + '</button>';
+}
+
+function scavProtoStart() {
+  const mode = normDiff(protoDiff);
+  g = {
+    v: 6, name: 'Scout', sex: 'Male', difficulty: mode, day: 1, miles: 0,
+    phase: 'scav', log: [], chapter: 0, consequences: [], flags: {}, npc: {},
+    proto: true, together: true,
+    crew: [{ name: 'Josh', hp: 100, fatigue: 0 }, { name: 'Mara', hp: 100, fatigue: 0 }],
+    scavLoc: 'roadside', invWho: 'josh', invReturn: 'scav',
+  };
+  initSimState(g);
+  // starter kits (prototype only — new Chapter One games start empty)
+  invAdd('josh', 'water_bottle', 2);
+  invAdd('josh', 'canned_food', 2);
+  invAdd('josh', 'flashlight', 1);
+  invAdd('josh', 'knife', 1); invEquip('josh', 'knife');
+  invAdd('mara', 'water_bottle', 2);
+  invAdd('mara', 'canned_food', 1);
+  invAdd('mara', 'bandage', 2);
+  invAdd('mara', 'dead_phone', 1);
+  log('Prototype run started (' + DIFF_MODS[mode].label + ').');
+  saveProto();
+  scavScene();
+}
+
+/* --- prototype persistence (isolated key; real saves untouched) ---------- */
+function saveProto() {
+  if (g && g.proto) localStorage.setItem(PROTO_KEY, JSON.stringify(g));
+}
+
+function hasProtoSave() {
+  try { return !!localStorage.getItem(PROTO_KEY); } catch (e) { return false; }
+}
+
+function resumeProto() {
+  try {
+    const s = JSON.parse(localStorage.getItem(PROTO_KEY));
+    if (!s || !s.proto) throw Error();
+    g = migrateSave(s);
+    initSimState(g);
+    render();
+  } catch (e) { notify('No prototype save found.'); scavProto(); }
+}
+
+function clearProto() {
+  try { localStorage.removeItem(PROTO_KEY); } catch (e) {}
+}
+
+/* --- the location scene -------------------------------------------------- */
+function riskBar(loc) {
+  const pct = Math.min(100, loc.risk);
+  const col = pct >= 75 ? '#dc8c78' : pct >= 40 ? '#e8c96a' : '#b8d68a';
+  return '<div class="bar"><span style="width:' + pct + '%;background:' + col + '"></span></div>' +
+    '<p class="muted">RISK ' + Math.round(loc.risk) + ' · NOISE ' + Math.round(loc.noise) + '</p>';
+}
+
+function scavScene() {
+  if (!g || !g.proto) return start();
+  g.phase = 'scav';
+  saveProto();
+  const locId = g.scavLoc, loc = scavLocState(locId), def = SCAV_LOCS[locId];
+  const who = g.invWho || 'josh';
+  let h = '<h2>' + def.name + '</h2><p class="muted">' + def.desc + '</p>';
+  h += riskBar(loc);
+  h += '<p class="muted">' + escapeHtml(survStatusLine('josh')) + '<br>' + escapeHtml(survStatusLine('mara')) + '</p>';
+  const warns = survWarning('josh').concat(survWarning('mara'));
+  if (warns.length) h += '<p class="danger">' + escapeHtml(warns[0]) + '</p>';
+  if (loc.noise >= 30 && !loc.noiseWarned) {
+    loc.noiseWarned = true;
+    h += '<p class="danger">That was loud. If anything is out there, it heard that — staying longer just got riskier.</p>';
+  }
+
+  if (g.found) {
+    h += foundPanel();
+  } else {
+    h += '<div class="eyebrow">SEARCHABLE AREAS — tap one</div><div class="actions">';
+    def.areas.forEach(function (a) {
+      const area = SCAV_AREAS[a], done = loc.searched[a];
+      h += done
+        ? '<button disabled>✓ ' + area.name + ' — searched</button>'
+        : '<button onclick="scavArea(\'' + a + '\')">' + area.name + '</button>';
+    });
+    h += '</div>';
+    if (loc.ground.length) {
+      h += '<div class="eyebrow">ON THE GROUND HERE</div>';
+      loc.ground.forEach(function (s, i) {
+        const d = itemDef(s.item);
+        h += btn('TAKE ' + s.qty + '× ' + d.name + ' (' + charName(who) + ')', 'scavTakeGround(' + i + ')', 'choice');
+      });
+    }
+    const searched = def.areas.filter(function (a) { return loc.searched[a]; }).length;
+    h += '<p class="muted">Searching as <b>' + charName(who) + '</b> — switch hands in the inventory. ' +
+      searched + '/' + def.areas.length + ' areas searched.</p>';
+    h += '<div class="actions">' +
+      btn('INVENTORY', 'openInventory(\'scav\')', '') +
+      btn('REST A WHILE', 'scavRest()', '') +
+      btn('LEAVE THIS PLACE', 'scavEnd(false)', '') +
+      btn('TITLE SCREEN', 'start()', '') + '</div>';
+  }
+  screen('<div class="panel">' + h + '</div>');
+}
+
+function scavArea(areaId) {
+  const area = SCAV_AREAS[areaId], loc = scavLocState(g.scavLoc);
+  if (loc.searched[areaId]) { scavScene(); return; }
+  screen('<div class="panel"><h2>' + area.name + '</h2><p>' + area.desc + '</p>' +
+    '<p class="muted">How do you work it?</p>' +
+    btn('SEARCH QUIETLY — slow, careful', 'scavSearch(\'' + g.scavLoc + '\',\'' + areaId + '\',\'quiet\')', 'choice') +
+    btn('FORCE IT — fast, loud', 'scavSearch(\'' + g.scavLoc + '\',\'' + areaId + '\',\'force\')', 'choice') +
+    btn('STEP BACK', 'scavScene()', 'choice') + '</div>');
+}
+
+function scavSearch(locId, areaId, mode) {
+  const loc = scavLocState(locId), area = SCAV_AREAS[areaId];
+  if (!area || loc.searched[areaId]) { scavScene(); return { ok: false }; }
+  const cfg = area[mode], mods = diffMods(g.difficulty);
+  const noiseGain = Math.round(cfg.noise * mods.noiseMult);
+  const riskGain = Math.round(cfg.risk * mods.riskMult * (1 + loc.noise / 60));
+  loc.noise = Math.min(100, loc.noise + noiseGain);
+  loc.risk = Math.min(120, loc.risk + riskGain);
+  loc.searched[areaId] = true;
+  const notes = simTick(cfg.ticks);
+  const loot = area.loot
+    .map(function (l, i) { return { item: l[0], qty: lootQtyFor(l[1], g.difficulty, i === 0) }; })
+    .filter(function (l) { return l.qty > 0 && itemDef(l.item); });
+  log(cfg.text + ' Risk +' + riskGain + ', noise +' + noiseGain + '.');
+  const who = g.invWho || 'josh';
+  const allFit = grantLoot(who, loot, locId);
+  saveProto();
+  if (loc.risk >= 100) { scavComplication(); return { ok: true }; }
+  if (!allFit) notify('No room — decide what to do with it.');
+  if (notes.length) notify(notes[0]);
+  scavScene();
+  return { ok: true };
+}
+
+function scavRest() {
+  const loc = scavLocState(g.scavLoc), mods = diffMods(g.difficulty);
+  const notes = simTick(2);
+  const m1 = restChar('josh'), m2 = restChar('mara');
+  loc.risk = Math.min(120, loc.risk + Math.round(4 * mods.riskMult));
+  log('Rested a while. Risk +' + Math.round(4 * mods.riskMult) + '.');
+  notify(m1 + ' ' + m2);
+  if (notes.length) setTimeout(function () { notify(notes[0]); }, 2500);
+  saveProto();
+  if (loc.risk >= 100) { scavComplication(); return; }
+  scavScene();
+}
+
+function scavComplication() {
+  const loc = scavLocState(g.scavLoc);
+  log('Complication: movement outside. Time to go.');
+  saveProto();
+  screen('<div class="panel"><div class="eyebrow">RISK BOILS OVER</div>' +
+    '<p>Headlights sweep the lot — or something that wants you to think they did. A cart tips over out by the pumps with a sound like the world clearing its throat.</p>' +
+    '<p>Nobody argues. You take what you can carry and go, quiet as dust.</p>' +
+    '<p class="muted">What you left behind stays where it fell.</p>' +
+    btn('SLIP AWAY', 'scavEnd(true)', 'primary') + '</div>');
+}
+
+function scavEnd(fled) {
+  if (!g || !g.proto) return start();
+  g.phase = 'scavend';
+  saveProto();
+  const loc = scavLocState(g.scavLoc), def = SCAV_LOCS[g.scavLoc];
+  const n = def.areas.filter(function (a) { return loc.searched[a]; }).length;
+  screen('<div class="panel"><div class="eyebrow">PROTOTYPE RUN ' + (fled ? '— CUT SHORT' : '— PAUSED') + '</div>' +
+    '<h2>' + (fled ? 'Gone like smoke.' : 'You step back out into the dust.') + '</h2>' +
+    '<p>' + n + '/' + def.areas.length + ' areas searched. ' +
+    (loc.ground.length ? 'Some of what you found is still sitting on the ground in there.' : 'You carried out everything worth carrying.') + '</p>' +
+    '<p class="muted">' + escapeHtml(survStatusLine('josh')) + '<br>' + escapeHtml(survStatusLine('mara')) + '</p>' +
+    '<p class="muted">The loop, end to end: find → carry → choose → consume/use → consequence. That\'s the whole game, in miniature.</p>' +
+    '<div class="actions">' +
+    btn('INVENTORY', 'openInventory(\'scavend\')', '') +
+    btn('GO BACK IN', 'scavScene()', '') +
+    btn('NEW PROTOTYPE RUN', 'scavProto()', '') +
+    btn('TITLE SCREEN', 'start()', '') + '</div></div>');
+}
+
+/* --- FOUND panel (no auto-discard, ever) ---------------------------------- */
+function foundPanel() {
+  const f = g.found, def = itemDef(f.item), acts = foundActions();
+  const labels = { take: 'TAKE', give: 'GIVE TO ' + charName(invOther(f.who)).toUpperCase(), use: 'USE NOW', leave: 'LEAVE IT' };
+  let h = '<div class="found"><div class="eyebrow">FOUND — ' + charName(f.who).toUpperCase() + ' HAS NO ROOM</div>' +
+    '<h3>' + f.qty + '× ' + def.name + '</h3><p class="muted">' + escapeHtml(def.desc) + '</p>' +
+    '<p>Nothing is thrown away for you. Decide:</p><div class="actions">';
+  acts.forEach(function (a) {
+    h += btn(labels[a], 'resolveFoundUI(\'' + a + '\')', a === 'leave' ? '' : 'primary');
+  });
+  h += '</div></div>';
+  return h;
+}
+
+function resolveFoundUI(action) {
+  const r = resolveFound(action);
+  notify(r.msg);
+  saveProto();
+  scavScene();
+}
+
+/* --- inventory entry from prototype -------------------------------------- */
+function openInventory(ret) {
+  g.invReturn = ret || 'scav';
+  if (!g.invWho) g.invWho = 'josh';
+  g.invSel = null;
+  g.phase = 'inv';
+  saveProto();
+  invScreen();
+}
+/* sim/invui.js — Touch-first inventory UI (Milestone 2).
+   JOSH | MARA tabs (never shrunken side-by-side panels). Tap an item to see
+   ONLY the actions that apply right now: USE / EQUIP / UNEQUIP / GIVE /
+   INSPECT / DROP. Tap controls throughout; no drag-and-drop required. */
+
+function invShow(who) {
+  g.invWho = invKey(who);
+  g.invSel = null;
+  g.invInspecting = false;
+  saveProto();
+  invScreen();
+}
+
+function invSelect(idx) {
+  g.invSel = { who: g.invWho, idx: idx };
+  g.invInspecting = false;
+  invScreen();
+}
+
+function invScreen() {
+  if (!g || !g.proto) return start();
+  g.phase = 'inv';
+  const who = g.invWho || 'josh', inv = invState(who), surv = survOf(who);
+  const other = invOther(who);
+  const used = invUsedSlots(who);
+
+  let h = '<h2>INVENTORY</h2>';
+  h += '<div class="inv-tabs">' +
+    '<button class="' + (who === 'josh' ? 'selected' : '') + '" onclick="invShow(\'josh\')">JOSH</button>' +
+    '<button class="' + (who === 'mara' ? 'selected' : '') + '" onclick="invShow(\'mara\')">MARA</button></div>';
+  h += '<p class="muted">' + escapeHtml(survStatusLine(who)) + '</p>';
+
+  // equipped: minimal Weapon + Utility model
+  const eq = inv.equipment;
+  h += '<div class="eyebrow">EQUIPPED</div><div class="actions">';
+  ['weapon', 'utility'].forEach(function (slot) {
+    const id = eq[slot];
+    h += id
+      ? btn(itemDef(id).name + ' (' + slot + ') — tap to stow', 'invDo(\'unequip:' + slot + '\')', 'choice')
+      : '<button disabled>— ' + slot + ' empty —</button>';
+  });
+  h += '</div>';
+
+  // slots
+  h += '<div class="eyebrow">PACK — ' + used + '/' + INV_SLOTS + ' SLOTS</div><div class="inv-grid">';
+  inv.slots.forEach(function (s, i) {
+    const d = itemDef(s.item);
+    const sel = g.invSel && g.invSel.who === who && g.invSel.idx === i;
+    h += '<button class="slot' + (sel ? ' sel' : '') + '" onclick="invSelect(' + i + ')">' +
+      escapeHtml(d.name) + (s.qty > 1 ? ' ×' + s.qty : '') +
+      (d.size > 1 ? '<small>' + d.size + ' slots</small>' : '') + '</button>';
+  });
+  for (let i = inv.slots.length; i < INV_SLOTS; i++) h += '<button class="slot empty" disabled>·</button>';
+  h += '</div>';
+
+  // detail panel for the selected item
+  if (g.invSel && g.invSel.who === who && inv.slots[g.invSel.idx]) {
+    const s = inv.slots[g.invSel.idx], d = itemDef(s.item);
+    h += '<div class="detail"><h3>' + escapeHtml(d.name) + (s.qty > 1 ? ' ×' + s.qty : '') + '</h3>';
+    h += '<p class="muted">' + escapeHtml(g.invInspecting ? invInspect(s.item) : d.desc) + '</p>';
+    const acts = itemActions(who, s.item);
+    const labels = { use: 'USE', equip: 'EQUIP', unequip: 'STOW', give: 'GIVE TO ' + charName(other).toUpperCase(), inspect: g.invInspecting ? 'HIDE DETAILS' : 'INSPECT', drop: 'DROP' };
+    h += '<div class="actions">';
+    acts.forEach(function (a) {
+      if (a === 'unequip') {
+        const slot = d.equip;
+        h += btn('STOW', 'invDo(\'unequip:' + slot + '\')', 'primary');
+      } else {
+        h += btn(labels[a], 'invDo(\'' + a + '\')', a === 'drop' ? '' : 'primary');
+      }
+    });
+    h += '</div></div>';
+  } else {
+    h += '<p class="muted">Tap an item to see what ' + charName(who) + ' can do with it.</p>';
+  }
+
+  h += '<p class="muted">' + charName(other).toUpperCase() + '\'s pack: ' + invUsedSlots(other) + '/' + INV_SLOTS + ' slots' +
+    (g.together === false ? ' · SEPARATED — no handoffs' : '') + '</p>';
+  const back = g.invReturn === 'scavend' ? 'scavEnd(false)' : 'scavScene()';
+  h += btn('BACK', back, 'choice');
+  screen('<div class="panel">' + h + '</div>');
+}
+
+/* invDo dispatches the tapped contextual action for the selected item. */
+function invDo(action) {
+  const sel = g.invSel;
+  if (!sel) { invScreen(); return; }
+  const who = sel.who, inv = invState(who), s = inv.slots[sel.idx];
+  if (!s) { g.invSel = null; invScreen(); return; }
+  const itemId = s.item, def = itemDef(itemId), other = invOther(who);
+  let msg = '';
+  if (action === 'use') {
+    const r = invUseItem(who, itemId);
+    msg = r.msg;
+  } else if (action === 'equip') {
+    const r = invEquip(who, itemId);
+    msg = r.msg;
+  } else if (action.indexOf('unequip:') === 0) {
+    const r = invUnequip(who, action.split(':')[1]);
+    msg = r.msg;
+  } else if (action === 'give') {
+    const r = invGive(who, other, itemId, s.qty);
+    msg = r.msg;
+  } else if (action === 'inspect') {
+    g.invInspecting = !g.invInspecting;
+    invScreen();
+    return;
+  } else if (action === 'drop') {
+    const r = invDrop(who, itemId, s.qty);
+    msg = r.msg;
+  }
+  g.invSel = null;
+  g.invInspecting = false;
+  if (msg) notify(msg);
+  saveProto();
+  invScreen();
 }
 start();
 
