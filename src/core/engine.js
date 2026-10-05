@@ -1,0 +1,25 @@
+function start(){document.body.classList.remove('cinema');let existing=localStorage.getItem('longroad_v01');screen(`${scene('bg-title.webp')}<div class="panel"><h2>COLORADO IS CALLING.</h2><p>Sixty years after the collapse began in the shadow of the autonomous defense network CUSTODIAN, a transmission reaches Mercy, Texas. It promises clean water in Colorado. Your settlement has nineteen days left.</p><p class="hero">Four survivors. One vehicle. 780 miles. The road remembers.</p>${btn('NEW JOURNEY','prologue(0)','primary')}${existing?btn('CONTINUE SAVED JOURNEY','resume()','choice'):''}</div>`)}
+
+function create(){document.body.classList.remove('cinema');selected='';screen(`<h2>01 / YOUR SURVIVOR</h2><p>Choose your character. Your name will appear throughout the journey.</p><div class="panel"><div class="grid">${btn('MALE','setSex("Male")','choice selected',)}${btn('FEMALE','setSex("Female")','choice')}</div><label for="name">SURVIVOR NAME</label><input id="name" class="field" maxlength="20" placeholder="Enter your name" autocomplete="off"><small>Both characters have the same abilities and story opportunities.</small>${btn('CONTINUE','chooseDifficulty()','primary')}</div>`)}
+
+function setSex(v){sex=v;document.querySelectorAll('.grid button').forEach(b=>b.classList.toggle('selected',b.textContent.toLowerCase()===v.toLowerCase()))}
+
+let playerName='';
+
+function chooseDifficulty(){playerName=$('#name').value.trim();if(!playerName){notify('Enter a survivor name.');return}screen(`<h2>02 / CHOOSE YOUR ROAD</h2><div class="panel"><h3>STORY MODE</h3><p>Forgiving resources. Replay from your most recent chapter checkpoint.</p>${btn('SELECT STORY MODE','setDifficulty("story")','choice selected')}<h3>SURVIVAL MODE</h3><p>Scarcer resources, permanent deaths, and one continuously updated save.</p>${btn('SELECT SURVIVAL MODE','setDifficulty("survival")','choice')}<h3>THE LAST ROAD</h3><p>Extreme scarcity. Your crew dies, your journey ends.</p>${btn('SELECT THE LAST ROAD','setDifficulty("hard")','choice')}${btn('CONTINUE','chooseCar()','primary')}</div>`)}
+
+function setDifficulty(v){difficulty=v;document.querySelectorAll('.choice').forEach(b=>b.classList.toggle('selected',b.textContent.toLowerCase().includes(v==='hard'?'last road':v)))}
+
+function chooseCar(){screen(`<h2>03 / MERCY MOTOR POOL</h2><p>Pick the vehicle that will carry your crew to Colorado.</p><div class="panel">${Object.entries(cars).map(([k,v])=>`<button class="choice carcard ${k===car?'selected':''}" onclick="setCar('${k}')">${img('vehicle-'+k+'.webp','',v.name)}<b>${escapeHtml(v.name)}</b><br><small>${v.desc}<br>Fuel ${v.fuel} gal · Condition ${v.hp}% · Parts ${v.parts}</small></button>`).join('')}${btn('BEGIN THE LONG ROAD','begin()','primary')}</div>`)}
+
+function setCar(v){car=v;document.querySelectorAll('.choice').forEach((b,i)=>b.classList.toggle('selected',Object.keys(cars)[i]===v))}
+
+function begin(){const c=cars[car];g={v:5,name:playerName,sex,difficulty,car,day:1,miles:0,fuel:c.fuel,food:c.food,water:c.water,parts:c.parts,hp:c.hp,meds:3,ammo:9,health:100,pfat:0,injury:'healthy',woundedDays:0,antibiotics:2,rationing:false,crew:[{name:'Josh',hp:100,trust:0,fatigue:0,injury:'healthy',woundedDays:0,neglectDone:false},{name:'Mara',hp:100,trust:0,fatigue:0,injury:'healthy',woundedDays:0,neglectDone:false}],flags:{},log:[],phase:'hank_repair',enemy:null,checkpoint:null,quests:newQuests(),discoveries:[],chapter:1,consequences:[],settlements:{},npcs:{},encounters:{},mercy:{contact:'none',infoTransmitted:[],supportSent:{},lastKnown:'stable'},route:sex==='Female'?'evelyn':'jack',spouseName:sex==='Female'?'Daniel':'Claire'};log('The last broadcast reaches Mercy.');save();hankRepair()}
+
+function resume(){document.body.classList.remove('cinema');try{g=JSON.parse(localStorage.getItem('longroad_v01'));if(!g||!g.crew)throw Error();g=migrateSave(g);updateQuests(true);render()}catch(e){notify('No valid save found.');start()}}
+
+function newGame(){if(!confirm('Start a new journey? This replaces your current saved game.'))return;localStorage.removeItem('longroad_v01');g=null;start()}
+
+function render(){if(!g)return start();switch(g.phase){case'hank_repair':return hankRepair();case'mercy_hub':return mercyHub();case'mercy_workshop':return mercyWorkshop();case'mercy_clinic':return mercyClinic();case'mercy_water':return mercyWater();case'ruth_crisis':return ruthCrisis();case'mercy_day':return mercyDay();case'day_josh':return dayJosh();case'day_mara':return dayMara();case'day_ruth':return dayRuth();case'day_eli':return dayEli();case'departure':return departure();case'phase1_done':return phase1Done();default:return phase1Done()}}
+/* Legacy road-loop phases (opening/road/crew/journal/quest/battle/event/end/arrival/breakdown)
+   were retired in Milestone 1; v5 migration remaps them to phase1_done before render runs. */

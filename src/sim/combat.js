@@ -1,0 +1,15 @@
+/* sim/combat.js — Preserved combat primitives (Milestone 1).
+   beginBattle / battle / combat are the turn-based encounter primitives from the
+   retired legacy road loop, preserved verbatim for the future encounter engine
+   (Milestone 3). They are currently DORMANT: no live code path calls them.
+   Known tech debt: their bodies still reference retired legacy functions
+   (road, end, woundChar, gainFatigue; log is kept). Those references only
+   resolve if the functions are invoked, which cannot happen until the
+   encounter engine rewires them. Do not call these from live code yet. */
+
+
+function beginBattle(name,hp,damage){g.enemy={name,hp,max:hp,damage,guard:false};g.phase='battle';save();battle('An enemy blocks your way.')}
+
+function battle(msg){if(!g.enemy)return road();g.phase='battle';save();screen(`${hud()}<div class="panel"><div class="eyebrow">TURN-BASED ENCOUNTER</div><h2>${escapeHtml(g.enemy.name)}</h2><p>ENEMY HP: ${g.enemy.hp} / ${g.enemy.max}</p><div class="bar"><span style="width:${100*g.enemy.hp/g.enemy.max}%;background:#dc8c78"></span></div><p>${escapeHtml(g.name)} HP: ${g.health} / 100</p><div class="bar"><span style="width:${g.health}%"></span></div><p class="hero">${escapeHtml(msg)}</p><div class="actions">${btn('ATTACK','combat(0)')}${btn('TALK','combat(1)')}${btn('MEDKIT ('+g.meds+')','combat(2)')}${btn('DEFEND','combat(3)')}${btn('JOSH: DISTRACT','combat(4)')}${btn('RETREAT','combat(5)')}</div><p class="muted">Ammo: ${g.ammo} · Each action uses one turn.</p></div>`)}
+
+function combat(a){let e=g.enemy;if(!e)return;let msg='';if(a===0){if(g.ammo<=0)return notify('Out of ammunition.');g.ammo--;let d=12+Math.floor(Math.random()*12);e.hp-=d;msg='Your shot deals '+d+' damage.'}if(a===1){if(e.hp<=e.max*.4||g.flags.frequency){log('You convince the enemy to stand down.');g.flags.merciful=true;g.enemy=null;return road('The confrontation ends without another shot.')}msg='Your words fail to stop the attack.'}if(a===2){if(g.meds<=0)return notify('No medicine left.');g.meds--;g.health=Math.min(100,g.health+30);msg='You recover 30 health.'}if(a===3){e.guard=true;msg='You brace for the next attack.'}if(a===4){if(g.crew[0].hp<=0)return notify('Josh cannot help.');if(Math.random()<.65){e.hp-=9;msg='Josh distracts the enemy for 9 damage.'}else msg='Josh misses his opening.'}if(a===5){if(Math.random()<.6){g.fuel=Math.max(0,g.fuel-2);g.enemy=null;log('You escape the confrontation.');return road('You retreat and burn extra fuel.')}msg='You fail to escape.'}if(e.hp<=0){g.enemy=null;g.parts++;g.flags.combatWins=(g.flags.combatWins||0)+1;log('You survive the fight and recover one spare part.');return road(msg+' The enemy is defeated.')}let dmg=Math.max(1,e.damage+Math.floor(Math.random()*7)-3-(e.guard?Math.floor(e.damage*.7):0)-(fatTier(g.pfat)==='Exhausted'?2:0));e.guard=false;g.health=Math.max(0,g.health-dmg);if(dmg>0&&g.injury==='healthy'){const ch=g.difficulty==='story'?0.15:g.difficulty==='hard'?0.35:0.25;if(Math.random()<ch)woundChar('player')}msg+=' The enemy strikes for '+dmg+' damage.';if(g.health<=0){g.enemy=null;return end('You fall in battle. The road does not wait.')}battle(msg)}

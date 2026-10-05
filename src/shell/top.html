@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#151d16"><title>The Long Road — Alpha 0.2.2</title><style>
+:root{font-family:ui-monospace,Menlo,Consolas,monospace;color:#e8e8cf;background:#101510}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#2c3527,#101510 75%);min-height:100vh}main{max-width:690px;margin:auto;padding:20px 16px 60px}h1{color:#c9e69c;letter-spacing:.14em;font-size:clamp(26px,7vw,43px);margin:8px 0}h2{font-size:20px;color:#c9e69c}h3{font-size:16px}p{line-height:1.55}small,.muted{color:#a3af94}header{border-bottom:1px solid #58694b;margin-bottom:20px;padding-bottom:10px}.eyebrow{color:#b3cb87;font-size:11px;letter-spacing:.2em}.panel{border:1px solid #52654a;background:#1a241a;padding:16px;border-radius:8px;margin:14px 0;box-shadow:0 5px 20px #0003}.art{height:170px;position:relative;overflow:hidden;background:linear-gradient(#554c37 0%,#a77743 48%,#504733 49%,#33392c 70%,#1b201a 70%);border-radius:5px;border:1px solid #706c4a;margin:12px 0}.art:before{content:'☢';position:absolute;right:16%;top:10%;font-size:46px;color:#d6b77b66}.art:after{content:'▰▰▰';position:absolute;bottom:25px;left:24%;font-size:38px;letter-spacing:-8px;color:#101510;text-shadow:0 8px #090c09}.road{position:absolute;bottom:0;width:100%;height:26px;background:#181c19;border-top:3px dashed #c2a76a}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.stat{background:#2a3828;border:1px solid #43583c;padding:9px;border-radius:5px;font-size:12px}.stat b{display:block;color:#e5f5c4;font-size:17px;margin-top:4px}button,input,select{font:inherit}button{background:#354b30;color:#eff5df;border:1px solid #91b279;padding:13px 12px;min-height:47px;border-radius:5px;cursor:pointer;text-align:left}button:hover,button:focus{background:#506c43}button:disabled{opacity:.4;cursor:not-allowed}.primary{background:#b5d58b;color:#142011;font-weight:900;text-align:center;width:100%;margin-top:10px}.primary:hover{background:#d5ecb3}.choice{display:block;width:100%;margin:8px 0}.choice.selected{background:#5d7648;border-color:#e5efbc}.field{width:100%;padding:13px;background:#0f180f;color:white;border:1px solid #91b279;border-radius:5px;margin:6px 0 12px}.bar{height:9px;background:#34432f;border-radius:9px;overflow:hidden;margin:8px 0}.bar span{display:block;height:100%;background:#b8d68a}.log{max-height:175px;overflow:auto;font-size:12px;color:#bfcaa9}.log div{border-bottom:1px solid #344231;padding:6px 0}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.tag{font-size:11px;border:1px solid #82996b;padding:4px 7px;border-radius:3px;color:#c4dfa1}.danger{color:#f4a79a}.success{color:#bde7a1}.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.footer{margin-top:24px;font-size:11px;color:#8e9e82}.hidden{display:none}label{display:block;margin:10px 0}.hero{font-size:14px;color:#f4dcb0}#toast{position:fixed;bottom:12px;left:12px;right:12px;max-width:660px;margin:auto;background:#c4e1a0;color:#152011;padding:12px;border-radius:5px;display:none;z-index:3}@media(min-width:600px){.art{height:240px}.stats{grid-template-columns:repeat(6,1fr)}}
+/* ---- ALPHA 0.2 visual framework: illustrated scenes, portraits, motion ---- */
+#app>*{animation:screenIn .38s ease both}
+@keyframes screenIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.scene{position:relative;overflow:hidden;border-radius:5px;border:1px solid #706c4a;margin:12px 0;min-height:170px;background:linear-gradient(#554c37 0%,#a77743 48%,#504733 49%,#33392c 70%,#1b201a 70%)}
+.scene img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.scene .shade{position:absolute;inset:0;background:linear-gradient(#0000 55%,#101510cc);pointer-events:none}
+.scene .car{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:min(62%,330px);filter:drop-shadow(0 10px 12px #000a)}
+.scene .car img{width:100%;display:block;border-radius:4px}
+.roadmove{position:absolute;bottom:0;left:0;width:200%;height:24px;background:repeating-linear-gradient(90deg,#c2a76a 0 34px,#181c19 34px 68px);border-top:3px solid #c2a76a;opacity:.8;animation:roadmove 1.6s linear infinite;pointer-events:none}
+@keyframes roadmove{to{transform:translateX(-68px)}}
+.dust{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(#d6b77b22 1.5px,#0000 2px),radial-gradient(#d6b77b18 1px,#0000 1.6px);background-size:90px 60px,140px 90px;animation:dust 9s linear infinite}
+@keyframes dust{to{background-position:90px 0,140px 0}}
+.portrait{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #91b279;flex:none;background:#2a3828}
+.speaker{display:flex;gap:10px;align-items:center;margin:10px 0}
+.speaker b{color:#e5f5c4}
+.carcard img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:4px;margin-bottom:8px;display:block;background:#2a3828}
+@media(min-width:600px){.scene{min-height:240px}.portrait{width:76px;height:76px}}
+@media(prefers-reduced-motion:reduce){#app>*{animation:none}.roadmove,.dust{animation:none}}
+/* ---- ALPHA 0.2.2 prologue & quests ---- */
+.scene-tall{min-height:230px}
+.kenburns{animation:kenburns 14s ease-in-out infinite alternate}
+@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.09)}}
+.dots{display:flex;gap:10px;justify-content:center;margin:14px 0}
+.dots span{width:10px;height:10px;border-radius:50%;background:#43583c}
+.dots span.on{background:#c9e69c;box-shadow:0 0 8px #c9e69c88}
+.prologue-text{white-space:pre-line;cursor:pointer;line-height:1.7;font-size:16px}
+.typecaret{color:#c9e69c;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.quest-done{color:#bde7a1}
+.quest-current{color:#f4dcb0}
+/* ---- Cinematic prologue presentation: full-bleed art, title overlaid, script-style narration ---- */
+body.cinema header,body.cinema .footer{display:none}
+body.cinema main{max-width:100%;padding:0 0 44px}
+.cine-art{position:relative;min-height:48vh;overflow:hidden;border-bottom:1px solid #706c4a;background:#0c100c}
+.cine-art img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.cine-art .shade{position:absolute;inset:0;background:linear-gradient(#10151055 0%,#0000 40%,#101510e6 92%);pointer-events:none}
+.cine-title{position:absolute;left:0;right:0;bottom:0;padding:60px 22px 20px}
+.cine-title>div{max-width:640px;margin:0 auto}
+.cine-title h2{font-size:clamp(24px,6.4vw,36px);margin:6px 0 4px;letter-spacing:.05em;text-shadow:0 2px 14px #000}
+.cine-script{max-width:660px;margin:0 auto;padding:20px 22px 6px}
+.cine-script .prologue-text{max-height:34vh;overflow-y:auto;padding:2px 8px 14px 2px;-webkit-overflow-scrolling:touch}
+.cine-controls{max-width:660px;margin:0 auto;padding:4px 22px 0}
+.cine-controls .row button{flex:1;min-height:52px;font-size:15px}
+.cine-controls .choice{margin-top:12px;min-height:52px;text-align:center}
+@media(min-width:600px){.scene-tall{min-height:320px}.cine-art{min-height:56vh}.cine-script .prologue-text{max-height:40vh;font-size:17px}}
+@media(prefers-reduced-motion:reduce){.kenburns,.typecaret{animation:none}}
+</style></head><body><main><header><div class="eyebrow">CONTINUITY NETWORK // 2089</div><h1>THE LONG ROAD</h1><div class="row"><span class="muted">EVERY MILE COSTS SOMETHING.</span><span class="tag">ALPHA 0.2.2</span></div></header><div id="app"></div><div class="footer">An original prototype. Saves locally in this browser. No accounts or network required.</div></main><div id="toast" role="status"></div><script>
