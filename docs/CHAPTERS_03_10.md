@@ -1,0 +1,44 @@
+# Chapters 3–10 — Design Outlines
+Frozen as direction by Nic 2026-10-05 (Campaign Master Plan v1.0). These are chapter-scale outlines, not implementation specs — each chapter gets a full spec (like `docs/CHAPTER_02_STRANGERS.md`) before implementation. Do not implement from these outlines alone.
+
+## Chapter 3 — THE ROAD REMEMBERS (~2–2.5h, miles 200–330)
+**Theme:** Nothing you do happens in isolation. First noticeable delayed consequences: the player hears stories about people, routes, and events they already affected. Not every consequence involves someone returning — information travels, reputation travels, people affect other people.
+**Tollway:** a community maintaining ~40 miles of usable highway — clearing wrecks, repairing pavement, maintaining bridges, patrolling against raiders — and charging travelers. The player may pay, negotiate, barter, perform work, help solve a local problem, attempt bypass, sneak, fight, or take a dangerous detour. **Tollway must NOT be "evil people charging for a road"** — maintaining infrastructure costs labor and lives; some travelers call the Tollkeepers extortionists, others call them the only reason commerce exists.
+**Centerpiece:** a Tollway patrol/caravan crisis combining road obstruction, hostile human threat, civilians, resource expenditure, and vehicle condition. An earlier decision may subtly affect available help. Cal Danner MAY return here if appropriate — conditional, never mandatory; if not, preserve him for later.
+**Ending:** approaching Blackridge, the crew sees something impossible — stable electric light, not fire, not generator flicker. Hank: "Keep driving." Chapter ends.
+
+## Chapter 4 — DO NOT TAKE I-40 (~2.5–3h, miles 330–430)
+**Theme:** Curiosity has a cost. **Blackridge** opens the chapter: population apparently zero, doors unlocked, beds, food, tools, no obvious massacre, no bodies explaining the abandonment — and a generator/system still functioning. **First undeniable evidence that significant pre-Collapse infrastructure remains active. Do NOT explain why yet.** (Existing CUSTODIAN sentry material folds into the Blackridge approach/escalation per `docs/WORLD.md` — C-07 tag hint → running generator → sentry demanding authorization — not duplicated.)
+**Major route decision — I-40 / C-07 corridor OR Free Roads. Neither is "correct."** I-40: shorter, higher-value old-world infrastructure, extremely dangerous — military checkpoints, abandoned traffic, emergency signage, barricades, active remnants, strange lighting, CUSTODIAN-linked infrastructure, dangerous scavenging. Free Roads: longer, more human contact — micro-settlements, travelers, damaged bridges, caravans, raiders, local disputes, more food/trade, more time/fuel. **Free Roads must NOT feel like the coward/inferior route.** Both routes carry enough campaign information; I-40 gives more direct C-07 evidence, Free Roads more human/contextual evidence.
+**Ending:** both branches converge toward the Dead Corridor / Last Stop region. The crew understands one thing: the warning about I-40 was not superstition. They still do NOT understand who inserted it.
+
+## Chapter 5 — DEAD SIGNALS (~2–2.5h, miles 430–500)
+**Theme:** The dead still leave messages. **Last Stop:** a lively rail-yard settlement — rail cars become homes, shops, clinic, bar, lodging, workshops. Contrast eerie abandoned infrastructure with extremely human community life.
+**Spouse breadcrumb:** Claire/Daniel was here relatively recently — alive, traveling with purpose, asking about communication infrastructure, moving toward Colorado. Someone remembers them clearly; a physical spouse-linked breadcrumb may appear. **Do not reunite yet.**
+**Rare cannibal storyline:** the campaign's major cannibal encounter belongs here — NOT Last Stop's secret, NOT a settlement-wide twist, but a Story Encounter away from the settlement: a small isolated group/camp offering shelter, food, ordinary conversation, perhaps trade. Something is wrong; Mara or an observant protagonist notices evidence gradually. **Never cartoon cannibals, never gore-as-comedy, never imply cannibalism is common.** The encounter can be avoided, escaped, negotiated through, exposed, fought, or survived without learning everything. **After this, no other major cannibal group appears in the campaign.**
+**Ending:** evidence suggests Claire/Daniel wasn't simply trying to reach Station Seven — they were trying to understand something.
+
+## Chapter 6 — THE LONG WAY NORTH (~3h, miles 500–590)
+**Theme:** Survival eventually becomes politics. **Republic of Morrow** (pop. ~600): the largest functioning society encountered — elected leadership, courts, guards, schools, currency, markets, limited electricity, farms, laws, factions. Shocking after the road: civilization did not disappear, it fragmented.
+**Political conflict** with no clean good/evil: **Expansionists** (secure roads, absorb/protect smaller communities) · **Isolationists** (expansion repeats old mistakes, drains Morrow) · **Alliance advocates** (independent communities in cooperation). The player's information — about Mercy, Redwater/Haven, Tollway, I-40, Station Seven — may become politically valuable; the player may lie, omit, or share.
+**Mid-trail spouse breadcrumb:** someone in/near Morrow holds an object or firsthand story connected to Claire/Daniel — closing the Crossroads/Last Stop → Relay gap. The spouse feels increasingly close without undermining The Relay.
+**Ending:** the crew leaves organized civilization for the High Country. Hank is visibly uneasy.
+
+## Chapter 7 — HIGH COUNTRY (~2–2.5h, miles 590–670)
+**Theme:** You cannot outrun where you came from. Travel itself becomes substantially harder: altitude, cold, snow, rockslides, steep grades, vehicle strain, wildlife, limited shelter.
+**Hollow Creek** (pop. ~75): hard, practical, interdependent mountain settlement. **Someone recognizes Hank — this is where Hank's history comes due** (see `docs/MYSTERIES.md`; guilt, not betrayal; exact technical knowledge stays limited).
+**Ending:** the crew receives evidence that The Relay recently operated. Claire/Daniel may have been there. Personal quest momentum accelerates.
+
+## Chapter 8 — CONTINUITY (~2–2.5h, miles 670–760)
+**Theme:** Hope becomes dangerous when it becomes certainty. **The Relay:** a pre-Collapse communications facility, partially functional. Evidence proves Claire/Daniel was here **recently** — no longer rumor. Personal quest: FOLLOW THE TRAIL → THEY'RE CLOSE. Spouse evidence (use more than one only if pacing supports it): fresh handwriting, recognizable repair, personal object, recording, improvised message, witness.
+**CUSTODIAN pressure:** active infrastructure becomes more common; systems begin responding to the crew's presence. CUSTODIAN may recognize **MERCER** — do not yet explain why completely.
+**Ending:** Station Seven is visible/reachable. It does not look like the salvation the broadcast promised.
+
+## Chapter 9 — STATION SEVEN (~2.5h, miles 760–780)
+**Theme:** Finding someone is not the same as saving them. Station Seven is a substantial explorable final-act environment — not one room and an ending screen: functioning water, medical infrastructure, power, damaged/isolated sections, survivors, CUSTODIAN-linked systems, evidence from 2029 onward, competing interpretations of what the station should become.
+**THE REUNION** occurs in the first portion (ideally within 30–45 minutes), not at the end. Claire: "Jack?" / Daniel: "Evelyn?" — embrace — "You came." / "You knew I would." / "I hoped." Personal quest: THEY'RE CLOSE → FOUND. **The spouse joins the party** — dialogue, opinions, contextual abilities, reactions to crew, knowledge the protagonist lacks, emotional scenes, standing to disagree.
+**The interrupted line**, revealed in its proper moment: "And if you're hearing this—" was the spouse's attempt to warn Jack/Evelyn not to come blindly — the broadcast was being generated/repeated through systems they did not trust. The interruption was unstable/contested access, not a deliberate stop. Their "I'm alive" is what caused the protagonist to come.
+**Ending:** the spouse reveals Station Seven connects to a deeper CUSTODIAN control site — **The Core**. Mercy may be connected to the network in a way nobody understood. Personal quest becomes GET HOME TOGETHER.
+
+## Chapter 10 — THE LAST ROAD (~3h)
+**Theme:** What does it mean to preserve civilization? Combines Station Seven, the spouse, the crew, The Core, CUSTODIAN, Mercy, journey consequences, and final decisions. **Never reduce the ending to DESTROY AI / SAVE AI.** Final choice architecture in `docs/CAMPAIGN_MASTER_PLAN.md` (Centralize / Sever / Distribute / Restrict-Hybrid — no canonical best ending). Final outcomes combine the CUSTODIAN decision, Mercy, spouse, crew survival, communities, information shared, relationships, time, resources, and discoveries. **The last emotional beat concerns home, not technology.**

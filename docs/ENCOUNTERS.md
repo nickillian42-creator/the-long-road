@@ -73,3 +73,41 @@ Traveling families, hunters, scavengers, old couples, groups moving south, wound
 
 ## Scale target
 ~100 authored NPCs **plus** potentially hundreds of encounter variants across tiers and categories. Chapter 2 is written with this layer in mind from the beginning.
+
+---
+
+## Campaign-wide encounter plan (Campaign Master Plan v1.0, frozen 2026-10-05)
+Encounters operate across Chapters 1–10 — they do not begin in Chapter 2 and do not disappear when the plot becomes urgent. Target: ~30–45 meaningful encounters per normal ~25-hour run; master pool of 100+ scenarios/variants; no single run sees everything. Quiet travel is part of pacing.
+
+### Distribution by chapter
+- **Ch1:** grounded wildlife, weather, stranded travelers, scavenging, ordinary road danger.
+- **Ch2:** wildlife, Cal, traders, storms, civilians, uncertainty.
+- **Ch3:** caravans, Tollway patrols, organized crime, returning consequences.
+- **Ch4:** dangerous road infrastructure, raiders, Free Roads civilians, I-40 anomalies.
+- **Ch5:** sparse population, Dead Corridor, scavenging, unsettling environments, the single major cannibal storyline.
+- **Ch6:** merchants, patrols, refugees, farms, criminals, political travelers around Morrow.
+- **Ch7:** high-country wildlife/weather/altitude/vehicle danger.
+- **Ch8:** fewer ordinary encounters; more active infrastructure and communication phenomena.
+- **Ch9:** Station Seven environmental/survivor/system encounters.
+- **Ch10:** encounters increasingly generated from the player's accumulated history.
+
+### Wildlife library
+Varies by region and behavior. Animals are ordinary wildlife in a world with dramatically reduced human control — never mutated monsters. Texas/Plains: coyotes, feral dogs, wild hogs, rattlesnakes, copperheads where plausible, bobcats, mountain lions, aggressive/feral cattle, feral horses, territorial deer/bucks, vultures, hawks, owls, skunks, raccoons, foxes, swarming insects, bees/wasps, dangerous spiders where appropriate. Northern/high-country: black bears, mountain lions, coyotes, wolves if ecologically plausible in 2089, elk, moose, mule deer, bighorn sheep, foxes, porcupines, scavenger birds, smaller animals able to damage supplies/equipment. Animals can attack, stalk, defend young or food, block roads, raid supplies, damage camp, indicate nearby danger/carcass/water, provide hunting opportunity, flee, or simply be observed. Some encounters can seriously wound or kill through poor decisions or pre-existing compromise. **Bear tracks can be the entire encounter.**
+
+### Random civilians / traders
+A large unnamed/minor-character population: traveling families, lone scavengers, hunters, mechanics, medics, merchants, refugees, couriers, farmers, children with adults nearby, grieving travelers, people moving settlements, injured travelers, religious travelers, storytellers, musicians, surveyors, former soldiers, ordinary people. Many support bargaining for food, water, ammunition, medicine, tools, vehicle parts, fuel, clothing, information, collectibles, junk. **Prices are contextual** — someone dying of thirst values water differently than someone beside a reservoir. A trader may bargain honestly, overcharge, bluff, unknowingly sell something valuable, recognize an item, refuse trade, or remember a previous interaction. Some people are encountered once and never again — genuinely.
+
+### Raiders / human hostility
+Not one generic faction. Archetypes: highway ambush, fake injured traveler, false distress signal, bridge trap, extortion checkpoint, camp robbery, vehicle pursuit, scavengers turning hostile, desperate civilians threatening the crew, organized raider patrol, raiders fighting another group, attempted theft, surrendering attacker, wounded enemy asking for help. Many support negotiation, intimidation, bribery, trade, retreat, stealth, alternate routes, or combat — **combat is never mandatory.** Raiders value survival: they flee, surrender, miscalculate. Some apparent raiders turn out not to be.
+
+### Environment (campaign-wide)
+Thunderstorms, flash floods, extreme heat, drought, dust, wildfire, cold snaps, snow, blizzards, ice, rockslides, mud, washed-out roads, collapsed bridges, unstable structures, lightning, river crossings, altitude. Environment interacts with vehicle, inventory, fatigue, wounds, time, and crew.
+
+### Sickness / medical trials
+Story-driven, never busywork: food poisoning, fever, contaminated water, respiratory illness, infected wounds, animal bite, heat exhaustion, hypothermia, altitude sickness, sprains, fractures, dental infection. Template: Mara becomes seriously ill; treatment exists off-route; Mercy's clock is running; the player chooses whether to detour — survival mechanics and story become the same decision.
+
+### Mechanical encounters
+Flat tire, overheating, belt/hose failure, dead battery, damaged suspension, fuel leak, stuck vehicle, broken windshield, radiator obstruction, electrical problems. Named inventory matters — never "PARTS −2" where a physical item/utility interaction makes a better scene. Not a maintenance-chore simulator.
+
+### Strange encounters (campaign-wide)
+Repeating six-second radio signal; freshly painted TURN AROUND sign; intact house; abandoned running vehicle; distant watcher; repeated unknown symbol; bicycle in roadway; warm abandoned campfire; functioning vending machine; cattle herd on interstate; time capsule; automated weather station; activating emergency siren; lights in an empty structure. Some mundane, some dangerous, some loot, some human, very few CUSTODIAN-connected. **Never labeled as CUSTODIAN encounters** — the crew initially sees only what is physically happening.

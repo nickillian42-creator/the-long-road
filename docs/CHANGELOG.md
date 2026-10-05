@@ -1,5 +1,17 @@
 # Changelog
 
+## Campaign Master Plan v1.0 freeze (2026-10-05) — docs + one title-screen text fix
+- New: `docs/CAMPAIGN_MASTER_PLAN.md` (campaign target ~25h, chapter pacing 1–10, consequence web, character death, ending montage, four-philosophy final choice, no-filler rule, implementation philosophy, north star)
+- New: `docs/MYSTERIES.md` — backstage truth frozen as WRITER-ONLY canon (CUSTODIAN, C-07, I-40 warning, Hank's history, spouse's interrupted line, MERCER recognition, human seekers) + reveal schedule + crew-knowledge firewall
+- New: `docs/CHAPTERS_03_10.md` — chapter outlines for 3–10 (full per-chapter specs required before implementation)
+- `docs/NPCS.md`: roster complete at exactly 100 authored NPCs — #031–100 appended with 31 approved collision cleanups; Helen Voss (#094) canonized as Owen Voss's aunt; stale Hank portrait audit note removed
+- `docs/ENCOUNTERS.md`: campaign-wide encounter plan appendix (distribution by chapter, wildlife library, civilians/traders, raiders, environment, sickness, mechanical, strange encounters)
+- `docs/WORLD.md`: Tollway philosophy, Relay partial function, endgame runtime clarification (4–5h = post-reunion spouse-active), Core writer-canon pointer
+- `docs/DECISIONS.md`: §12 records the freeze (mystery canon, 100-NPC completion, endgame clarification, engineering principles, save/state schema planning)
+- `docs/ROADMAP.md`: architecture groundwork checklist before Alpha 0.4; single-file split scheduled no later than Chapter 3
+- `index.html`: title-screen text fix ONLY — "Thirty-seven years" → "Sixty years"; "CUSTODIAN initiated the collapse" softened to preserve mystery (no gameplay, save, or quest changes)
+- 27-point audit found no hard canon contradictions before freezing
+
 ## Campaign canon freeze (2026-10-05) — docs only, no code changes
 - New: `docs/CHARACTERS.md` (character bible: Jack/Evelyn Mercer routes, Claire/Daniel, marriage, expedition backstory, two-voice rule, reunion, spouse survival rule, route differentiation)
 - New: `docs/CAMPAIGN.md` (campaign structure: 22–25h targets, personal quest FIND THEM → … → GET HOME TOGETHER, Chapter 1 THE VOICE, final-act Station Seven, four unresolved mysteries, ~100-NPC roster plan)

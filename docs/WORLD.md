@@ -27,7 +27,7 @@ Controls a functioning underground reservoir. Healthy crops, clean water, strong
 Apparently beautiful agricultural community: food, families, music, security. Haven believes individual freedom helped destroy the old world. Everyone contributes and receives food/medicine/protection — but residents are not permitted to simply leave. **Do NOT turn this into a predictable cannibal/cult twist.** The ideological conflict itself is the problem.
 
 ### 4. THE TOLLWAY — ~Mile 250 — Population ~90
-A road-maintenance society controlling roughly 40 miles of usable highway. They clear wrecks, maintain bridges, mark routes, and suppress banditry — then charge travelers for passage. The player may pay, negotiate, assist them, bypass them, or make an enemy. Their people remember the choice later.
+A road-maintenance society controlling roughly 40 miles of usable highway. They clear wrecks, maintain bridges, mark routes, and suppress banditry — then charge travelers for passage. The player may pay, negotiate, assist them, bypass them, or make an enemy. Their people remember the choice later. **Never written as "evil people charging for a road":** maintaining infrastructure costs labor and lives; some travelers call the Tollkeepers extortionists, others call them the only reason commerce still exists.
 
 ### 5. BLACKRIDGE — ~Mile 330 — Population apparently 0
 An abandoned settlement, vacated suddenly: doors unlocked, possessions left behind, no obvious massacre. A generator or other infrastructure is inexplicably still operating. First strong indication that active CUSTODIAN-connected infrastructure remains in the world. **Keep explanations withheld.**
@@ -50,13 +50,13 @@ Largest society encountered. Elections, courts, guards, schools, local currency,
 Colorado mountain settlement. Small, interdependent community. Major Hank storyline location: someone recognizes Hank or his family/name, beginning to expose his connection to the region, I-40, and/or old events. The exact secret remains to be authored later.
 
 ### 10. THE RELAY — ~Mile 690
-Pre-Collapse communications installation. Evidence proves Claire/Daniel was here recently. This transitions the personal quest into **THEY'RE CLOSE**.
+Pre-Collapse communications installation, partially functional. Evidence proves Claire/Daniel was here recently. This transitions the personal quest into **THEY'RE CLOSE**.
 
 ### 11. CONTINUITY STATION SEVEN — ~Mile 780
-Destination and substantial final-act environment. Power, clean water, medical infrastructure, sealed and recently used areas. The Claire/Daniel reunion occurs around this stage; the spouse joins the party. The Station Seven / CUSTODIAN / Mercy endgame occupies roughly 4–5 hours. (See `docs/CAMPAIGN.md`.)
+Destination and substantial final-act environment. Power, clean water, medical infrastructure, sealed and recently used areas. The Claire/Daniel reunion occurs around this stage; the spouse joins the party. Roughly 4–5 hours of post-reunion spouse-active gameplay across the Station Seven endgame (see runtime clarification in `docs/CAMPAIGN_MASTER_PLAN.md`).
 
 ### 12. THE CORE
-Deep Station Seven / CUSTODIAN environment and final decision space. **Exact nature remains intentionally unresolved until later campaign writing.**
+Deep Station Seven / CUSTODIAN environment and final decision space. Its nature is defined as writer canon in `docs/MYSTERIES.md`; it remains unresolved for the player until the final act.
 
 ## Route splits
 - **Split 1 (after Crossroads, ~mile 70+):** REDWATER (3A) vs. HAVEN (3B). Rejoin at the Tollway (~250).

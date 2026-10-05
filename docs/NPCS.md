@@ -33,7 +33,7 @@ Preserve: **THE WORLD REMEMBERS WHAT YOU DO. THE CONSEQUENCES DON'T ALWAYS ARRIV
 - **Lucy beat:** Lucy Bell asks Eli about the mountains before departure. If Eli returns to Mercy, her repeated question and his answer reflect who he became. If he doesn't return, someone else may have to answer. Do not predetermine Eli's death.
 
 ### #004 — HANK ROURKE
-- **Age:** late 60s, approximately 68 *(audit note: the portrait bible in `docs/ASSET_MANIFEST.md` still says "late 70s" — flagged as conflicting with the deeper canon that Hank was a child in 2029, which puts him at ~60–68. Roster locks ~68; manifest correction pending Nic's approval.)*
+- **Age:** late 60s, approximately 68.
 - **Location:** Mercy / traveling crew. **Role:** Mechanic / old-road knowledge.
 - Funny, stubborn, exceptionally capable. His hands may shake slightly at rest but steady when working.
 - Knows substantially more about old roads, Colorado, and certain infrastructure than he initially admits. His immediate reaction to AVOID INTERSTATE 40 is significant. He refuses to fully explain why.
@@ -229,4 +229,171 @@ Redwater (#016–022) and Haven (#023–030) belong to the first significant rou
 - **7–9 location target:** route exclusivity is compatible — a run sees one branch, keeping the count in range.
 - **Crew knowledge:** no violations. Rosa's projections are explicitly uncertain; Tomas's lie is flagged without explanation; Abel stays ambiguous.
 
-*Roster continues at #031+ (next: Chapter 2 playable narrative before further roster expansion, per Nic).*
+- **Crew knowledge:** no violations. Rosa's projections are explicitly uncertain; Tomas's lie is flagged without explanation; Abel stays ambiguous.
+
+---
+
+## NPC ROSTER #031–100 (frozen 2026-10-05, Campaign Master Plan v1.0)
+All 31 collision cleanups approved by Nic with final names below; IDs #031–100 preserved; roster now complete at exactly 100 authored NPCs. **Helen Voss (#094) is canonized as Owen Voss's aunt** — a deliberate, lightweight family connection (caravan/family texture, not a hidden plot thread unless later story development calls for it). MERCER remains protected for protagonist/spouse only; no unrelated Mercers exist.
+
+### TOLLWAY
+### #031 — DANA QUINN
+- **Age:** 45. **Location:** Tollway. **Role:** Tollway administrator. Former road crew leader; believes usable infrastructure is worth paying for.
+### #032 — DEKE HOLLIS
+- **Age:** 38. **Location:** Tollway. **Role:** Patrol captain. Hard, disciplined; lost friends clearing raiders from the highway.
+### #033 — LENNY PRICE
+- **Age:** 62. **Location:** Tollway. **Role:** Bridge engineer. Keeps infrastructure alive with improvised repairs; obsessed with preventative maintenance.
+### #034 — PIPER ROSS
+- **Age:** 19. **Location:** Tollway. **Role:** Toll collector. Born into the Tollway; curious about life beyond forty miles of maintained asphalt.
+### #035 — SOLOMON REYES
+- **Age:** 51. **Location:** Tollway. **Role:** Merchant. Vocal critic of toll prices despite depending on the road for his livelihood.
+### #036 — GRACE NOLAND
+- **Age:** 34. **Location:** Tollway. **Role:** Caravan organizer. Coordinates merchants and civilians into safer traveling groups.
+### #037 — RAFE MADDOX
+- **Age:** 40. **Location:** Tollway. **Role:** Security. Former raider now working Tollway security; some people don't believe rehabilitation is real.
+### #038 — NELL AVERY
+- **Age:** 67. **Location:** Tollway. **Role:** Roadside cook. Knows travelers, rumors, and who disappeared on which roads.
+
+### BLACKRIDGE / I-40 / FREE ROADS
+### #039 — ISAAC VENN
+- **Age:** 36. **Location:** Blackridge. **Role:** Scavenger. Arrived shortly before the crew; claims he hasn't touched the power systems.
+### #040 — ROWAN ASH
+- **Age:** 31. **Location:** Free Roads. **Role:** Independent electronics scavenger. Brilliant, reckless, fascinated by active old-world systems.
+### #041 — FATHER ANSEL HALE
+- **Age:** 57. **Location:** Free Roads interchange settlement. **Role:** Community leader. "Father" is an affectionate title, not necessarily clergy.
+### #042 — JESSA HALE
+- **Age:** 30. **Location:** Free Roads. **Role:** Scout. Ansel's daughter; distrusts travelers but knows alternative roads.
+### #043 — MALIK GRANT
+- **Age:** 26. **Location:** Free Roads. **Role:** Caravan guard. Capable and talkative; recurring traveler candidate.
+### #044 — CORINNE BECK
+- **Age:** 48. **Location:** Free Roads bridge settlement. **Role:** Mechanic. Can solve a major route problem for a price or favor.
+### #045 — EVERETT COBB
+- **Age:** 59. **Location:** Free Roads. **Role:** Former infrastructure worker. Knows fragments about highway emergency systems.
+### #046 — JUNO VEGA
+- **Age:** 22. **Location:** Free Roads. **Role:** Courier. Knowledge of routes makes them useful.
+### #047 — HARLAN KNOX
+- **Age:** 43. **Location:** Free Roads. **Role:** Raider lieutenant. Intelligent enough to bargain; not all encounters with him require combat.
+### #048 — "DOC" FEN
+- **Age:** 66. **Location:** Traveling. **Role:** Traveling medic. Credentials impossible to verify; nevertheless highly competent.
+
+### LAST STOP / DEAD CORRIDOR
+### #049 — CELIA VANCE
+- **Age:** 50. **Location:** Last Stop. **Role:** Coordinator. Practical informal leader of the rail-yard settlement.
+### #050 — ARCHIE BELLOWS
+- **Age:** 65. **Location:** Last Stop. **Role:** Rail mechanic. Keeps ancient equipment functional.
+### #051 — MINA TORRES
+- **Age:** 28. **Location:** Last Stop. **Role:** Bartender/trader. Information passes through her business.
+### #052 — RAY DELGADO
+- **Age:** 41. **Location:** Last Stop. **Role:** Rail scout. Personally remembers Claire/Daniel passing through.
+### #053 — TALIA FINCH
+- **Age:** 32. **Location:** Last Stop. **Role:** Clinic worker. Works with Mara; can exchange medical knowledge.
+### #054 — EMMETT GRAY
+- **Age:** 74. **Location:** Last Stop. **Role:** Retired railman. Remembers pre-Collapse childhood fragments and early post-Collapse migration.
+### #055 — ROOK TANNER
+- **Age:** 25. **Location:** Dead Corridor. **Role:** Scavenger. Has explored parts of the Dead Corridor.
+### #056 — WILLA CRANE
+- **Age:** 37. **Location:** Last Stop. **Role:** Merchant. May possess or have handled a spouse-linked object.
+### #057 — AARON BLYTHE
+- **Age:** 46. **Location:** Traveling. **Role:** Traveler searching for his missing brother. Mirrors the protagonist without duplicating the story.
+### #058 — SABLE
+- **Age:** 39. **Location:** Dead Corridor (isolated camp). **Role:** Spokesperson for the campaign's single major cannibal group. Calm, articulate, deeply unsettling precisely because she isn't theatrical. Full surname intentionally unknown. (See `docs/CHAPTERS_03_10.md` Chapter 5 — used once, never cartoonish, never repeated elsewhere.)
+
+### MORROW
+### #059 — PRESIDENT LENA WARDELL
+- **Age:** 52. **Location:** Republic of Morrow. **Role:** Elected executive. Pragmatic institutionalist.
+### #060 — COUNCILOR MARCUS TRENT
+- **Age:** 45. **Location:** Republic of Morrow. **Role:** Expansionist leader. Believes Morrow must secure neighboring communities and routes.
+### #061 — COUNCILOR AMAYA CHEN
+- **Age:** 39. **Location:** Republic of Morrow. **Role:** Isolationist leader. Believes overextension will destroy Morrow.
+### #062 — COUNCILOR RAFAEL SOTO
+- **Age:** 58. **Location:** Republic of Morrow. **Role:** Alliance advocate. Favors federation and cooperation without annexation.
+### #063 — CAPTAIN IRIS MARSH
+- **Age:** 42. **Location:** Republic of Morrow. **Role:** Guard commander. Loyal to the law rather than individual politicians.
+### #064 — DR. NAOMI SHAH
+- **Age:** 44. **Location:** Republic of Morrow. **Role:** Physician/researcher. Interested in Station Seven's medical capability.
+### #065 — THEO MARCH
+- **Age:** 29. **Location:** Republic of Morrow. **Role:** Radio technician. Detects unusual network traffic.
+### #066 — VIVIAN THORNE
+- **Age:** 36. **Location:** Republic of Morrow. **Role:** Information broker. Knows someone is seeking the Mercer traveler.
+### #067 — GRAHAM FIELDS
+- **Age:** 33. **Location:** Republic of Morrow. **Role:** Merchant representative.
+### #068 — ELSIE ROWAN
+- **Age:** 70. **Location:** Republic of Morrow. **Role:** Judge. Believes rebuilding law is civilization's most important achievement.
+### #069 — FELIX ROWE
+- **Age:** 48. **Location:** Republic of Morrow. **Role:** Schoolteacher/historian.
+### #070 — NADIA SLOANE
+- **Age:** 20. **Location:** Republic of Morrow. **Role:** Courier. Young adult who has traveled between settlements; challenges Eli's assumptions.
+### #071 — GRANT HAVEL
+- **Age:** 55. **Location:** Republic of Morrow. **Role:** Farmer/delegate. Skeptical of urban political ambitions.
+### #072 — SIMONE LARK
+- **Age:** 31. **Location:** Republic of Morrow. **Role:** Engineer.
+
+### HIGH COUNTRY / HOLLOW CREEK
+### #073 — MABEL KADE
+- **Age:** 63. **Location:** Hollow Creek. **Role:** Leader. Recognizes Hank.
+### #074 — MASON IVERS
+- **Age:** 61. **Location:** Hollow Creek. **Role:** Elder. Former long-haul driver who knew the mountain roads before the Collapse.
+### #075 — CALLIE FROST
+- **Age:** 27. **Location:** High Country. **Role:** Mountain guide. Excellent climber, blunt, experienced with wildlife.
+### #076 — WALTER LANE
+- **Age:** 46. **Location:** High Country. **Role:** Hunter. Understands predator behavior; not a trophy-hunter stereotype.
+### #077 — DR. CARMEN ORTIZ
+- **Age:** 40. **Location:** Hollow Creek. **Role:** Clinic operator. Deals with altitude and cold injuries.
+### #078 — NOAH BRIGGS
+- **Age:** 18. **Location:** Hollow Creek. **Role:** Inexperienced scout. Wants to prove himself.
+### #079 — MAEVE KINCAID
+- **Age:** 71. **Location:** Hollow Creek. **Role:** Old survivor. Knows pieces of Hank's earlier expedition.
+### #080 — TUCKER WYNN
+- **Age:** 35. **Location:** High Country. **Role:** Recovery driver. Retrieves stranded vehicles from mountain roads.
+
+### THE RELAY / STATION SEVEN
+### #081 — ADRIAN CROSS
+- **Age:** 34. **Location:** The Relay. **Role:** Technician/survivor.
+### #082 — LILA HART
+- **Age:** 29. **Location:** The Relay. **Role:** Communications specialist. Encountered Claire/Daniel.
+### #083 — BRENNAN CAINE
+- **Age:** 48. **Location:** Station Seven. **Role:** Former Station Seven security.
+### #084 — DR. IMOGEN PARK
+- **Age:** 55. **Location:** Station Seven. **Role:** Physician. Has kept limited medical infrastructure functioning.
+### #085 — HUGH ARMITAGE
+- **Age:** 43. **Location:** Station Seven. **Role:** Systems engineer. Understands only part of the CUSTODIAN architecture.
+### #086 — NIA OKAFOR
+- **Age:** 37. **Location:** Station Seven. **Role:** Survivor organizer. Wants Station Seven controlled by its residents.
+### #087 — GABRIEL MOSS
+- **Age:** 60. **Location:** Station Seven. **Role:** Continuity historian. Has spent decades reconstructing records.
+### #088 — SOREN DRAY
+- **Age:** 41. **Location:** Station Seven. **Role:** Salvage leader.
+### #089 — CASSIDY FINN
+- **Age:** 32. **Location:** Station Seven. **Role:** Survivor. Maintains the water reclamation systems.
+### #090 — ELLIS STERN
+- **Age:** 46. **Location:** Station Seven approaches. **Role:** Outside faction representative.
+
+### FINAL ACT / RETURNING NETWORK
+### #091 — VERA SOLIS
+- **Age:** 44. **Location:** Traveling. **Role:** Independent operative connected to the human search for continuity access.
+### #092 — COMMANDER ALINA BROOKS
+- **Age:** 49. **Location:** Traveling. **Role:** Leader of a human group seeking centralized control of Station Seven. Not a cartoon villain; believes fragmented communities guarantee endless suffering.
+### #093 — DEVIN SUTTER
+- **Age:** 24. **Location:** Traveling. **Role:** Survivor whose family benefited from continuity infrastructure.
+### #094 — HELEN VOSS
+- **Age:** 57. **Location:** Traveling (caravan circuits). **Role:** Caravan elder. **Canonized as Owen Voss's aunt** (2026-10-05) — a deliberate lightweight family connection; caravan/family texture, not a hidden plot thread unless later story development calls for it.
+### #095 — JONAS GREER
+- **Age:** 38. **Location:** Traveling. **Role:** Technician.
+### #096 — INGRID SORREL
+- **Age:** 61. **Location:** Station Seven. **Role:** Archivist.
+### #097 — ARTHUR GRADY
+- **Age:** 69. **Location:** Traveling. **Role:** Survivor.
+### #098 — REN CALLOWAY
+- **Age:** 45. **Location:** Traveling. **Role:** Traveler.
+### #099 — CORA MERRITT
+- **Age:** 39. **Location:** Traveling. **Role:** Independent radio operator relaying messages between settlements.
+### #100 — DR. EDWIN MARLOWE
+- **Age:** 72. **Location:** Station Seven. **Role:** Continuity-era researcher descendant and archivist.
+
+## Continuity & audit notes — #031–100 (freeze report, 2026-10-05)
+- **Names:** 31 collision cleanups applied (8 found in audit beyond the plan's own flags: #031, #041, #066, #070, #073, #076, #077, #085). Zero surname/first-name collisions remain across the full 100; MERCER appears only for protagonist/spouse.
+- **Ages/relationships:** all check out (Ansel 57 → Jessa 30; Helen 57 as Owen's aunt b. plausible; Gabriel 60 b. ~2029 reconstructing records for decades; Emmett 74 b. ~2015 with pre-Collapse childhood fragments; Edwin 72 b. ~2017 as researcher descendant).
+- **WORLD.md compliance:** Tollway (~250, pop. ~90, 40 maintained miles); Blackridge (apparently empty — Isaac is a recent arrival, not a population); Last Stop (~450, pop. ~120, rail-yard); Morrow (~520, pop. ~600); Hollow Creek (~620, pop. ~75); Relay (~690); Station Seven (~780).
+- **Four mysteries:** untouched at roster level. Backstage truth lives only in `docs/MYSTERIES.md` (writer knowledge).
+- **Abel Rusk (#015)** is not duplicated; #091 Vera Solis is a new character.
+- **Roster complete: exactly 100 authored NPC IDs (#001–100).**

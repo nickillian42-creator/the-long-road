@@ -40,9 +40,20 @@ Flexible milestones, not promises. Updated as work lands.
 - [ ] Chapter 1: THE VOICE (~90–120 min) — Mercy, the marriage, expedition backstory, transmission + spouse voice break-in, expedition authorization, vehicle/inventory prep, departure, first road encounter, first camp. Preserves the existing water-vote choice/flags.
 - [ ] Personal quest track: FIND THEM → FOLLOW THE TRAIL → THEY'RE CLOSE → FOUND → GET HOME TOGETHER (separate from THE LAST TRANSMISSION)
 - [ ] Save schema v4: `g.route`, `g.spouseName`, `g.quests.personal` (all additive; `longroad_v01` preserved)
-- [ ] Spouse-voice break-in added to prologue transmission (two-voice rule); title-screen text fixes (60 years; CUSTODIAN ambiguity)
+- [ ] Architecture groundwork BEFORE content expands (per Campaign Master Plan v1.0 freeze): document save/state schema — `g.chapter`, `g.consequences`, structured settlement outcomes/support records, significant encounter history, Mercy contact/status, major NPC outcome/disposition records, ending-montage inputs. Final-choice credibility computed from accumulated state, never a stored morality score.
+- [ ] Reusable settlement-hub pattern designed once (Crossroads first), reused for all later settlements; encounters move toward data-driven definitions
+- [ ] Spouse-voice break-in added to prologue transmission (two-voice rule)
+- [x] Title-screen text fixes (2026-10-05): sixty years (was "thirty-seven"); CUSTODIAN collapse wording softened to preserve mystery
 - [ ] New portraits: `portrait-claire.webp`, `portrait-daniel.webp` (specs in `docs/ASSET_MANIFEST.md`)
-- [ ] ~100-NPC roster design (target ~30–45 encountered per run), alongside Chapter 2
+- [x] ~100-NPC roster complete (2026-10-05): #031–100 frozen in `docs/NPCS.md`; exactly 100 authored IDs
+
+## Campaign Master Plan v1.0 (FROZEN 2026-10-05)
+- [x] `docs/CAMPAIGN_MASTER_PLAN.md` — campaign target, chapter pacing, consequence web, character death, ending montage, final choice architecture, no-filler rule, north star
+- [x] `docs/MYSTERIES.md` — backstage truth as writer-only canon (CUSTODIAN, C-07, I-40 warning, Hank, spouse's line, MERCER recognition, human seekers) + reveal schedule
+- [x] `docs/CHAPTERS_03_10.md` — chapter outlines for 3–10 (full specs to be written per chapter before implementation)
+- [x] `docs/ENCOUNTERS.md` — campaign-wide encounter plan: distribution by chapter, wildlife library, civilians/traders, raiders, environment, sickness, mechanical, strange encounters
+- [x] `docs/WORLD.md` — Tollway philosophy, Relay partial function, endgame runtime clarification, Core writer-canon pointer
+- [ ] Single-file split scheduled no later than Chapter 3 implementation (must preserve GitHub Pages deployment + save compatibility)
 
 ## Campaign — Final Act: Station Seven (planned)
 - [ ] Station Seven becomes a substantial final-act location (~4–5 hours with the spouse in party), replacing the placeholder `arrival()`/`finish()` endings
