@@ -1,11 +1,11 @@
 # Changelog
 
-## Crew-motivation pass (2026-10-05, on `alpha-0.4-dev`, unpushed)
+## Crew-motivation pass (2026-10-05, on `alpha-0.4-dev` (pushed))
 - Mara volunteers from self-driven desire ("I want to see it for real") + navigator value; not devotion to the protagonist
 - Josh reluctant ("Done with roads"); Ruth asks him to see them through Forty; "I'll get you through Forty" bounds his commitment (not Colorado); Eli's "You don't even want to go. So why do you get to?" sharpens the argument
 - Locked as DECISIONS.md §14; NPCS.md #002/#004 motivations
 
-## Character canon retcon + Mercy Day expansion (2026-10-05, on `alpha-0.4-dev`, unpushed)
+## Character canon retcon + Mercy Day expansion (2026-10-05, on `alpha-0.4-dev` (pushed))
 - Controlled retcon per Nic + ChatGPT: Josh ~49 (11→4 journey, corridor unease from lived experience), Mara ~24 (map wall, compassion voice), Ruth ~80 (remembers the old world, memorial book, dark history), Eli ~12 (stays in Mercy, dead phone, "15's the one." = attempt #15)
 - New playable content: Mercy Day hub (4 character sequences, any order) + departure convergence (Ruth releases Mara, Josh/Eli argument, phone in bag) → leaving Mercy
 - Eli leaves the traveling crew at departure (crew: protagonist + Josh + Mara); `eliHealthy()` null-safe; `crew[2]` trust guards
