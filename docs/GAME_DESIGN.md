@@ -68,3 +68,23 @@ The recap reflects only recorded player history:
 - Recap generator reads the save blob (`longroad_v01`, schema v2+) — same data the Story So Far recap uses, extended.
 - No new save fields required if quest/discovery/flag coverage is complete; audit coverage before building.
 - Must respect `prefers-reduced-motion`.
+
+## ART DIRECTION — playable graphic novel (2nd generation, approved direction pending preview)
+**Status:** style-preview phase. Four preview images (Mercy, Baby Raptor, Mara, The Cascade) must be approved by Nic + ChatGPT before the remaining 20 assets are generated. Existing photorealistic artwork stays live until the full 24-asset set is approved and swapped in.
+
+**Goal:** The Long Road should feel like a playable, animated, mature post-apocalyptic graphic novel.
+
+**Style:**
+- Mature, cinematic American graphic-novel aesthetic. Heavy black ink outlines, detailed cross-hatching, strong shadows, dramatic contrast, textured brushwork, subtle halftone shading.
+- Muted post-apocalyptic earth tones: faded greens, dusty oranges, rust, charcoal, with occasional dramatic accent colors.
+- Grounded, believable people and recognizable vehicle silhouettes. Natural proportions, practical clothing, ordinary weathered vehicles — no neon, no sci-fi excess, no futuristic redesigns.
+- Hand-illustrated appearance, never glossy AI photorealism. Visually consistent across every asset.
+- Original illustrations only. Never imitate or copy a specific comic artist, existing franchise, or copyrighted game.
+
+**Consistency (binding for all future artwork):**
+- Recurring characters keep the same face, age, hairstyle, clothing identity, and recognizable features in every illustration. See the character bible in `docs/ASSET_MANIFEST.md`.
+- Vehicles keep consistent silhouettes, proportions, and detailing across selection screens, travel scenes, and future encounter art. See the vehicle bible in `docs/ASSET_MANIFEST.md`.
+- Hank remains elderly, consistent with canon (a child in 2029, an old man in 2089).
+- World, locations, story canon, and atmosphere are preserved — only the rendering style changes.
+
+**Technical:** exact filenames, dimensions, and aspect ratios are preserved (see manifest). Optimized WebP for iPhone Safari. Vehicle art stays suitable for future layered driving animation. Artwork swaps never touch gameplay, quests, narrative, saves, or code.

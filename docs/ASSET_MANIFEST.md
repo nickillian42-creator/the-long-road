@@ -42,8 +42,27 @@ All artwork is original. WebP format. Naming: lowercase, hyphenated. Never use m
 
 Note: `portrait-hank.webp` was revised (elderly, late sixties) to match canon — Hank was a child during the 2029 collapse. Re-upload overwrites the earlier version.
 
-## Art direction
-Grounded post-apocalyptic realism. Natural human proportions, ordinary weathered vehicles, overgrown highways, practical clothing, cinematic lighting. The collapse was in 2029; the game is set in 2089 — six decades of wear. No futuristic vehicles, neon, glowing armor, or sci-fi excess.
+## Art direction — 2nd generation: comic-book / graphic novel (Oct 2026)
+Mature, cinematic American graphic-novel aesthetic: heavy black ink outlines, detailed cross-hatching, strong shadows, dramatic contrast, textured brushwork, subtle halftone shading. Muted post-apocalyptic earth tones (faded greens, dusty oranges, rust, charcoal) with occasional dramatic accent colors. Hand-illustrated appearance — never glossy photorealism. Grounded believable people, recognizable vehicle silhouettes, practical clothing. Original illustrations only; never imitate a specific artist, franchise, or copyrighted game. Full direction: `docs/GAME_DESIGN.md` (ART DIRECTION section).
+
+### Character bible (binding — same face, age, hairstyle, clothing in every illustration)
+- **Ruth** (`portrait-ruth.webp`): woman in her 60s, silver-streaked dark hair in a single braid, lined weathered face, calm authoritative eyes, patched canvas council coat over a work shirt.
+- **Mara** (`portrait-mara.webp`): woman in her early 30s, black hair tied back in a practical knot, warm brown eyes, determined compassionate expression, worn canvas medic's jacket with stitched patches, canvas satchel strap across shoulder, dust on her cheek.
+- **Hank** (`portrait-hank.webp`): ELDERLY man, late 70s — canon: a child in 2029. Deeply weathered face, grey stubble beard, thinning grey hair, kind tired eyes, oil-stained mechanic's overalls over a flannel shirt.
+- **Eli** (`portrait-eli.webp`): man in his mid-20s, short dark curly hair, lean build, wary intelligent eyes, hooded scout's jacket, fingerless gloves.
+- **The Stranger** (`portrait-stranger.webp`): gaunt man in his 40s, sunburnt peeling skin, torn dusty jacket with a blood-stained sleeve, desperate hollow eyes, cracked lips.
+- **Custodian** (`portrait-custodian.webp`): not human — a cold machine visage: dark angular metal faceplate with a single calm optic band glowing faint teal, faint etched circuitry, black background.
+
+### Vehicle bible (binding — consistent silhouette, proportions, detailing everywhere)
+- **Eagle** (`vehicle-eagle.webp`): 1980s AWD station wagon — long roof, boxy flanks, roof rack with bedroll and fuel cans, dusty faded paint, steel wheels.
+- **Wagon** (`vehicle-wagon.webp`): large boxy full-size SUV — upright grille, woodgrain-delete worn panels, bull bar, spare tire on the rear gate.
+- **Raptor** (`vehicle-raptor.webp`): compact off-road pickup — aggressive stance, flared fenders, all-terrain tires, bed loaded with tarped supplies, dusty orange paint faded by sun.
+- **M4** (`vehicle-m4.webp`): sleek low coupe — out of place among the workhorses, scratched dark paint, one mismatched panel, fragile look.
+
+### Regeneration status (24 assets, exact filenames/dimensions preserved)
+**Phase 1 — style preview (awaiting Nic + ChatGPT approval):** `bg-mercy.webp`, `vehicle-raptor.webp`, `portrait-mara.webp`, `bg-prologue-cascade.webp`.
+**Phase 2 — remaining 20 (only after preview approval):** all other backgrounds, vehicles, portraits, and prologue pages.
+The live photorealistic set stays in `assets/` untouched until the full approved comic-book set is ready to swap in.
 
 ## Adding or replacing assets
 Upload WebP files to `assets/` using the exact filenames above — the game picks them up automatically with no code changes. Missing files degrade gracefully to the built-in CSS visuals (every `<img>` has an `onerror` fallback), so partial sets are safe.
