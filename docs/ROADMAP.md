@@ -31,4 +31,5 @@ Flexible milestones, not promises. Updated as work lands.
 ## Later Alpha / Beta
 - Expanded branching narrative; complete Texas-to-Colorado campaign
 - Multiple endings; endless mode; larger encounter library
+- **PREVIOUSLY ON THE LONG ROAD** — cinematic save recap generated from actual player history (requires quest tracker + narrative history from 0.2.2; never invents or spoils)
 - Advanced animation + environmental systems; performance and save-system testing
