@@ -48,6 +48,8 @@ function fresh() {
   restChar, hungerLabel, thirstLabel, healthLabel, survStatusLine, survWarning,
   scavProtoStart, scavScene, scavArea, scavSearch, scavRest, scavEnd, scavLocState,
   scavGroundAdd, scavTakeGround, saveProto, resumeProto, hasProtoSave, scavProto,
+  lootLabel, discoveryPanel, discoveryTakeAll, discoveryChoose,
+  discoveryTakeOne, discoveryLeaveOne, discoveryLeaveAll,
   openInventory, invScreen, invShow, invDo,
   has: (n) => typeof globalThis[n] !== 'undefined',
   getG: () => g, setG: v => { g = v; },
@@ -216,7 +218,11 @@ console.log('M2D scavenging');
   check('prototype state isolated', g0.proto === true && g0.v === 6);
   const before = a.invCount('josh', 'canned_food');
   const r = a.scavSearch('roadside', 'shelves', 'quiet');
-  check('search grants authored loot', r.ok && a.invCount('josh', 'canned_food') === before + 2);
+  check('search opens discovery, grants nothing yet', r.ok && !!a.getG().discovery && a.invCount('josh', 'canned_food') === before);
+  check('discovery lists exact loot', a.getG().discovery.loot.length === 2 && a.getG().discovery.loot[0].item === 'canned_food' && a.getG().discovery.loot[0].qty === 2);
+  const takeMsg = a.discoveryTakeAll();
+  check('take all grants to searching character', a.invCount('josh', 'canned_food') === before + 2);
+  check('confirmation names the character', takeMsg.indexOf("Added to Josh's pack") === 0, takeMsg);
   check('area marked searched', a.scavLocState('roadside').searched.shelves === true);
   const n1 = a.invCount('josh', 'water_bottle');
   a.scavSearch('roadside', 'shelves', 'quiet');
@@ -235,6 +241,7 @@ console.log('M2D scavenging');
   d.scavLocState('roadside').risk = 99;
   d.scavSearch('roadside', 'fridge', 'force');
   check('risk 100 forces complication', d.lastScreen().indexOf('RISK BOILS OVER') >= 0);
+  check('fleeing grounds the loot instead of granting it', d.scavLocState('roadside').ground.some(s => s.item === 'mre') && !d.getG().discovery);
 
   // loot persistence through save/load: searched stays searched, ground stays
   const e = fresh(); e.scavProtoStart();
@@ -249,6 +256,7 @@ console.log('M2D scavenging');
   f.resumeProto();
   check('searched persists after load', f.scavLocState('roadside').searched.shelves === true);
   check('ground persists after load', f.scavLocState('roadside').ground.some(s => s.item === 'rope'));
+  check('pending discovery survives save/load', !!f.getG().discovery && f.getG().discovery.loot.length === 2);
   const wBefore = f.invCount('josh', 'water_bottle');
   f.scavSearch('roadside', 'shelves', 'quiet');
   check('re-entry does not regenerate loot', f.invCount('josh', 'water_bottle') === wBefore);
@@ -261,6 +269,8 @@ console.log('M2D scavenging');
   for (let i = 0; i < 10; i++) p.invAdd('josh', 'flashlight', 1);
   p.getG().invWho = 'josh';
   p.scavSearch('roadside', 'shelves', 'quiet');
+  check('discovery opens before the FOUND flow', !!p.getG().discovery);
+  p.discoveryTakeAll();
   check('FOUND state opens on overflow', !!p.getG().found && p.getG().found.item === 'canned_food');
   check('found actions include leave, not auto-take', p.foundActions().indexOf('leave') >= 0);
   const fr = p.resolveFound('leave');
@@ -343,6 +353,86 @@ console.log('M2G render smoke');
   // difficulty picker on the prototype intro
   const b = fresh(); b.scavProto();
   check('intro shows difficulty choice', b.lastScreen().indexOf('HARDCORE SURVIVAL') >= 0);
+}
+
+// ---------- M2H: discovery interstitial (Milestone 2 polish) ----------
+console.log('M2H discovery interstitial');
+{
+  // search -> discovery lists exact items, nothing enters inventory first
+  const a = fresh(); a.scavProtoStart();
+  const before = a.invCount('josh', 'canned_food');
+  const r = a.scavSearch('roadside', 'shelves', 'quiet');
+  const d = a.getG().discovery;
+  check('search opens discovery, grants nothing yet', r.ok && !!d && a.invCount('josh', 'canned_food') === before);
+  check('discovery holds exact loot', d.loot.length === 2 && d.loot[0].item === 'canned_food' && d.loot[0].qty === 2 && d.loot[1].item === 'water_bottle' && d.loot[1].qty === 1);
+  const scr = a.lastScreen();
+  check('discovery panel is prominent', scr.indexOf('✦ FOUND ✦') >= 0 && scr.indexOf('Canned Food ×2') >= 0 && scr.indexOf('Bottled Water ×1') >= 0);
+  check('contextual options shown', scr.indexOf('TAKE ALL') >= 0 && scr.indexOf('CHOOSE ITEMS') >= 0 && scr.indexOf('LEAVE IT ALL') >= 0);
+
+  // TAKE ALL -> confirmation names the character
+  const msg = a.discoveryTakeAll();
+  check('take all clears discovery', a.getG().discovery === null);
+  check('take all grants to the searching character', a.invCount('josh', 'canned_food') === before + 2 && a.invCount('josh', 'water_bottle') === 3);
+  check('confirmation names the character and the loot', msg.indexOf("Added to Josh's pack:") === 0 && msg.indexOf('Canned Food ×2') >= 0, msg);
+
+  // LEAVE -> ground, inventory untouched
+  const b = fresh(); b.scavProtoStart();
+  const wb = b.invCount('josh', 'water_bottle');
+  b.scavSearch('roadside', 'backpack', 'quiet');
+  b.discoveryLeaveAll();
+  check('leave clears discovery', b.getG().discovery === null);
+  const gr = b.scavLocState('roadside').ground;
+  check('left items sit on the ground', gr.some(s => s.item === 'bandage') && gr.some(s => s.item === 'ammo_9mm'));
+  check('leave adds nothing to packs', b.invCount('josh', 'water_bottle') === wb && b.invCount('josh', 'bandage') === 0);
+
+  // CHOOSE ITEMS -> per-item take/leave
+  const c = fresh(); c.scavProtoStart();
+  c.scavSearch('roadside', 'shelves', 'quiet');
+  c.discoveryChoose();
+  check('choose mode renders per-item rows', c.lastScreen().indexOf('loot-row') >= 0);
+  const tmsg = c.discoveryTakeOne(0); // Canned Food ×2
+  check('take one grants only that item', c.invCount('josh', 'canned_food') === 4 && c.getG().discovery.loot.length === 1);
+  check('take-one confirmation names the character', tmsg.indexOf("Added to Josh's pack: Canned Food ×2") === 0, tmsg);
+  check('discovery still pending for the rest', !!c.getG().discovery);
+  c.discoveryLeaveOne(0); // Bottled Water ×1
+  check('deciding everything clears discovery', c.getG().discovery === null);
+  check('left item sits on the ground', c.scavLocState('roadside').ground.some(s => s.item === 'water_bottle'));
+
+  // single-item discovery hides CHOOSE ITEMS (nothing to choose between)
+  const e = fresh(); e.scavProtoStart();
+  e.scavSearch('roadside', 'fridge', 'quiet');
+  const escr = e.lastScreen();
+  check('single item: choose hidden, take/leave shown', escr.indexOf('CHOOSE ITEMS') < 0 && escr.indexOf('TAKE ALL') >= 0 && escr.indexOf('LEAVE IT ALL') >= 0);
+
+  // searching as Mara -> Mara's pack, Mara named
+  const f = fresh(); f.scavProtoStart();
+  f.getG().invWho = 'mara';
+  f.scavSearch('roadside', 'backpack', 'quiet');
+  check('discovery records the searching character', f.getG().discovery.who === 'mara');
+  const mb = f.invCount('mara', 'bandage');
+  const fmsg = f.discoveryTakeAll();
+  check('take all lands in Mara\'s pack', f.invCount('mara', 'bandage') === mb + 1);
+  check('confirmation names Mara', fmsg.indexOf("Added to Mara's pack:") === 0, fmsg);
+
+  // risk/noise and searched state are unaffected by the interstitial
+  const g2 = fresh(); g2.scavProtoStart();
+  g2.scavSearch('roadside', 'backpack', 'quiet');
+  const loc = g2.scavLocState('roadside');
+  check('risk and noise still accrue', loc.risk > 0 && loc.noise > 0);
+  check('area marked searched while discovery pending', loc.searched.backpack === true);
+
+  // choose-mode overflow still routes through FOUND; undecided items grounded
+  const h = fresh(); h.scavProtoStart();
+  h.invRemove('josh', 'water_bottle', 2);
+  h.invRemove('josh', 'canned_food', 2);
+  h.invRemove('josh', 'flashlight', 1);
+  for (let i = 0; i < 10; i++) h.invAdd('josh', 'flashlight', 1);
+  h.getG().invWho = 'josh';
+  h.scavSearch('roadside', 'shelves', 'quiet');
+  h.discoveryChoose();
+  h.discoveryTakeOne(0); // Canned Food ×2, no room at all
+  check('choose overflow opens FOUND, clears discovery', !!h.getG().found && h.getG().discovery === null);
+  check('undecided item grounded, not lost', h.scavLocState('roadside').ground.some(s => s.item === 'water_bottle'));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
