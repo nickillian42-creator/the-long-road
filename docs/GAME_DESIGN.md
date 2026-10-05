@@ -7,6 +7,18 @@ Living design document for THE LONG ROAD. Systems are documented here when appro
 
 Consequences must be persistent, visible, and traceable to the player's own choices.
 
+## DESIGN PRINCIPLE: THE PLAYER SHOULD KNOW ONLY WHAT THE CREW KNOWS
+**Status:** APPROVED — permanent, applies to everything.
+
+Inventory names, descriptions, quests, dialogue, and UI must never reveal information the crew has not discovered. This covers CUSTODIAN, locations, characters, items (see the `knownPurpose` system in the item catalog), and quest language. When in doubt, the crew's knowledge is the ceiling.
+
+## CHARACTER ROUTES
+**Status:** APPROVED — campaign canon locked 2026-10-05. Full bible: `docs/CHARACTERS.md`.
+
+Two protagonist routes — **Jack Mercer** (male) and **Evelyn Mercer** (female) — searching for their spouses **Claire Mercer** and **Daniel Mercer**. The routes are not pronoun swaps: Jack receives occasional physical/strength solutions, Evelyn occasional insight/improvisation solutions. Neither route is mechanically superior. The surname Mercer is fixed for surname-recognition story beats.
+
+Campaign structure, personal quest, reunion, and final act: `docs/CAMPAIGN.md`.
+
 ## DESIGN PRINCIPLE: THE LONG SHADOW OF CHOICE
 **Status:** APPROVED — guiding philosophy for all narrative implementation.
 

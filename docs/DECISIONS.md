@@ -20,3 +20,16 @@ Small fixes push straight to `main`. Larger features use branches + pull request
 - Show Nic proposed gameplay-balance changes before implementing them.
 - No paid services or unnecessary dependencies. GitHub Pages hosting.
 - Keep the live GitHub Pages deployment functional at all times.
+
+## 6. Campaign canon freeze (2026-10-05)
+Locked with Nic. Full canon: `docs/CAMPAIGN.md`, `docs/CHARACTERS.md`, `docs/PROLOGUE.md`.
+- Timeline: 2029 → 2089 is sixty years. Never state as objective fact that CUSTODIAN initiated the Collapse; cause and CUSTODIAN's role stay deliberately ambiguous.
+- Protagonists locked for v1: **Jack Mercer** (male) / **Evelyn Mercer** (female). Spouses: **Claire Mercer** / **Daniel Mercer**. Mercer surname is canonical.
+- Two-voice rule (permanent): the Station Seven broadcast voice and the spouse's break-in are separate voices; Hank recognizes something about the Station voice, the protagonist instantly recognizes their spouse.
+- Expedition backstory: 18 months prior, Mercy detected a changing machine signal from the northwest; the council authorized a small expedition under a one-member-per-household rule; Claire/Daniel volunteered, Jack/Evelyn stayed after their "Don't go" argument.
+- Personal quest: **FIND THEM → FOLLOW THE TRAIL → THEY'RE CLOSE → FOUND → GET HOME TOGETHER**, separate from THE LAST TRANSMISSION.
+- Reunion guaranteed at ~final quarter; spouse joins the party for a ~4–5 hour Station Seven final act. Spouse is never auto-killed after reunion; final-act player decisions may causally lead to their death — never a cheap scripted twist.
+- Current `arrival()`/`finish()` four-ending structure is placeholder/legacy content, to be replaced by the authored Station Seven final act.
+- Four mysteries stay unresolved: who added AVOID INTERSTATE 40; what the spouse was about to say; C-07's ultimate role; CUSTODIAN's moral interpretation.
+- Permanent principle: **THE PLAYER SHOULD KNOW ONLY WHAT THE CREW KNOWS.**
+- 300-item Master Catalog v1.0 frozen (audit passed 2026-10-05; firearm damage table still pending Nic's explicit lock).
