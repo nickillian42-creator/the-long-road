@@ -37,7 +37,7 @@ function fresh() {
   mercyClinic, mercyClinicHelp, mercyClinicHonest,
   mercyWater, mercyWaterHelp, mercyWaterTease,
   ruthCrisis, ruthCrisisChoice, phase1Done, opening, openingChoice,
-  recordConsequence, npcState, settleState, encounterState,
+  recordConsequence, npcState, settleState, encounterState, noteTreatment,
   getG: () => g, setG: v => { g = v; },
   setPlayerName: v => { playerName = v; }, setSexSel: v => { sex = v; },
   setDiff: v => { difficulty = v; }, setCarSel: v => { car = v; } };`;
@@ -63,6 +63,8 @@ console.log('C1 Jack route');
   check('chapter 1 set', g.chapter === 1);
   a.hankRepairChoice(0);
   check('careful choice: Hank trust +1', a.getG().crew[0].trust === 1);
+  check('careful choice: authored treatment, not points', JSON.stringify(a.getG().npcs.hank.treatment) === JSON.stringify(['repair_careful']));
+  check('no numeric disposition written', a.getG().npcs.hank.disposition === 0);
   check('tire iron flag set', a.getG().flags.tireIronSeen === true);
   check('hank met', a.getG().npcs.hank && a.getG().npcs.hank.met === true);
   check('continues to hub', a.lastScreen().includes('HEAD INTO MERCY'));
@@ -122,6 +124,8 @@ console.log('C4 location content');
   check('workshop: aging equipment', a.lastScreen().includes('older than the Collapse'));
   a.mercyWorkshopHelp();
   check('workshop help: Hank trust', a.getG().crew[0].trust === 2);
+  check('workshop help: treatment recorded', a.getG().npcs.hank.treatment.includes('helped_workshop'));
+  check('Hank accumulates both treatments', JSON.stringify(a.getG().npcs.hank.treatment) === JSON.stringify(['repair_careful','helped_workshop']));
   const b = fresh(); b.newGame('Male'); b.hankRepairChoice(0);
   b.mercyClinic();
   const cs = b.lastScreen();
@@ -129,12 +133,15 @@ console.log('C4 location content');
   check('clinic: Mara clinical honesty voice', cs.includes('split lip'));
   b.mercyClinicHelp();
   check('clinic help: Mara trust', b.getG().crew[1].trust === 1);
+  check('clinic help: treatment recorded', JSON.stringify(b.getG().npcs.mara.treatment) === JSON.stringify(['helped_clinic']));
   const c = fresh(); c.newGame('Male'); c.hankRepairChoice(0);
   c.mercyWater();
   const ws = c.lastScreen();
   check('water: strain shown', ws.includes('barely trembles') || ws.includes('dying'));
   check('water: mountains bit', ws.includes('mountainous') || ws.includes('never seen a mountain'));
   check('water: Eli humor voice', ws.includes('load-bearing'));
+  c.mercyWaterHelp();
+  check('water help: treatment recorded', JSON.stringify(c.getG().npcs.eli.treatment) === JSON.stringify(['helped_water_station']));
 }
 
 // ---------- C5: Ruth crisis + stop ----------
@@ -155,6 +162,9 @@ console.log('C5 Ruth crisis');
     const c0 = g.consequences[0];
     check(`consequence kind valid (choice ${n})`, ['decision', 'encounter', 'settlement', 'npc', 'mercy', 'quest'].includes(c0.kind), 'kind=' + c0.kind);
     check(`consequence stamped (choice ${n})`, c0.day === 1 && c0.chapter === 1);
+    const want = ['crisis_resolve','crisis_practical','crisis_silent'][n];
+    check(`ruth treatment = actual position (choice ${n})`, JSON.stringify(a.getG().npcs.ruth.treatment) === JSON.stringify([want]), JSON.stringify(a.getG().npcs.ruth.treatment));
+    check(`ruth disposition untouched (choice ${n})`, a.getG().npcs.ruth.disposition === 0);
     a.phase1Done();
     check(`phase1 done, game saved (choice ${n})`, a.getG().phase === 'phase1_done' && a.getG().flags.phase1 === true);
     check(`stop card renders (choice ${n})`, a.lastScreen().includes('TO BE CONTINUED'));
@@ -198,6 +208,22 @@ console.log('C7 legacy preservation');
     b.mercyWorkshopHelp(); b.mercyClinicHonest(); b.mercyWaterTease();
     b.ruthCrisisChoice(0);
     return b.getG().consequences.length === 1;
+  })());
+}
+
+// ---------- C8: noteTreatment unit behavior ----------
+console.log('C8 treatment helper');
+{
+  const a = fresh(); a.newGame('Male');
+  const t1 = a.noteTreatment('hank','repair_careful');
+  const t2 = a.noteTreatment('hank','repair_careful');
+  check('deduplicates repeat entries', t1.length === 1 && t2.length === 1);
+  a.noteTreatment('hank','helped_workshop');
+  check('accumulates multiple entries', a.getG().npcs.hank.treatment.length === 2);
+  check('survives save/load', (() => {
+    const raw = JSON.stringify(a.getG());
+    const b = fresh(); b.setG(b.migrateSave(JSON.parse(raw)));
+    return JSON.stringify(b.getG().npcs.hank.treatment) === JSON.stringify(['repair_careful','helped_workshop']);
   })());
 }
 
