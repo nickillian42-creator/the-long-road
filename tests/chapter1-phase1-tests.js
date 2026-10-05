@@ -36,7 +36,7 @@ function fresh() {
   mercyWorkshop, mercyWorkshopHelp, mercyWorkshopAge,
   mercyClinic, mercyClinicHelp, mercyClinicHonest,
   mercyWater, mercyWaterHelp, mercyWaterTease,
-  ruthCrisis, ruthCrisisChoice, phase1Done, opening, openingChoice,
+  ruthCrisis, ruthCrisisChoice, phase1Done,
   recordConsequence, npcState, settleState, encounterState, noteTreatment,
   getG: () => g, setG: v => { g = v; },
   setPlayerName: v => { playerName = v; }, setSexSel: v => { sex = v; },
@@ -62,7 +62,7 @@ console.log('C1 Jack route');
   check('tire iron introduced', s.includes('tire iron'));
   check('chapter 1 set', g.chapter === 1);
   a.hankRepairChoice(0);
-  check('careful choice: Josh trust +1', a.getG().crew[0].trust === 1);
+  check('careful choice: no numeric trust written', a.getG().crew[0].trust === 0);
   check('careful choice: authored treatment, not points', JSON.stringify(a.getG().npcs.hank.treatment) === JSON.stringify(['repair_careful']));
   check('no numeric disposition written', a.getG().npcs.hank.disposition === 0);
   check('tire iron flag set', a.getG().flags.tireIronSeen === true);
@@ -123,7 +123,7 @@ console.log('C4 location content');
   a.mercyWorkshop();
   check('workshop: aging equipment', a.lastScreen().includes('older than the Collapse'));
   a.mercyWorkshopHelp();
-  check('workshop help: Josh trust', a.getG().crew[0].trust === 2);
+  check('workshop help: no numeric trust written', a.getG().crew[0].trust === 0);
   check('workshop help: treatment recorded', a.getG().npcs.hank.treatment.includes('helped_workshop'));
   check('Josh accumulates both treatments', JSON.stringify(a.getG().npcs.hank.treatment) === JSON.stringify(['repair_careful','helped_workshop']));
   const b = fresh(); b.newGame('Male'); b.hankRepairChoice(0);
@@ -132,7 +132,7 @@ console.log('C4 location content');
   check('clinic: supplies concern', cs.includes('washing bandages') || cs.includes('half-empty'));
   check('clinic: Mara clinical honesty voice', cs.includes('split lip'));
   b.mercyClinicHelp();
-  check('clinic help: Mara trust', b.getG().crew[1].trust === 1);
+  check('clinic help: no numeric trust written', b.getG().crew[1].trust === 0);
   check('clinic help: treatment recorded', JSON.stringify(b.getG().npcs.mara.treatment) === JSON.stringify(['helped_clinic']));
   const c = fresh(); c.newGame('Male'); c.hankRepairChoice(0);
   c.mercyWater();
@@ -199,8 +199,6 @@ console.log('C6 save/load');
 console.log('C7 legacy preservation');
 {
   const a = fresh();
-  check('opening() still exists (dormant Phase-2 beat)', typeof a.opening === 'function');
-  check('openingChoice() still exists', typeof a.openingChoice === 'function');
   a.newGame('Male');
   check('personal quest untouched at stage 0', a.getG().quests.personal && a.getG().quests.personal.stage === 0);
   check('no consequence flooding in Phase 1', (() => {

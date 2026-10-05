@@ -40,7 +40,6 @@ function fresh() {
   dayJosh, dayJoshChoice, dayMara, dayMaraChoice, maraWhyFollow,
   dayRuth, dayRuthChoice, dayRuthVow, dayEli, dayEliChoice,
   departure, departureArgument, departurePhone, phase1Done,
-  eliHealthy, drainRate,
   recordConsequence, npcState, settleState, encounterState, noteTreatment,
   getG: () => g, setG: v => { g = v; },
   setPlayerName: v => { playerName = v; }, setSexSel: v => { sex = v; },
@@ -197,21 +196,6 @@ console.log('D9 authored history only');
   const clean = ['hank', 'mara', 'ruth', 'eli'].every(id => !t[id] || t[id].disposition === 0 || t[id].disposition === undefined);
   check('no numeric disposition written by new scenes', clean);
   check('treatments are string arrays', ['hank', 'mara', 'ruth', 'eli'].every(id => Array.isArray(t[id].treatment) && t[id].treatment.every(x => typeof x === 'string')));
-}
-
-// ---------- D10: post-departure mechanics safety ----------
-console.log('D10 post-departure safety');
-{
-  const a = fresh(); a.reachMercyDay();
-  a.dayJosh(); a.dayJoshChoice(1); a.mercyDay();
-  a.dayMara(); a.dayMaraChoice(1); a.mercyDay();
-  a.dayRuth(); a.dayRuthChoice(1); a.mercyDay();
-  a.dayEli(); a.dayEliChoice(1); a.mercyDay();
-  a.departure(); a.departureArgument(); a.departurePhone();
-  let crashed = false;
-  try { a.eliHealthy(); a.drainRate(); } catch (e) { crashed = true; }
-  check('eliHealthy/drainRate safe without Eli', !crashed);
-  check('eliHealthy false when gone', a.eliHealthy() === false);
 }
 
 // ---------- D11: save/load across new phases ----------
