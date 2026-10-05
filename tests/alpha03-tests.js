@@ -100,7 +100,7 @@ console.log('T2 incapacitated companions');
 {
   const a = fresh(); a.newGame();
   const g = a.getG();
-  g.crew[0].hp = 0; g.crew[0].fatigue = 40; // Hank out
+  g.crew[0].hp = 0; g.crew[0].fatigue = 40; // Josh out
   const d = a.drainRate();
   // livingEq = 1 + 2 + 0.5 = 3.5 -> ceil(0.5*3.5*1.35)=ceil(2.3625)=3
   check('drain counts incapacitated as half (survival=3)', d === 3, 'drain=' + d);
@@ -110,7 +110,7 @@ console.log('T2 incapacitated companions');
   const g2 = a.getG();
   check('TREAT revives to 25 HP', g2.crew[0].hp === 25, 'hp=' + g2.crew[0].hp);
   check('TREAT consumed 1 meds', g2.meds === medsBefore - 1);
-  check('treat flag set', g2.flags['treated_Hank'] === true);
+  check('treat flag set', g2.flags['treated_Josh'] === true);
 }
 
 // ---------- T3: multiple simultaneous conditions ----------
@@ -143,14 +143,14 @@ console.log('T4 migration');
 {
   const a = fresh();
   // v1 save: no v, no quests, no discoveries
-  const v1 = { name: 'Old', difficulty: 'survival', day: 5, miles: 100, health: 80, food: 10, water: 10, crew: [{ name: 'Hank', hp: 90, trust: 1 }, { name: 'Mara', hp: 100, trust: 0 }, { name: 'Eli', hp: 70, trust: -1 }], flags: { mercy: 0 } };
+  const v1 = { name: 'Old', difficulty: 'survival', day: 5, miles: 100, health: 80, food: 10, water: 10, crew: [{ name: 'Josh', hp: 90, trust: 1 }, { name: 'Mara', hp: 100, trust: 0 }, { name: 'Eli', hp: 70, trust: -1 }], flags: { mercy: 0 } };
   const m1 = a.migrateSave(JSON.parse(JSON.stringify(v1)));
   check('v1 -> v4', m1.v === 4);
   check('v1 backfills fatigue/injury', m1.pfat === 0 && m1.injury === 'healthy' && m1.crew[0].fatigue === 0 && m1.crew[0].injury === 'healthy');
   check('v1 gets 2 antibiotics', m1.antibiotics === 2);
   check('v1 quests created', m1.quests && m1.quests.main.objectives.length === 8);
   // v2 save: fields preserved byte-identical
-  const v2 = { v: 2, name: 'Mid', difficulty: 'hard', day: 9, miles: 300, health: 66, food: 4, water: 7, fuel: 20, parts: 3, hp: 80, meds: 2, ammo: 5, car: 'wagon', sex: 'Female', crew: [{ name: 'Hank', hp: 100, trust: 2 }, { name: 'Mara', hp: 40, trust: 0 }, { name: 'Eli', hp: 100, trust: 1 }], flags: { tag: true, drone: true }, log: ['x'], phase: 'road', enemy: null, checkpoint: null, quests: a.newQuests(), discoveries: [{ title: 't', text: 'x', day: 3 }] };
+  const v2 = { v: 2, name: 'Mid', difficulty: 'hard', day: 9, miles: 300, health: 66, food: 4, water: 7, fuel: 20, parts: 3, hp: 80, meds: 2, ammo: 5, car: 'wagon', sex: 'Female', crew: [{ name: 'Josh', hp: 100, trust: 2 }, { name: 'Mara', hp: 40, trust: 0 }, { name: 'Eli', hp: 100, trust: 1 }], flags: { tag: true, drone: true }, log: ['x'], phase: 'road', enemy: null, checkpoint: null, quests: a.newQuests(), discoveries: [{ title: 't', text: 'x', day: 3 }] };
   const before = JSON.parse(JSON.stringify(v2));
   const m2 = a.migrateSave(JSON.parse(JSON.stringify(v2)));
   let same = true;

@@ -110,7 +110,7 @@ The recap reflects only recorded player history:
 **Consistency (binding for all future artwork):**
 - Recurring characters keep the same face, age, hairstyle, clothing identity, and recognizable features in every illustration. See the character bible in `docs/ASSET_MANIFEST.md`.
 - Vehicles keep consistent silhouettes, proportions, and detailing across selection screens, travel scenes, and future encounter art. See the vehicle bible in `docs/ASSET_MANIFEST.md`.
-- Hank remains elderly, consistent with canon (a child in 2029, an old man in 2089).
+- Josh remains elderly, consistent with canon (a child in 2029, an old man in 2089).
 - World, locations, story canon, and atmosphere are preserved — only the rendering style changes.
 
 **Technical:** exact filenames, dimensions, and aspect ratios are preserved (see manifest). Optimized WebP for iPhone Safari. Vehicle art stays suitable for future layered driving animation. Artwork swaps never touch gameplay, quests, narrative, saves, or code.

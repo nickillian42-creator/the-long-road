@@ -1,5 +1,10 @@
 # Changelog
 
+## Character rename: Hank → Josh (2026-10-05, on `alpha-0.4-dev`)
+- Hank Rourke renamed to **Josh Rourke** (display name only) across `index.html`, all `docs/`, and tests — per Nic's direction
+- Unchanged on purpose: internal IDs (`flags.hankSecret`, `hankRepair()`, `noteTreatment('hank',…)`), save schema, and the `portrait-hank.webp` asset filename — existing saves keep working
+- Historical CHANGELOG entries below still say "Hank" (accurate for their time)
+
 ## Campaign Master Plan v1.0 freeze (2026-10-05) — docs + one title-screen text fix
 - New: `docs/CAMPAIGN_MASTER_PLAN.md` (campaign target ~25h, chapter pacing 1–10, consequence web, character death, ending montage, four-philosophy final choice, no-filler rule, implementation philosophy, north star)
 - New: `docs/MYSTERIES.md` — backstage truth frozen as WRITER-ONLY canon (CUSTODIAN, C-07, I-40 warning, Hank's history, spouse's interrupted line, MERCER recognition, human seekers) + reveal schedule + crew-knowledge firewall

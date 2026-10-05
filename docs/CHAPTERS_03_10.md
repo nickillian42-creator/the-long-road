@@ -5,7 +5,7 @@ Frozen as direction by Nic 2026-10-05 (Campaign Master Plan v1.0). These are cha
 **Theme:** Nothing you do happens in isolation. First noticeable delayed consequences: the player hears stories about people, routes, and events they already affected. Not every consequence involves someone returning — information travels, reputation travels, people affect other people.
 **Tollway:** a community maintaining ~40 miles of usable highway — clearing wrecks, repairing pavement, maintaining bridges, patrolling against raiders — and charging travelers. The player may pay, negotiate, barter, perform work, help solve a local problem, attempt bypass, sneak, fight, or take a dangerous detour. **Tollway must NOT be "evil people charging for a road"** — maintaining infrastructure costs labor and lives; some travelers call the Tollkeepers extortionists, others call them the only reason commerce exists.
 **Centerpiece:** a Tollway patrol/caravan crisis combining road obstruction, hostile human threat, civilians, resource expenditure, and vehicle condition. An earlier decision may subtly affect available help. Cal Danner MAY return here if appropriate — conditional, never mandatory; if not, preserve him for later.
-**Ending:** approaching Blackridge, the crew sees something impossible — stable electric light, not fire, not generator flicker. Hank: "Keep driving." Chapter ends.
+**Ending:** approaching Blackridge, the crew sees something impossible — stable electric light, not fire, not generator flicker. Josh: "Keep driving." Chapter ends.
 
 ## Chapter 4 — DO NOT TAKE I-40 (~2.5–3h, miles 330–430)
 **Theme:** Curiosity has a cost. **Blackridge** opens the chapter: population apparently zero, doors unlocked, beds, food, tools, no obvious massacre, no bodies explaining the abandonment — and a generator/system still functioning. **First undeniable evidence that significant pre-Collapse infrastructure remains active. Do NOT explain why yet.** (Existing CUSTODIAN sentry material folds into the Blackridge approach/escalation per `docs/WORLD.md` — C-07 tag hint → running generator → sentry demanding authorization — not duplicated.)
@@ -22,11 +22,11 @@ Frozen as direction by Nic 2026-10-05 (Campaign Master Plan v1.0). These are cha
 **Theme:** Survival eventually becomes politics. **Republic of Morrow** (pop. ~600): the largest functioning society encountered — elected leadership, courts, guards, schools, currency, markets, limited electricity, farms, laws, factions. Shocking after the road: civilization did not disappear, it fragmented.
 **Political conflict** with no clean good/evil: **Expansionists** (secure roads, absorb/protect smaller communities) · **Isolationists** (expansion repeats old mistakes, drains Morrow) · **Alliance advocates** (independent communities in cooperation). The player's information — about Mercy, Redwater/Haven, Tollway, I-40, Station Seven — may become politically valuable; the player may lie, omit, or share.
 **Mid-trail spouse breadcrumb:** someone in/near Morrow holds an object or firsthand story connected to Claire/Daniel — closing the Crossroads/Last Stop → Relay gap. The spouse feels increasingly close without undermining The Relay.
-**Ending:** the crew leaves organized civilization for the High Country. Hank is visibly uneasy.
+**Ending:** the crew leaves organized civilization for the High Country. Josh is visibly uneasy.
 
 ## Chapter 7 — HIGH COUNTRY (~2–2.5h, miles 590–670)
 **Theme:** You cannot outrun where you came from. Travel itself becomes substantially harder: altitude, cold, snow, rockslides, steep grades, vehicle strain, wildlife, limited shelter.
-**Hollow Creek** (pop. ~75): hard, practical, interdependent mountain settlement. **Someone recognizes Hank — this is where Hank's history comes due** (see `docs/MYSTERIES.md`; guilt, not betrayal; exact technical knowledge stays limited).
+**Hollow Creek** (pop. ~75): hard, practical, interdependent mountain settlement. **Someone recognizes Josh — this is where Josh's history comes due** (see `docs/MYSTERIES.md`; guilt, not betrayal; exact technical knowledge stays limited).
 **Ending:** the crew receives evidence that The Relay recently operated. Claire/Daniel may have been there. Personal quest momentum accelerates.
 
 ## Chapter 8 — CONTINUITY (~2–2.5h, miles 670–760)

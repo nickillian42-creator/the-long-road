@@ -48,7 +48,7 @@ Flash flood, thunderstorm, dust storm, wildfire, extreme heat, cold snap, snowst
 
 ### Mechanical disasters
 The vehicle is practically another character: flat tire, overheating, broken belt, damaged suspension, dead battery, fuel leak, stuck vehicle, engine trouble, broken windshield, blocked radiator.
-**Named-item integration (300-item catalog):** not "PARTS −2" but — the temperature needle climbs, Hank kills the engine, *"Pop the hood,"* and the player has a RoadKing Radiator Hose, a Federal Repair Kit, an Ironclad Wrecking Bar. The catalog becomes the solution space.
+**Named-item integration (300-item catalog):** not "PARTS −2" but — the temperature needle climbs, Josh kills the engine, *"Pop the hood,"* and the player has a RoadKing Radiator Hose, a Federal Repair Kit, an Ironclad Wrecking Bar. The catalog becomes the solution space.
 
 ### Strange road encounters
 The ones that matter most. **Not everything needs an explanation:** a radio repeating the same six seconds nightly; a freshly painted highway sign reading TURN AROUND; an intact house in the middle of nowhere; a car parked across the road, driver's door open; someone watching from a distant overpass; a town where every building bears the same painted symbol; a child's bicycle in the middle of a highway; a still-warm campfire; a working vending machine; cattle walking an abandoned interstate; a buried 2027 time capsule; a still-transmitting weather station; an old emergency siren suddenly activating.

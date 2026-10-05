@@ -46,7 +46,7 @@ function fresh() {
 console.log('S1 v1->v4 migration');
 {
   const a = fresh();
-  const v1 = { name: 'Old', difficulty: 'survival', sex: 'Male', day: 5, miles: 100, health: 80, food: 10, water: 10, crew: [{ name: 'Hank', hp: 90 }], flags: {} };
+  const v1 = { name: 'Old', difficulty: 'survival', sex: 'Male', day: 5, miles: 100, health: 80, food: 10, water: 10, crew: [{ name: 'Josh', hp: 90 }], flags: {} };
   const m = a.migrateSave(JSON.parse(JSON.stringify(v1)));
   check('v bumps to 4', m.v === 4, 'v=' + m.v);
   check('chapter defaults to 1', m.chapter === 1);
@@ -85,7 +85,7 @@ console.log('S2 v2->v4 flags + backfill');
 console.log('S3 v3->v4 survival preservation');
 {
   const a = fresh();
-  const v3 = { v: 3, name: 'S3', difficulty: 'survival', sex: 'Female', day: 12, miles: 200, pfat: 55, injury: 'wounded', woundedDays: 2, antibiotics: 1, rationing: true, crew: [{ name: 'Hank', hp: 80, fatigue: 30, injury: 'healthy', woundedDays: 0, neglectDone: false }], flags: { mercy: 1 }, quests: a.newQuests(), discoveries: [] };
+  const v3 = { v: 3, name: 'S3', difficulty: 'survival', sex: 'Female', day: 12, miles: 200, pfat: 55, injury: 'wounded', woundedDays: 2, antibiotics: 1, rationing: true, crew: [{ name: 'Josh', hp: 80, fatigue: 30, injury: 'healthy', woundedDays: 0, neglectDone: false }], flags: { mercy: 1 }, quests: a.newQuests(), discoveries: [] };
   const m = a.migrateSave(JSON.parse(JSON.stringify(v3)));
   check('v3 fields preserved', m.pfat === 55 && m.injury === 'wounded' && m.antibiotics === 1 && m.rationing === true && m.crew[0].fatigue === 30);
   check('v4 structures added', m.v === 4 && m.chapter === 1 && Array.isArray(m.consequences));

@@ -80,7 +80,7 @@ Then:
 — before the signal is lost.
 
 ### The two-voice rule (permanent)
-The Station Seven broadcast voice and the spouse's break-in are **two separate voices**. Hank finds something about the Station voice familiar (he heard it sixty years ago). The protagonist **instantly recognizes** Claire/Daniel. The writing must never let the player confuse them: the Station voice is calm and steady; the spouse's voice is raw, fragmenting, emotional.
+The Station Seven broadcast voice and the spouse's break-in are **two separate voices**. Josh finds something about the Station voice familiar (he heard it sixty years ago). The protagonist **instantly recognizes** Claire/Daniel. The writing must never let the player confuse them: the Station voice is calm and steady; the spouse's voice is raw, fragmenting, emotional.
 
 ## Breadcrumbs (across the 780 miles)
 Not every chapter; never conveniently spaced. Instead: someone remembers them. A campsite holds something recognizable. A trader carries an object of theirs. A name appears somewhere impossible. A radio recording. A CUSTODIAN system reacts to the surname Mercer. Eventually someone says *"Mercer?"* — pause — *"There was another Mercer."*
@@ -97,7 +97,7 @@ They cross the distance. They embrace. Give it time.
 *"I hoped."*
 
 ## After the reunion (final act)
-The spouse does **not** become an NPC standing in a room. For the final act, **they join the traveling party**. They have opinions about what the player has done. They meet Mara, Eli, and Hank. They recognize NPCs from their own journey. They know things about CUSTODIAN the player doesn't. They can disagree with the player. The last hours become about something different: *you crossed the world to find each other — now decide what you're going to do together.*
+The spouse does **not** become an NPC standing in a room. For the final act, **they join the traveling party**. They have opinions about what the player has done. They meet Mara, Eli, and Josh. They recognize NPCs from their own journey. They know things about CUSTODIAN the player doesn't. They can disagree with the player. The last hours become about something different: *you crossed the world to find each other — now decide what you're going to do together.*
 
 ## Spouse survival rule (locked)
 Reunion is **guaranteed** once the player reaches that story point. The spouse must **never** be automatically killed shortly after reunion. However, later player decisions in the final act *may* create outcomes in which Claire/Daniel dies — such an outcome must be causally connected to player choices, never a cheap scripted twist.
