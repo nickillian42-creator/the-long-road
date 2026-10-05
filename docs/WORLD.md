@@ -47,7 +47,7 @@ Community built through an old rail yard: rail cars become homes, shops, clinic,
 Largest society encountered. Elections, courts, guards, schools, local currency, limited electricity. Genuine political disagreements over expansion, isolation, and alliances. **Do not make one political side objectively correct.** The player's knowledge of Colorado/CUSTODIAN may become politically valuable.
 
 ### 9. HOLLOW CREEK — ~Mile 620 — Population ~75
-Colorado mountain settlement. Small, interdependent community. Major Josh storyline location: someone recognizes Josh or his family/name, beginning to expose his connection to the region, I-40, and/or old events. The exact secret remains to be authored later.
+Colorado mountain settlement. Small, interdependent community. Major Josh storyline location: someone recognizes Josh from the 11→4 journey ~20 years ago — his group passed through, and someone there remembers what happened and what Josh did. Guilt, not malice. (Retcon 2026-10-05: replaces the continuity-network connection.)
 
 ### 10. THE RELAY — ~Mile 690
 Pre-Collapse communications installation, partially functional. Evidence proves Claire/Daniel was here recently. This transitions the personal quest into **THEY'RE CLOSE**.
@@ -88,7 +88,7 @@ The ~100 authored NPC target is populated **through these locations**, not as 10
 ## Integration notes with existing game content (Dwight audit, 2026-10-05)
 - **Stranger encounter (~mile 140)** sits just before the Redwater/Haven split. No conflict; the C-07 tag remains a hint, not yet infrastructure.
 - **Custodian sentry / THE WATCHER (~mile 330)** coincides with Blackridge. Recommendation: fold the sentry into the Blackridge approach with a clear revelation escalation — C-07 tag (hint) → Blackridge's still-running generator (first *active* infrastructure) → sentry (active system demanding authorization). This preserves Blackridge's "first strong indication" framing.
-- **Mountain passage (~mile 590)** flows into the Hollow Creek region (~620). Josh's deepening storyline belongs here.
+- **Mountain passage (~mile 590)** flows into the Hollow Creek region (~620). Josh's 11→4 history surfaces here — he is driving back toward where it happened.
 - **Region system** (North Texas 0–190 / Panhandle 190–390 / Dead Corridor 390–580 / Mountain Passage 580–780) accommodates all locations without breaking existing quest objectives.
 - **Lore catalog assignment** (which of the 20 lore items lives on 6A vs. 6B) is future work; both branches must independently carry enough for the main story.
 - **7–9 location target:** a completionist run currently counts ~10–11 stops. The Tollway bypass option already supports skipping; ensure at least 2–3 majors remain skippable so the target is reachable.

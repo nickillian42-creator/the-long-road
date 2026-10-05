@@ -10,8 +10,10 @@ Not a second evil AI. A fractured CUSTODIAN continuity process/subsystem created
 ## The I-40 warning
 Answered above. The warning sits inside Station Seven's own status broadcast ("CONTINUITY STATION SEVEN OPERATIONAL / MEDICAL FACILITIES ACTIVE. CLEAN WATER AVAILABLE") as the one line that does not sound like the station — which is precisely why it draws attention. The crew understands the warning was not superstition by the end of Chapter 4; they still do not understand who inserted it until much later.
 
-## Josh's history
-Josh Rourke (~68) heard the Station Seven voice as a child in 2029. As a young survivor he later worked with people attempting to understand, salvage, or disable parts of the surviving continuity network. He saw enough to understand I-40 was dangerous. He carries guilt because one of those expeditions ended badly — people died after he pushed them farther than they should have gone. This is why he reacts strongly to the protagonist chasing Claire/Daniel into the same territory. **His secrecy is rooted in guilt, not betrayal.** He did not create CUSTODIAN; he is not its mastermind, agent, or android. Exact technical knowledge stays limited per crew-knowledge rules. His Tire Iron (`melee_020`) and Old Road Atlas (`rare_013`) remain emotionally important.
+## Josh's history (retconned 2026-10-05)
+Josh Rourke (~49, born ~2040) never experienced the pre-collapse world and never worked inside continuity infrastructure. His mystery is the **11 → 4**: twenty years ago he arrived at Mercy as part of a group of eleven travelers; only four reached Mercy. He carries guilt over a call he made during that journey — people died. Do NOT reveal the complete story yet.
+His group lost people near old corridor infrastructure they never understood, which is the lived source of his unease around the I-40 corridor. He knows something is wrong there without knowing why. He does NOT recognize the Station Seven broadcast and possesses no special knowledge of it.
+**His secrecy is rooted in guilt, not betrayal.** He did not create CUSTODIAN; he is not its mastermind, agent, or android. His Tire Iron (`melee_020`) and Old Road Atlas (`rare_013`) remain emotionally important. His history comes due at Hollow Creek (Chapter 7): his group passed through ~20 years ago, and someone there remembers what happened.
 
 ## The spouse's interrupted line
 "And if you're hearing this—" was an attempt to warn Jack/Evelyn **not to come blindly to Station Seven just because Claire/Daniel is there.** By the time of the broadcast, the spouse had learned Station Seven's signal was being generated/repeated through systems whose objectives they did not fully trust. They wanted Mercy to know they were alive while preventing the signal from being read as a simple rescue beacon. The interruption came from unstable/contested access to the broadcast path — not a deliberate stop. **The tragedy: their attempt to say "I'm alive" is exactly what caused Jack/Evelyn to come.**
@@ -23,7 +25,7 @@ Claire/Daniel's expedition interacted with C-07-linked systems; their identity b
 Multiple interested humans learned a Mercer interacted with functioning continuity infrastructure. At least one Morrow-linked information network and independent scavenger/mercenary interests seek the spouse, believing Claire/Daniel knows how to access Station Seven systems. Abel Rusk (#015) knows pieces of this; **his exact allegiance stays flexible** until his later authored scenes are locked.
 
 ## Reveal schedule (writer guidance, not player promises)
-- Chapters 1–2: warnings without explanations (transmission, Owen, Josh's reactions, Abel).
+- Chapters 1–2: warnings without explanations (transmission, Owen, Ruth's cadence reaction, Josh's corridor unease, Abel).
 - Chapter 3: first delayed consequences; Tollway shows infrastructure has human costs.
 - Chapter 4: I-40 is genuinely dangerous (experienced, not explained); the warning was not superstition.
 - Chapters 5–6: CUSTODIAN-linked infrastructure becomes harder to dismiss; human seekers emerge (Morrow networks, Abel's pieces).

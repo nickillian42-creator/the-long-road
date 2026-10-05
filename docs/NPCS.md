@@ -13,34 +13,49 @@ Preserve: **THE WORLD REMEMBERS WHAT YOU DO. THE CONSEQUENCES DON'T ALWAYS ARRIV
 ## MERCY
 
 ### #001 — RUTH CALDER
-- **Age:** 58. **Location:** Mercy. **Role:** Council leader.
+- **Age:** ~80 (born ~2009; ~20 during the 2029 collapse). **Location:** Mercy. **Role:** Council leader.
+- Ruth genuinely remembers the old world — not as legend but as lived life. She has spent sixty years watching people disappear, and keeps a handwritten memorial book of the names Mercy has lost. Do not over-explain the book in Chapter 1; it is a recurring object.
+- She has a dark survival history: during the collapse she did morally terrible things trying to keep herself and her younger sister alive. Her sister died anyway. Ruth is not a pacifist, but she believes merely staying alive is not the same as remaining human. Despite everything, she still sees light in humanity.
 - Ruth has spent decades making decisions where every available option hurts somebody. She genuinely understands Jack/Evelyn's desire to find Claire/Daniel — but Mercy's population depends on her too.
 - Core departure sentiment: *"Find them. I mean that. But find something for Mercy too. Nineteen days. Come back."*
 - **Long shadow:** information the player gets back to Mercy may affect Ruth's decisions on rationing, preparation, evacuation, and Station Seven. She may eventually have to make major decisions without the protagonist present.
+- **Voice connection:** Ruth recognizes something wrong or familiar about the Station Seven broadcast's cadence. She is visibly affected and will not explain what it is. She must NOT identify it as machine-generated this early — that truth belongs to a later reveal.
+- **Knowledge rule:** Ruth remembers ordinary pre-collapse America, but she was not a CUSTODIAN insider and cannot explain the central mystery. She answers old-world questions when asked; she never volunteers mystery-relevant exposition.
 - Never characterize Ruth as secretly power-hungry or generically authoritarian.
 
 ### #002 — MARA VELEZ
-- **Age:** 33. **Location:** Mercy / traveling crew. **Role:** Medic.
-- Defining quality: clinical honesty. She does not lie about survival odds. If somebody is unlikely to survive, she says so. If saving strangers endangers the crew, she says so. This can read as cold, but she is deeply affected by patients she cannot save.
-- **Undisclosed detail (discover naturally, never exposition-dumped):** Mara privately remembers and records the names of patients she has lost.
-- Existing characterization preserved: values compassion; trust-reactive; first-wound dialogue; weary-argument participant.
+- **Age:** ~24. **Location:** Mercy / traveling crew. **Role:** Medic.
+- Raised in Mercy. Sweet and somewhat naive about the outside world, but NOT stupid, helpless, or incompetent — she is capable and intelligent within the world she knows, including as a medic.
+- She believes people deserve chances. She is fascinated by what exists beyond Mercy: she collects and studies old maps, combining pre-collapse atlases with post-collapse traveler annotations, Mercy records, and copied warnings on her map wall.
+- **Key observation (not an answer):** multiple independent sources across different years have marked the same I-40 corridor as dangerous. Mara does not know why.
+- **Long arc:** naivety transforms into informed hope, never mere cynicism. Sometimes her instinct to trust people is correct.
+- **Crew dynamic:** Mara is the compassionate voice opposite Josh's caution ("trust has a price" vs "people deserve chances"). Neither position is framed as objectively correct.
+- In Chapter 1 she asks to travel toward Colorado — a major crew-assembly beat. Her hand-drawn route knowledge is genuine and useful.
+- **Motivation (locked 2026-10-05):** "I need to know what's beyond Mercy." Mara volunteers — partly selfish and human. A life spent studying maps on paper, and now a legitimate chance to experience the world for real. She has real practical value as a navigator. Her relationship with the protagonist develops on the road; it does NOT begin as devotion.
 
 ### #003 — ELI BOONE
-- **Age:** 24 *(audit adjustment: draft said 21; set to 24 to match the established "mid-20s" portrait bible — flagged in freeze report)*. **Location:** Mercy / traveling crew.
-- Born in Mercy; never traveled far from it. Old America fascinates him — highways, cities, airports, technology, everyday things older survivors take for granted. Provides humor without becoming comic relief.
-- *"Did everybody really have cars?" / "Pretty much." / "Where'd they put them all?" / Josh looks at the ruined highway. "Apparently here."*
-- **Long arc:** partially a coming-of-age story. The protagonist's behavior influences who Eli becomes — never as an obvious morality meter. (Productive tension, not a contradiction: he distrusts machines yet is fascinated by what old America built.)
-- **Lucy beat:** Lucy Bell asks Eli about the mountains before departure. If Eli returns to Mercy, her repeated question and his answer reflect who he became. If he doesn't return, someone else may have to answer. Do not predetermine Eli's death.
+- **Age:** ~12. **Location:** Mercy (does NOT travel with the crew).
+- Born in Mercy. He doesn't think of himself as living "after the apocalypse" — this is simply the world. Fascinated by old-world artifacts; collects useless objects adults consider junk.
+- His treasured object is a dead, damaged cell phone. Josh has examined it fourteen times and insists it cannot be fixed. Eli's recurring answer: "Maybe fifteen's the one." The phone matters because Eli is beginning to forget what his father's voice sounded like (his father died of an infection when Eli was ~7; Ruth once explained phones could keep voices).
+- He hangs around Josh's workshop; Josh has unintentionally become a father figure to him. Neither labels it.
+- Reckless and desperate to prove himself useful — but he must genuinely contribute, never exist merely as "the kid who needs rescuing." His close attention (honed on the dead phone) lets him notice the Station Seven broadcast's exact repeat pattern: an observation, not an answer.
+- **Departure:** Eli desperately wants to go; Josh refuses. Their argument exposes the unspoken father/son bond. Eli storms off. He plants the dead phone plus a scratched note ("15's the one.") in Josh's bag — attempt #15. This object follows the crew as a long-term emotional thread; a future roadside find may one day give Josh something to try.
+- **Lucy beat:** Lucy Bell (9) asks Eli about the mountains before departure — kid-to-kid. If Eli remains in Mercy, her repeated question and his answer reflect who he became there.
+- Do not predetermine Eli's death.
 
 ### #004 — JOSH ROURKE
-- **Age:** late 60s, approximately 68.
-- **Location:** Mercy / traveling crew. **Role:** Mechanic / old-road knowledge.
-- Funny, stubborn, exceptionally capable. His hands may shake slightly at rest but steady when working.
-- Knows substantially more about old roads, Colorado, and certain infrastructure than he initially admits. His immediate reaction to AVOID INTERSTATE 40 is significant. He refuses to fully explain why.
-- **Do NOT resolve** Josh's underlying connection to I-40, CUSTODIAN, C-07, Colorado, or Hollow Creek yet.
-- Personal objects: his Tire Iron (`melee_020`, `story:hank_tire_iron`) and his Old Road Atlas (`rare_013`) remain important.
-- Existing characterization preserved: elderly mechanic; heard the Station voice as a child; `flags.hankSecret` (worked at a Custodian facility).
-
+- **Age:** ~49 (born ~2040; never experienced the pre-collapse world).
+- **Location:** Mercy / traveling crew. **Role:** Mechanic / fabricator.
+- Capable, warm, funny — and emotionally evasive. NOT a stereotypical gruff wasteland mechanic. Protect his warmth and humor even when he advocates caution or hard choices.
+- Arrived at Mercy ~20 years ago as part of a group of eleven; only four reached Mercy. "11 → 4" is his recurring clue. He carries guilt over a call he made during that journey — people died. Do NOT reveal the complete story yet.
+- Machines are easier for Josh than people: when a machine breaks, he can usually understand why.
+- **Corridor knowledge (re-sourced):** Josh knows something is wrong with the I-40 corridor because his group lost people near corridor infrastructure they never understood — lived experience, not CUSTODIAN knowledge. His unease is triggered by maps, routes, and corridor discussion, never by recognizing the Station Seven broadcast (he does not recognize the Voice).
+- **Motivation (locked 2026-10-05):** "I can't let what happened before happen again." Josh does NOT want to leave Mercy — Eli, the workshop, responsibilities, twenty years of avoiding that road. Ruth asks him to see the protagonist and Mara through the I-40 corridor; when he sees Mara's route he recognizes 11→4 territory. Publicly he agrees because they need a mechanic who has survived that road; privately he is confronting something he has avoided for twenty years (do NOT reveal yet). His commitment is explicitly bounded: **"I'll get you through Forty."** He is not committing to Colorado — room for a later, meaningful decision to continue.
+- **Long arc:** his history comes due at Hollow Creek (Chapter 7) — his group passed through ~20 years ago, and someone there remembers what happened. Guilt, not malice.
+- **Relationship with Eli:** unintentional father figure. Leaving Eli behind is one of his hardest decisions.
+- **Crew dynamic:** Josh is the cautious/hard-choice voice opposite Mara's compassion. "Josh believes trust has a price."
+- Personal objects: his Tire Iron (`melee_020`, `story:josh_tire_iron`) and his Old Road Atlas (`rare_013`) remain important. The atlas's back cover carries eleven tally notches, four circled.
+- Hands: a slight tremor at rest that steadies when he works (long-standing, origin unestablished — do not over-explain).
 ### #005 — JUNE BELL
 - **Age:** 46. **Location:** Mercy. **Role:** Radio operator. Wife of Amos, mother of Lucy.
 - June receives the Station Seven transmission. She has spent years listening to static, distant settlements, and unidentifiable signals. She realizes something about the Station Seven transmission does not behave like an ordinary broadcast — **but she cannot explain why, and must never know more than the evidence allows** (crew-knowledge rule).
@@ -111,13 +126,13 @@ Preserve: **THE WORLD REMEMBERS WHAT YOU DO. THE CONSEQUENCES DON'T ALWAYS ARRIV
 
 ---
 
-## Continuity & audit notes (freeze report, 2026-10-05)
-- **Ages:** Ruth 58, Mara 33 (matches "early 30s" portrait), Eli 24 (adjusted from 21 — see above), Josh ~68 (see manifest conflict note), all others as drafted. No conflicts with existing material beyond the two flagged.
+## Continuity & audit notes (freeze report, 2026-10-05; retcon 2026-10-05 — see CHANGELOG)
+- **Ages (retconned):** Ruth ~80 (born ~2009), Mara ~24, Eli ~12, Josh ~49 (born ~2040). Portraits for all four are now age-mismatched; flagged for a later art pass, not yet redone.
 - **Surnames:** zero collisions across canon; Mercer reserved per the surname rule.
 - **Mercy families:** June + Amos Bell → Lucy (9); all other relationships as drafted. 10 named Mercy NPCs of ~186 population.
-- **Existing characterization:** Ruth (council leader), Mara (compassionate medic), Eli (scout), Josh (elderly mechanic, heard the voice as a child, worked at a Custodian facility) — all preserved; new details are additive only.
-- **Josh item hooks:** Tire Iron (`melee_020`) and Old Road Atlas (`rare_013`) referenced; `flags.hankSecret` untouched.
-- **Chapter 1:** roster populates the planned THE VOICE expansion; current `opening()` Ruth/Mara scene is preserved as one beat within it.
+- **Retconned characterization:** Ruth (elder/matriarch, remembers the old world, memorial book, dark survival history); Mara (young medic, map wall, compassion voice); Eli (12, stays in Mercy, dead phone, pattern observer); Josh (mechanic/fabricator, 11→4 guilt, corridor unease from lived experience, cautious voice). See #001–#004.
+- **Josh item hooks:** Tire Iron (`melee_020`) and Old Road Atlas (`rare_013`) referenced; `flags.hankSecret` key retained (meaning re-sourced to 11→4 corridor encounter).
+- **Chapter 1:** Mercy Day preparation sequences + departure convergence implemented; current `opening()` Ruth/Mara scene remains dormant.
 - **Breadcrumb pacing:** Mae (#012) delivers the Crossroads beat per `docs/WORLD.md`.
 - **Crew knowledge:** June, Nora, Abel, and Owen's stale-information principle all comply; no NPC reveals beyond evidence.
 - **Four mysteries:** none answered or weakened. Josh's I-40 connection, Abel's identity, and Wes's lesson all stay unresolved by rule.
@@ -201,7 +216,7 @@ Preserve: **THE WORLD REMEMBERS WHAT YOU DO. THE CONSEQUENCES DON'T ALWAYS ARRIV
 
 ### #028 — SADIE QUILL
 - **Age:** 16. **Location:** Haven. **Role:** Haven resident. David's daughter.
-- Never lived outside Haven. Fascinated by Eli — he represents another young person who has actually traveled beyond his home. **This does NOT need to become a romance.** Their conversations should pressure-test Eli's lifelong desire to leave Mercy against Sadie's upbringing, where leaving is considered irresponsible or wrong. (Feeds Eli's coming-of-age arc from #003.)
+- Never lived outside Haven. Fascinated by Mara — a young woman who actually left home to travel the road. **This does NOT need to become a romance.** Their conversations should pressure-test Mara's lifelong desire to see the world against Sadie's upbringing, where leaving is considered irresponsible or wrong. (Retcon 2026-10-05: re-aimed from Eli, who stays in Mercy; the 16-year-old who stayed vs the 24-year-old who left.)
 
 ### #029 — EZRA COLE
 - **Age:** 73. **Location:** Haven. **Role:** Musician / storyteller.
@@ -322,7 +337,7 @@ All 31 collision cleanups approved by Nic with final names below; IDs #031–100
 ### #069 — FELIX ROWE
 - **Age:** 48. **Location:** Republic of Morrow. **Role:** Schoolteacher/historian.
 ### #070 — NADIA SLOANE
-- **Age:** 20. **Location:** Republic of Morrow. **Role:** Courier. Young adult who has traveled between settlements; challenges Eli's assumptions.
+- **Age:** 20. **Location:** Republic of Morrow. **Role:** Courier. Young adult who has traveled between settlements; challenges Mara's assumptions about the world beyond Mercy. (Retcon 2026-10-05: re-aimed from Eli, who stays in Mercy.)
 ### #071 — GRANT HAVEL
 - **Age:** 55. **Location:** Republic of Morrow. **Role:** Farmer/delegate. Skeptical of urban political ambitions.
 ### #072 — SIMONE LARK
