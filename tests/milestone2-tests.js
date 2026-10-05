@@ -1,0 +1,349 @@
+// Milestone 2 tests: inventory, survival, difficulty, scavenging prototype,
+// v6 migration, Chapter One preservation. Run with node.
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const js = html.split('<script>')[1].split('</scr' + 'ipt>')[0];
+
+let pass = 0, fail = 0;
+function check(name, cond, extra = '') {
+  if (cond) { pass++; console.log('  PASS', name); }
+  else { fail++; console.log('  FAIL', name, extra); }
+}
+
+function fresh() {
+  const store = {};
+  const screens = [];
+  const appObj = {};
+  Object.defineProperty(appObj, 'innerHTML', { set(v) { screens.push(v); }, get() { return ''; } });
+  const elems = {};
+  const fakeEl = (s) => {
+    if (!elems[s]) {
+      const e = { textContent: '', style: {}, classList: { remove() {}, toggle() {} }, value: '' };
+      Object.defineProperty(e, 'innerHTML', { set(v) { screens.push(v); }, get() { return ''; } });
+      elems[s] = e;
+    }
+    return elems[s];
+  };
+  const ctx = {
+    console, Math, JSON, Object, Array, String, Number, Boolean, Error, parseInt, parseFloat,
+    setTimeout: () => 0, confirm: () => true,
+    localStorage: { getItem: k => store[k] ?? null, setItem: (k, v) => { store[k] = String(v); }, removeItem: k => { delete store[k]; } },
+    document: {
+      querySelector: (s) => s === '#app' ? appObj : fakeEl(s),
+      querySelectorAll: () => [],
+      body: { classList: { remove() {}, add() {} } },
+    },
+    window: { scrollTo() {} },
+  };
+  ctx.window.top = ctx.window;
+  ctx.globalThis = ctx;
+  vm.createContext(ctx);
+  const code = js.replace(/start\(\);?\s*$/, '') + `\n;globalThis.__api = { begin, migrateSave, render,
+  initSimState, invAdd, invRemove, invHas, invCount, invUsedSlots, invFreeSlots, invFits,
+  invUseItem, invEquip, invUnequip, invGive, invDrop, invInspect, itemActions, itemDef,
+  grantLoot, setFound, clearFound, foundActions, resolveFound,
+  normDiff, diffMods, lootQtyFor, simTick, survOf, survAddCondition, survRemoveCondition,
+  restChar, hungerLabel, thirstLabel, healthLabel, survStatusLine, survWarning,
+  scavProtoStart, scavScene, scavArea, scavSearch, scavRest, scavEnd, scavLocState,
+  scavGroundAdd, scavTakeGround, saveProto, resumeProto, hasProtoSave, scavProto,
+  openInventory, invScreen, invShow, invDo,
+  has: (n) => typeof globalThis[n] !== 'undefined',
+  getG: () => g, setG: v => { g = v; },
+  setPlayerName: v => { playerName = v; }, setSexSel: v => { sex = v; },
+  setDiff: v => { difficulty = v; }, setCarSel: v => { car = v; },
+  getStore: k => null, setStore: (k, v) => {} };`;
+  vm.runInContext(code, ctx);
+  const api = ctx.__api;
+  api.getStore = k => store[k] ?? null;
+  api.setStore = (k, v) => { store[k] = String(v); };
+  api.newGame = (sex = 'Male') => { api.setPlayerName('Tester'); api.setSexSel(sex); api.setDiff('survivor'); api.setCarSel('eagle'); api.begin(); };
+  api.lastScreen = () => screens[screens.length - 1];
+  return api;
+}
+
+// ---------- M2A: inventory core ----------
+console.log('M2A inventory core');
+{
+  const a = fresh(); a.newGame();
+  const g = a.getG();
+  check('v6 stamped', g.v === 6);
+  check('both packs initialized empty', g.inv.josh.slots.length === 0 && g.inv.mara.slots.length === 0);
+  check('10 slots each', a.invFreeSlots('josh') === 10 && a.invFreeSlots('mara') === 10);
+  check('together by default', g.together === true && g.found === null);
+
+  let r = a.invAdd('josh', 'water_bottle', 2);
+  check('add stacks', r.added === 2 && r.leftover === 0 && a.invCount('josh', 'water_bottle') === 2);
+  check('one stack, one slot', a.getG().inv.josh.slots.length === 1 && a.invUsedSlots('josh') === 1);
+  r = a.invAdd('josh', 'water_bottle', 3);
+  check('partial stack fills then new stack', r.added === 3 && a.getG().inv.josh.slots.length === 2 && a.invCount('josh', 'water_bottle') === 5);
+
+  r = a.invAdd('josh', 'knife', 1);
+  check('size-2 item costs 2 slots', a.invUsedSlots('josh') === 4, 'used=' + a.invUsedSlots('josh'));
+
+  // fill to capacity with size-1 non-stackables
+  for (let i = 0; i < 6; i++) a.invAdd('josh', 'flashlight', 1);
+  check('pack full at 10', a.invUsedSlots('josh') === 10, 'used=' + a.invUsedSlots('josh'));
+  r = a.invAdd('josh', 'canned_food', 1);
+  check('overflow rejected, nothing lost', r.added === 0 && r.leftover === 1 && a.invCount('josh', 'canned_food') === 0);
+  check('invFits false when full', a.invFits('josh', 'canned_food', 1) === false);
+
+  const rem = a.invRemove('josh', 'flashlight', 2);
+  check('remove works', rem === 2 && a.invCount('josh', 'flashlight') === 4);
+  check('invHas', a.invHas('josh', 'water_bottle', 5) && !a.invHas('josh', 'water_bottle', 6));
+
+  // USE: water eases thirst
+  a.survOf('josh').thirst = 2;
+  const u = a.invUseItem('josh', 'water_bottle');
+  check('drink eases thirst', u.ok && a.survOf('josh').thirst === 1 && a.invCount('josh', 'water_bottle') === 4);
+  a.survOf('josh').thirst = 0;
+  check('USE hidden when not thirsty', a.itemActions('josh', 'water_bottle').indexOf('use') < 0);
+  const u2 = a.invUseItem('josh', 'water_bottle');
+  check('USE refused when not thirsty, item kept', !u2.ok && a.invCount('josh', 'water_bottle') === 4);
+
+  // EQUIP
+  const e = a.invEquip('josh', 'knife');
+  check('equip weapon', e.ok && a.getG().inv.josh.equipment.weapon === 'knife');
+  check('equipped frees pack slots', a.invUsedSlots('josh') === 5, 'used=' + a.invUsedSlots('josh'));
+  const ue = a.invUnequip('josh', 'weapon');
+  check('unequip stows', ue.ok && a.getG().inv.josh.equipment.weapon === null);
+
+  // GIVE
+  const gv = a.invGive('josh', 'mara', 'flashlight', 1);
+  check('give works when together', gv.ok && a.invCount('mara', 'flashlight') === 1);
+  a.getG().together = false;
+  const gv2 = a.invGive('josh', 'mara', 'flashlight', 1);
+  check('give refused when separated', !gv2.ok && a.invCount('josh', 'flashlight') === 3);
+  a.getG().together = true;
+
+  // story item: inspect/drop only (+give when together)
+  const acts = a.itemActions('mara', 'dead_phone');
+  check('story item actions limited', acts.indexOf('use') < 0 && acts.indexOf('equip') < 0 &&
+    acts.indexOf('inspect') >= 0 && acts.indexOf('drop') >= 0, acts.join(','));
+  check('inspect text exists', a.invInspect('dead_phone').length > 20);
+
+  // DROP in a scav location -> ground (loot persists there)
+  const p = fresh(); p.scavProtoStart();
+  p.invAdd('josh', 'rope', 1);
+  const d = p.invDrop('josh', 'rope', 1);
+  const ground = p.scavLocState('roadside').ground;
+  check('drop lands on location ground', d.ok && ground.some(s => s.item === 'rope'));
+}
+
+// ---------- M2B: survival ----------
+console.log('M2B survival');
+{
+  const a = fresh(); a.scavProtoStart(); // survivor difficulty
+  a.simTick(2);
+  check('thirst advances before hunger (survivor)', a.survOf('josh').thirst === 1 && a.survOf('josh').hunger === 0);
+  a.simTick(1);
+  check('hunger follows', a.survOf('josh').hunger === 1);
+
+  const b = fresh(); b.scavProtoStart();
+  b.getG().difficulty = 'story';
+  b.simTick(3);
+  check('story deteriorates slower', b.survOf('josh').thirst === 0, 'thirst=' + b.survOf('josh').thirst);
+  const c = fresh(); c.scavProtoStart();
+  c.getG().difficulty = 'hardcore';
+  c.simTick(1);
+  check('hardcore deteriorates faster', c.survOf('josh').thirst === 1 && c.survOf('mara').hunger === 0);
+
+  // neglect at Dehydrated worsens health gradually (survivor: every 2 ticks)
+  const d = fresh(); d.scavProtoStart();
+  d.survOf('josh').thirst = 3;
+  d.simTick(1);
+  check('one tick at dehydrated: still holding', d.survOf('josh').health === 'healthy');
+  d.simTick(1);
+  check('neglect worsens health', d.survOf('josh').health === 'hurt');
+
+  // contextual treatment: bandage cures bleeding, not infection
+  const e = fresh(); e.scavProtoStart();
+  e.survAddCondition('mara', 'bleeding');
+  e.invAdd('mara', 'bandage', 1);
+  const t1 = e.invUseItem('mara', 'bandage');
+  check('bandage cures bleeding', t1.ok && e.survOf('mara').conditions.indexOf('bleeding') < 0);
+  e.survAddCondition('mara', 'infection');
+  const t2 = e.invUseItem('mara', 'bandage');
+  check('bandage useless vs infection', !t2.ok && e.survOf('mara').conditions.indexOf('infection') >= 0);
+  e.invAdd('mara', 'antiseptic', 1);
+  const t3 = e.invUseItem('mara', 'antiseptic');
+  check('antiseptic cures infection', t3.ok && e.survOf('mara').conditions.indexOf('infection') < 0);
+
+  // medkit stabilizes one step, not a full heal
+  const f = fresh(); f.scavProtoStart();
+  f.survOf('josh').health = 'badly_hurt';
+  f.invAdd('josh', 'medkit', 1);
+  const t4 = f.invUseItem('josh', 'medkit');
+  check('medkit stabilizes one step', t4.ok && f.survOf('josh').health === 'hurt');
+
+  // recovery needs the combination: fed + hydrated + no acute condition + time
+  // (story: thirst advances every 4 ticks, recovery every 2 — room to heal)
+  const h = fresh(); h.scavProtoStart();
+  h.getG().difficulty = 'story';
+  h.survOf('mara').health = 'hurt';
+  h.simTick(2);
+  check('recovery with food+water+time', h.survOf('mara').health === 'healthy');
+  const h2 = fresh(); h2.scavProtoStart();
+  h2.survOf('mara').health = 'hurt';
+  h2.survOf('mara').thirst = 2;
+  h2.simTick(6);
+  check('no recovery while thirsty — neglect worsens instead', h2.survOf('mara').health === 'critical');
+
+  // labels + status line
+  check('labels', a.hungerLabel(3) === 'Starving' && a.thirstLabel(3) === 'Dehydrated' && a.healthLabel('badly_hurt') === 'Badly Hurt');
+  check('status line mentions states', a.survStatusLine('josh').indexOf('Mara') < 0 && a.survStatusLine('josh').indexOf('Josh') === 0);
+}
+
+// ---------- M2C: difficulty ----------
+console.log('M2C difficulty');
+{
+  const a = fresh(); a.newGame();
+  check('legacy aliases map', a.normDiff('hard') === 'hardcore' && a.normDiff('survival') === 'survivor' && a.normDiff('story') === 'story');
+  check('unknown defaults to survivor', a.normDiff('bogus') === 'survivor' && a.normDiff(undefined) === 'survivor');
+  const s = a.diffMods('story'), v = a.diffMods('survivor'), h = a.diffMods('hardcore');
+  check('pressure scales story<survivor<hardcore', s.thirstEvery > v.thirstEvery && v.thirstEvery > h.thirstEvery);
+  check('risk scales', s.riskMult < v.riskMult && v.riskMult < h.riskMult);
+  check('loot bonus: story +1, hardcore -1', a.lootQtyFor(2, 'story', true) === 3 && a.lootQtyFor(2, 'hardcore', true) === 1 && a.lootQtyFor(2, 'survivor', true) === 2);
+  check('loot bonus only on first stack', a.lootQtyFor(2, 'story', false) === 2);
+}
+
+// ---------- M2D: scavenging prototype ----------
+console.log('M2D scavenging');
+{
+  const a = fresh(); a.scavProtoStart();
+  const g0 = a.getG();
+  check('prototype state isolated', g0.proto === true && g0.v === 6);
+  const before = a.invCount('josh', 'canned_food');
+  const r = a.scavSearch('roadside', 'shelves', 'quiet');
+  check('search grants authored loot', r.ok && a.invCount('josh', 'canned_food') === before + 2);
+  check('area marked searched', a.scavLocState('roadside').searched.shelves === true);
+  const n1 = a.invCount('josh', 'water_bottle');
+  a.scavSearch('roadside', 'shelves', 'quiet');
+  check('re-search gives nothing', a.invCount('josh', 'water_bottle') === n1);
+
+  const b = fresh(); b.scavProtoStart();
+  b.scavSearch('roadside', 'backpack', 'quiet');
+  const noiseQuiet = b.scavLocState('roadside').noise;
+  const c = fresh(); c.scavProtoStart();
+  c.scavSearch('roadside', 'backpack', 'force');
+  const noiseForce = c.scavLocState('roadside').noise;
+  check('force is louder than quiet', noiseForce > noiseQuiet, noiseQuiet + ' vs ' + noiseForce);
+
+  // risk boil-over forces a complication, not a fight
+  const d = fresh(); d.scavProtoStart();
+  d.scavLocState('roadside').risk = 99;
+  d.scavSearch('roadside', 'fridge', 'force');
+  check('risk 100 forces complication', d.lastScreen().indexOf('RISK BOILS OVER') >= 0);
+
+  // loot persistence through save/load: searched stays searched, ground stays
+  const e = fresh(); e.scavProtoStart();
+  e.scavSearch('roadside', 'shelves', 'quiet');
+  e.invAdd('josh', 'rope', 1);
+  e.invDrop('josh', 'rope', 1); // onto the ground
+  e.saveProto();
+  const snap = e.getStore('longroad_proto');
+  const f = fresh();
+  f.setStore('longroad_proto', snap);
+  check('proto save detected', f.hasProtoSave());
+  f.resumeProto();
+  check('searched persists after load', f.scavLocState('roadside').searched.shelves === true);
+  check('ground persists after load', f.scavLocState('roadside').ground.some(s => s.item === 'rope'));
+  const wBefore = f.invCount('josh', 'water_bottle');
+  f.scavSearch('roadside', 'shelves', 'quiet');
+  check('re-entry does not regenerate loot', f.invCount('josh', 'water_bottle') === wBefore);
+
+  // FOUND state: full pack + loot -> no auto-discard, resolve via LEAVE
+  const p = fresh(); p.scavProtoStart();
+  p.invRemove('josh', 'water_bottle', 2); // clear starter stacks so nothing can merge
+  p.invRemove('josh', 'canned_food', 2);
+  p.invRemove('josh', 'flashlight', 1);
+  for (let i = 0; i < 10; i++) p.invAdd('josh', 'flashlight', 1);
+  p.getG().invWho = 'josh';
+  p.scavSearch('roadside', 'shelves', 'quiet');
+  check('FOUND state opens on overflow', !!p.getG().found && p.getG().found.item === 'canned_food');
+  check('found actions include leave, not auto-take', p.foundActions().indexOf('leave') >= 0);
+  const fr = p.resolveFound('leave');
+  check('LEAVE drops remainder to ground', fr.ok && p.scavLocState('roadside').ground.some(s => s.item === 'canned_food'));
+  check('rest of loot queues next', !!p.getG().found && p.getG().found.item === 'water_bottle');
+  p.resolveFound('leave');
+  check('FOUND cleared after rest resolved', p.getG().found === null);
+}
+
+// ---------- M2E: v6 migration ----------
+console.log('M2E migration');
+{
+  const a = fresh();
+  const old = { v: 5, name: 'Old', sex: 'Male', difficulty: 'survivor', crew: [{ name: 'Josh' }, { name: 'Mara' }], phase: 'phase1_done', flags: {}, log: [] };
+  const m = a.migrateSave(JSON.parse(JSON.stringify(old)));
+  check('v5 -> v6', m.v === 6);
+  check('empty packs on migrate', m.inv.josh.slots.length === 0 && m.inv.mara.slots.length === 0);
+  check('neutral survival on migrate', m.surv.josh.hunger === 0 && m.surv.mara.thirst === 0 && m.surv.josh.health === 'healthy');
+  check('scav + together defaults', JSON.stringify(m.scav) === '{}' && m.together === true && m.found === null);
+  check('legacy difficulty value preserved', m.difficulty === 'survivor' && a.normDiff(m.difficulty) === 'survivor');
+}
+
+// ---------- M2F: Chapter One preservation ----------
+console.log('M2F preservation');
+{
+  const ch1 = fs.readFileSync(path.join(__dirname, '..', 'src', 'chapters', 'chapter1.js'), 'utf8');
+  const banned = ['invAdd', 'scavProto', 'simTick', 'Math.random', 'makeRng', 'SCAVENGING PROTOTYPE', 'g.inv', 'g.surv'];
+  let clean = true;
+  banned.forEach(function (t) { if (ch1.indexOf(t) >= 0) { clean = false; console.log('   LEAKED INTO CH1:', t); } });
+  check('no M2 systems leak into chapter1.js', clean);
+  check('phase1Done has no prototype entry', ch1.indexOf('scavProto') < 0);
+  const eng = fs.readFileSync(path.join(__dirname, '..', 'src', 'core', 'engine.js'), 'utf8');
+  check('prototype entry lives on title screen only', eng.indexOf('SCAVENGING PROTOTYPE') >= 0);
+
+  const a = fresh(); a.newGame();
+  const g = a.getG();
+  check('crew still Josh + Mara, no Eli', g.crew.length === 2 && !g.crew.some(c => c.name === 'Eli'));
+  const srcAll = ['state.js', 'engine.js', 'ui.js', 'globals.js'].map(f => fs.readFileSync(path.join(__dirname, '..', 'src', 'core', f), 'utf8')).join('\n');
+  check('no trust++ anywhere in core', srcAll.indexOf('trust++') < 0 && srcAll.indexOf('trust --') < 0);
+
+  // combat stays dormant: no live caller outside sim/combat.js
+  const simFiles = fs.readdirSync(path.join(__dirname, '..', 'src', 'sim')).filter(f => f !== 'combat.js');
+  const chapters = fs.readdirSync(path.join(__dirname, '..', 'src', 'chapters'));
+  let dormant = true;
+  simFiles.concat(['core/engine.js', 'core/state.js']).forEach(function (f) {
+    const p = path.join(__dirname, '..', 'src', f.indexOf('/') >= 0 ? f : 'sim/' + f);
+    const body = fs.readFileSync(p, 'utf8');
+    if (/[^a-zA-Z]beginBattle\s*\(/.test(body)) { dormant = false; console.log('   LIVE COMBAT CALLER:', f); }
+  });
+  chapters.forEach(function (f) {
+    const body = fs.readFileSync(path.join(__dirname, '..', 'src', 'chapters', f), 'utf8');
+    if (/[^a-zA-Z]beginBattle\s*\(/.test(body)) { dormant = false; console.log('   LIVE COMBAT CALLER:', f); }
+  });
+  check('combat still dormant', dormant);
+}
+
+// ---------- M2G: UI render smoke (templates don't throw, key elements present) ----------
+console.log('M2G render smoke');
+{
+  const a = fresh(); a.scavProtoStart();
+  check('scav scene renders', a.lastScreen().indexOf('ROADSIDE STOP') >= 0);
+  a.scavArea('fridge');
+  check('area detail renders', a.lastScreen().indexOf('Refrigerator') >= 0 && a.lastScreen().indexOf('FORCE IT') >= 0);
+  a.openInventory('scav');
+  let s = a.lastScreen();
+  check('inventory renders with tabs', s.indexOf('INVENTORY') >= 0 && s.indexOf('JOSH') >= 0 && s.indexOf('MARA') >= 0);
+  check('pack + equipped shown', s.indexOf('PACK') >= 0 && s.indexOf('EQUIPPED') >= 0);
+  a.invShow('mara');
+  check('tab switch renders Mara', a.lastScreen().indexOf('Bandage') >= 0);
+  a.invShow('josh');
+  a.getG().invSel = { who: 'josh', idx: 0 }; // water_bottle stack
+  a.invScreen();
+  s = a.lastScreen();
+  check('item detail shows contextual actions', s.indexOf('Bottled Water') >= 0 && s.indexOf('INSPECT') >= 0 && s.indexOf('DROP') >= 0);
+  a.getG().invSel = { who: 'josh', idx: 2 }; // flashlight (utility)
+  a.invScreen();
+  check('utility offers EQUIP', a.lastScreen().indexOf('EQUIP') >= 0);
+  a.scavEnd(false);
+  check('end screen renders', a.lastScreen().indexOf('PROTOTYPE RUN') >= 0);
+  // difficulty picker on the prototype intro
+  const b = fresh(); b.scavProto();
+  check('intro shows difficulty choice', b.lastScreen().indexOf('HARDCORE SURVIVAL') >= 0);
+}
+
+console.log(`\n${pass} passed, ${fail} failed`);
+process.exit(fail ? 1 : 0);

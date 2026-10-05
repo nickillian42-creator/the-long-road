@@ -1,4 +1,4 @@
-// Alpha 0.4 State Foundation tests: v5 schema, migration, helpers, backfill. Run with node.
+// Alpha 0.4 State Foundation tests: v6 schema, migration, helpers, backfill. Run with node.
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -43,12 +43,12 @@ function fresh() {
 }
 
 // ---------- S1: v1 -> v5 ----------
-console.log('S1 v1->v5 migration');
+console.log('S1 v1->v6 migration');
 {
   const a = fresh();
   const v1 = { name: 'Old', difficulty: 'survival', sex: 'Male', day: 5, miles: 100, health: 80, food: 10, water: 10, crew: [{ name: 'Josh', hp: 90 }], flags: {} };
   const m = a.migrateSave(JSON.parse(JSON.stringify(v1)));
-  check('v bumps to 5', m.v === 5, 'v=' + m.v);
+  check('v bumps to 6', m.v === 6, 'v=' + m.v);
   check('chapter defaults to 1', m.chapter === 1);
   check('structures initialized', Array.isArray(m.consequences) && m.consequences.length === 0 && typeof m.settlements === 'object' && typeof m.npcs === 'object' && typeof m.encounters === 'object' && !Array.isArray(m.encounters));
   check('mercy defaults (no game-over)', m.mercy && m.mercy.contact === 'none' && m.mercy.lastKnown === 'stable');
@@ -62,7 +62,7 @@ console.log('S1 v1->v5 migration');
 }
 
 // ---------- S2: v2 -> v5, flags preserved, backfill ----------
-console.log('S2 v2->v5 flags + backfill');
+console.log('S2 v2->v6 flags + backfill');
 {
   const a = fresh();
   const flags = { mercy: 2, stranger: 0, droneResult: 1, pass: true, hankSecret: true, tag: true };
@@ -81,17 +81,17 @@ console.log('S2 v2->v5 flags + backfill');
   check('existing personal preserved', m.quests.personal.id === 'find-them');
   // re-migration must not duplicate
   const m2 = a.migrateSave(JSON.parse(JSON.stringify(m)));
-  check('no duplicate backfill on re-migrate', m2.consequences.length === 5 && m2.v === 5);
+  check('no duplicate backfill on re-migrate', m2.consequences.length === 5 && m2.v === 6);
 }
 
 // ---------- S3: v3 -> v5 preserves survival fields ----------
-console.log('S3 v3->v5 survival preservation');
+console.log('S3 v3->v6 survival preservation');
 {
   const a = fresh();
   const v3 = { v: 3, name: 'S3', difficulty: 'survival', sex: 'Female', day: 12, miles: 200, pfat: 55, injury: 'wounded', woundedDays: 2, antibiotics: 1, rationing: true, crew: [{ name: 'Josh', hp: 80, fatigue: 30, injury: 'healthy', woundedDays: 0, neglectDone: false }], flags: { mercy: 1 }, quests: a.newQuests(), discoveries: [] };
   const m = a.migrateSave(JSON.parse(JSON.stringify(v3)));
   check('v3 fields preserved', m.pfat === 55 && m.injury === 'wounded' && m.antibiotics === 1 && m.rationing === true && m.crew[0].fatigue === 30);
-  check('v5 structures added', m.v === 5 && m.chapter === 1 && Array.isArray(m.consequences));
+  check('v6 structures added', m.v === 6 && m.chapter === 1 && Array.isArray(m.consequences));
   check('route from sex', m.route === 'evelyn' && m.spouseName === 'Daniel');
 }
 
@@ -133,14 +133,14 @@ console.log('S6 new game init');
 {
   const a = fresh(); a.newGame();
   const g = a.getG();
-  check('new game stamps v5', g.v === 5, 'v=' + g.v);
+  check('new game stamps v6', g.v === 6, 'v=' + g.v);
   check('new game chapter 1 + empty histories', g.chapter === 1 && g.consequences.length === 0 && Object.keys(g.settlements).length === 0);
   check('new game route/spouse/personal', g.route === 'jack' && g.spouseName === 'Claire' && g.quests.personal.id === 'find-them');
   check('new game mercy sane', g.mercy.contact === 'none' && g.mercy.lastKnown === 'stable');
 }
 
-// ---------- S7: v5 retcon corrections ----------
-console.log('S7 v5 retcon corrections');
+// ---------- S7: v5 retcon corrections (carried into v6) ----------
+console.log('S7 v5 retcon corrections (v6)');
 {
   const a = fresh();
   // v4 save with Eli in crew and a legacy road phase
@@ -149,7 +149,7 @@ console.log('S7 v5 retcon corrections');
     flags: {}, phase: 'road', chapter: 1, consequences: [], settlements: {}, npcs: {}, encounters: {},
     mercy: { contact: 'none', infoTransmitted: [], supportSent: {}, lastKnown: 'stable' } };
   const m = a.migrateSave(JSON.parse(JSON.stringify(v4)));
-  check('v4 -> v5 bump', m.v === 5, 'v=' + m.v);
+  check('v4 -> v6 bump', m.v === 6, 'v=' + m.v);
   check('Eli stripped from crew', m.crew.length === 2 && m.crew.every(c => c.name !== 'Eli'));
   check('Josh and Mara preserved', m.crew[0].name === 'Josh' && m.crew[1].name === 'Mara' && m.crew[0].hp === 90);
   check('legacy road phase remapped', m.phase === 'phase1_done', 'phase=' + m.phase);
@@ -165,7 +165,7 @@ console.log('S7 v5 retcon corrections');
   }
   // save without crew array doesn't crash
   const nc = a.migrateSave({ v: 4, phase: 'road', flags: {} });
-  check('missing crew safe', nc.v === 5 && nc.phase === 'phase1_done');
+  check('missing crew safe', nc.v === 6 && nc.phase === 'phase1_done');
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

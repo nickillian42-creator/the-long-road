@@ -46,4 +46,18 @@ body.cinema main{max-width:100%;padding:0 0 44px}
 .cine-controls .choice{margin-top:12px;min-height:52px;text-align:center}
 @media(min-width:600px){.scene-tall{min-height:320px}.cine-art{min-height:56vh}.cine-script .prologue-text{max-height:40vh;font-size:17px}}
 @media(prefers-reduced-motion:reduce){.kenburns,.typecaret{animation:none}}
+/* ---- Milestone 2: inventory + scavenging prototype ---- */
+.inv-tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0}
+.inv-tabs button{min-height:56px;text-align:center;font-weight:900;letter-spacing:.12em}
+.inv-tabs button.selected{background:#5d7648;border-color:#e5efbc}
+.inv-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:10px 0}
+@media(min-width:600px){.inv-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.slot{min-height:64px;font-size:13px}
+.slot small{display:block;color:#a3af94;font-size:11px;margin-top:3px}
+.slot.sel{background:#5d7648;border-color:#e5efbc}
+.slot.empty{opacity:.25;min-height:44px}
+.detail{border:1px solid #91b279;border-radius:8px;padding:12px;margin:12px 0;background:#22301f}
+.detail h3{margin:4px 0 6px;color:#e5f5c4}
+.found{border:2px solid #e8c96a;border-radius:8px;padding:14px;margin:14px 0;background:#2a2417}
+.found h3{color:#f4dcb0;margin:6px 0}
 </style></head><body><main><header><div class="eyebrow">CONTINUITY NETWORK // 2089</div><h1>THE LONG ROAD</h1><div class="row"><span class="muted">EVERY MILE COSTS SOMETHING.</span><span class="tag">ALPHA 0.2.2</span></div></header><div id="app"></div><div class="footer">An original prototype. Saves locally in this browser. No accounts or network required.</div></main><div id="toast" role="status"></div><script>

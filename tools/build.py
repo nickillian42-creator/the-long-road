@@ -22,8 +22,14 @@ JS_MODULES = [
     'core/engine.js',
     'chapters/prologue.js',
     'chapters/chapter1.js',
+    'data/items.js',
     'sim/combat.js',
     'sim/rng.js',
+    'sim/difficulty.js',
+    'sim/inventory.js',
+    'sim/survival.js',
+    'sim/scavenging.js',
+    'sim/invui.js',
     'boot.js',
 ]
 

@@ -33,7 +33,17 @@ if(s.v<5){s.v=5;
 if(Array.isArray(s.crew))s.crew=s.crew.filter(function(c){return c&&c.name!=='Eli';});
 var _lp=['opening','road','crew','journal','quest','battle','event','end','arrival','breakdown'];
 if(_lp.indexOf(s.phase)>=0)s.phase='phase1_done';
-}return s}
+}
+// M6 (Milestone 2): simulation state — individual inventories, survival,
+// scavenging. Conservative: fills only what's missing; empty packs, neutral
+// hunger/thirst/health, no speculative content.
+if(s.v<6){s.v=6;initSimState(s);}
+return s}
+
+
+/* Combined Milestone 2 sim-state initializer. Defensive: only fills fields
+   that are missing, so v5 saves migrate cleanly and new games start sane. */
+function initSimState(s){initInvState(s);initSurvState(s);if(!s.scav)s.scav={};if(!('found'in s))s.found=null;if(s.together===undefined)s.together=true;return s}
 
 
 var CONSEQUENCE_KINDS=['decision','encounter','settlement','npc','mercy','quest'];

@@ -54,7 +54,7 @@ console.log('M1 Eli retcon');
   check('crew has 2 members', g.crew.length === 2, 'len=' + g.crew.length);
   check('no Eli in crew', !g.crew.some(c => c.name === 'Eli'));
   check('Josh and Mara present', g.crew[0].name === 'Josh' && g.crew[1].name === 'Mara');
-  check('new game is v5', g.v === 5);
+  check('new game is v6', g.v === 6);
 }
 
 // ---------- M2: no numeric trust writes from live gameplay ----------
