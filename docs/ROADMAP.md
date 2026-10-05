@@ -1,20 +1,21 @@
 # Roadmap
 Flexible milestones, not promises. Updated as work lands.
 
-## Alpha 0.2 — Visual Foundation (in progress)
+## Alpha 0.2 — Visual Foundation (COMPLETE)
 - [x] Blank-screen fix (`top()` → `hud()`)
 - [x] Visual framework: scene containers, vehicle art slots, dialogue + crew portraits, screen transitions, environmental animation, reduced-motion support, missing-asset fallbacks
 - [x] 17 original assets generated (7 backgrounds, 4 vehicles, 6 portraits)
-- [ ] Assets uploaded to `assets/` (via GitHub web UI — API corrupts binaries)
-- [ ] Mobile playtest QA on iPhone Safari
+- [x] Assets uploaded to `assets/` (via GitHub web UI — API corrupts binaries)
+- [x] Mobile playtest QA on iPhone Safari
 
-## Alpha 0.2.2 — Cinematic Prologue & Main Quest (in progress)
+## Alpha 0.2.2 — Cinematic Prologue & Main Quest (COMPLETE)
 - [x] Six-page illustrated prologue (canonical narrative, typewriter, Prev/Next/Skip)
 - [x] Main quest tracker: THE LAST TRANSMISSION (8 event-driven objectives)
 - [x] Discoveries log + Story So Far recap in journal
 - [x] Save schema v2 (quests/discoveries backfilled for old saves)
-- [ ] 6 prologue images + revised Hank portrait uploaded to `assets/`
-- [ ] Mobile playtest QA
+- [x] 6 prologue images + revised Hank portrait uploaded to `assets/`
+- [x] Cinematic presentation pass: full-bleed art, overlaid title cards, hidden header, scrollable narration, thumb-friendly controls, reduced-motion preserved
+- [x] Mobile playtest QA on iPhone Safari (prologue + artwork confirmed)
 
 ## Alpha 0.3a — Foundation (next)
 - [x] Save versioning (`g.v` + `migrateSave()`)
