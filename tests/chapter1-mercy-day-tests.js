@@ -33,12 +33,12 @@ function fresh() {
   const code = js.replace(/start\(\);?\s*$/, '') + `
 ;globalThis.__api = { begin, migrateSave, newQuests, updateQuests, render, start, resume,
   mercyTitle, hankRepair, hankRepairChoice, mercyHub,
-  mercyWorkshop, mercyWorkshopHelp, mercyWorkshopAge,
-  mercyClinic, mercyClinicHelp, mercyClinicHonest,
+  mercyWorkshop, mercyWorkshopHelp, mercyWorkshopAge, hankHandsFollow,
+  mercyClinic, mercyClinicHelp, mercyClinicHonest, maraNotebookFollow,
   mercyWater, mercyWaterHelp, mercyWaterTease,
   ruthCrisis, ruthCrisisChoice, mercyDay,
-  dayJosh, dayJoshChoice, dayMara, dayMaraChoice,
-  dayRuth, dayRuthChoice, dayEli, dayEliChoice,
+  dayJosh, dayJoshChoice, dayMara, dayMaraChoice, maraWhyFollow,
+  dayRuth, dayRuthChoice, dayRuthVow, dayEli, dayEliChoice,
   departure, departureArgument, departurePhone, phase1Done,
   eliHealthy, drainRate,
   recordConsequence, npcState, settleState, encounterState, noteTreatment,
@@ -308,6 +308,67 @@ console.log('D14 polish pass');
   const p = f.lastScreen();
   check('protected: Forty', /I'll get you through Forty/.test(p));
   check('protected: bring her back', /bring her back too/.test(p));
+}
+
+// ---------- follow-up dialogue (approved #1-#4; #5 cut) ----------
+console.log('follow-up dialogue');
+{
+  // #1 hands: offered on repair screen, leaf renders, DEPTH ONLY (no state)
+  const a = fresh(); a.newGame('Male'); a.hankRepairChoice(0);
+  check('hands follow-up offered', /hankHandsFollow\(\)/.test(a.lastScreen()));
+  const t0 = JSON.stringify(a.getG().npcs);
+  a.hankHandsFollow();
+  check('hands leaf renders', /They do that sometimes/.test(a.lastScreen()) && /I only drop things I\u2019ve already fixed/.test(a.lastScreen()));
+  check('hands leaf no lifelong claim', !/Long as I can remember/.test(a.lastScreen()));
+  check('hands leaf depth-only', JSON.stringify(a.getG().npcs) === t0);
+  check('hands leaf exits to hub', /mercyHub\(\)/.test(a.lastScreen()));
+  // #2 notebook: offered on clinic screen, leaf renders, DEPTH ONLY
+  const b = fresh(); b.newGame('Male'); b.hankRepairChoice(0); b.mercyHub(); b.mercyClinic(); b.mercyClinicHelp();
+  check('notebook follow-up offered', /maraNotebookFollow\(\)/.test(b.lastScreen()));
+  const t1 = JSON.stringify(b.getG().npcs);
+  b.maraNotebookFollow();
+  check('notebook leaf renders', /My wall started in here/.test(b.lastScreen()));
+  check('notebook leaf depth-only', JSON.stringify(b.getG().npcs) === t1);
+  // #3 I-40 why: offered on map-wall screen, leaf renders, DEPTH ONLY
+  const c = fresh(); c.reachMercyDay(); c.dayMara(); c.dayMaraChoice(0);
+  check('why follow-up offered', /maraWhyFollow\(\)/.test(c.lastScreen()));
+  const t2 = JSON.stringify(c.getG().npcs);
+  c.maraWhyFollow();
+  check('why leaf renders', /They went anyway\. They didn\u2019t come back/.test(c.lastScreen()));
+  check('why leaf depth-only', JSON.stringify(c.getG().npcs) === t2);
+  // #4 vow: two-sided choice, only on the sister path
+  const d = fresh(); d.reachMercyDay(); d.dayRuth(); d.dayRuthChoice(0);
+  check('vow offered on sister path', /dayRuthVow\(0\)/.test(d.lastScreen()) && /dayRuthVow\(1\)/.test(d.lastScreen()));
+  const d2 = fresh(); d2.reachMercyDay(); d2.dayRuth(); d2.dayRuthChoice(1);
+  check('no vow on cadence path', !/dayRuthVow/.test(d2.lastScreen()));
+  const d3 = fresh(); d3.reachMercyDay(); d3.dayRuth(); d3.dayRuthChoice(2);
+  check('no vow on silent path', !/dayRuthVow/.test(d3.lastScreen()));
+  // vow branch: records vowed_for_mercy, renders Ruth's answer
+  d.dayRuthVow(0);
+  const trVow = d.npcState('ruth').treatment || [];
+  check('vow records vowed_for_mercy', trVow.indexOf('vowed_for_mercy') >= 0);
+  check('vow answer renders', /Mercy will remember that/.test(d.lastScreen()));
+  // permanence: the other answer can no longer be taken
+  d.dayRuthVow(1);
+  const trVow2 = d.npcState('ruth').treatment || [];
+  check('cannot take both vows', trVow2.indexOf('would_not_vow_for_mercy') < 0);
+  check('no duplicate vow write', trVow2.filter(k => k === 'vowed_for_mercy').length === 1);
+  // re-rendering the scene does not re-offer the choice
+  d.dayRuthChoice(0);
+  check('vow not re-offered after vow', !/dayRuthVow\(0\)/.test(d.lastScreen()));
+  // refusal branch: records would_not_vow_for_mercy, Ruth respects it
+  const e = fresh(); e.reachMercyDay(); e.dayRuth(); e.dayRuthChoice(0); e.dayRuthVow(1);
+  const trRef = e.npcState('ruth').treatment || [];
+  check('refusal records would_not_vow_for_mercy', trRef.indexOf('would_not_vow_for_mercy') >= 0);
+  check('refusal respected not punished', /Promises shouldn\u2019t come cheap/.test(e.lastScreen()));
+  e.dayRuthVow(0);
+  check('refusal permanent', (e.npcState('ruth').treatment || []).indexOf('vowed_for_mercy') < 0);
+  e.dayRuthChoice(0);
+  check('vow not re-offered after refusal', !/dayRuthVow\(1\)/.test(e.lastScreen()));
+  // vow survives save/load
+  const h = fresh(); h.reachMercyDay(); h.dayRuth(); h.dayRuthChoice(0); h.dayRuthVow(0);
+  const h2 = fresh(); h2.setG(h2.migrateSave(JSON.parse(JSON.stringify(h.getG()))));
+  check('vow survives save/load', (h2.npcState('ruth').treatment || []).indexOf('vowed_for_mercy') >= 0);
 }
 
 console.log(`\nRESULT: ${pass} passed, ${fail} failed`);
