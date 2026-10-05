@@ -1,5 +1,13 @@
 # Changelog
 
+## Alpha 0.2.2 — cinematic prologue presentation pass
+- Prologue now plays in a dedicated cinematic mode: the permanent game header and footer are hidden while the six pages are on screen, giving the artwork full-bleed space.
+- Title, page number, and subtitle are overlaid on the artwork as a title card; narration appears below in a script-style layout distinct from normal gameplay panels.
+- Narration area scrolls internally on long pages (e.g. The Transmission) with improved line spacing for mobile.
+- Page dots enlarged; Prev/Next are full-height thumb-friendly buttons; Skip Intro remains full-width.
+- Cinematic mode exits automatically on Skip, on BEGIN JOURNEY (character creation), on New Journey title screen, and on Continue Saved Journey — the header always returns for gameplay.
+- No narrative text changes, no gameplay or save-schema changes. Reduced-motion behavior preserved (typewriter completes instantly, Ken Burns disabled).
+
 ## Alpha 0.2.2 (2026-10-04)
 - Cinematic six-page prologue (THE WORLD WE LOST) on New Journey: Ken Burns art, typewriter narration, Prev/Next/Skip, page dots
 - Main quest tracker: THE LAST TRANSMISSION with 8 event-driven objectives (quest continues past Station Seven: truth + Mercy's fate)
