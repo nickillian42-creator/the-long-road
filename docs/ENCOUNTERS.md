@@ -1,0 +1,75 @@
+# Encounter System — THE LONG ROAD
+System bible v1 locked by Nic (2026-10-05). The 100 named NPCs are authored identities; this system fills the road between them. Revisit only with Nic's approval.
+
+## Core rule (locked)
+**THE ROAD SHOULD CREATE STORIES, NOT INTERRUPT THEM.**
+
+Random encounters must never feel like Pokémon grass. They reinforce the feeling of traveling 780 dangerous miles. They create situations — not stat penalties.
+
+## The two populations
+- **~100 authored NPCs** (`docs/NPCS.md`): named characters whose identities matter — they recur, remember, travel, die, and return.
+- **Encounter characters**: unnamed or minor survivors who may have ten lines of dialogue and disappear forever — a traveling family, two hunters, a scavenger, an old couple, a group moving south, a wounded traveler, three kids fishing, a trader, a grieving parent, someone asking directions, a woman repairing her truck. **These do not count against the 100.** Their disposability is what makes the named NPCs feel important.
+
+## Encounter tiers (locked)
+| Tier | Length | Examples |
+|---|---|---|
+| **Ambient** | 30 sec – 2 min | Wildlife sighting, abandoned car, weather shift, lone traveler |
+| **Road Event** | 3 – 10 min | Breakdown, robbery, sick traveler, animal attack, scavenging location |
+| **Story Encounter** | 10 – 30 min | Cannibal camp, convoy dispute, trapped family, abandoned facility |
+| **Major Encounter** | 30 – 60+ min | Settlement crisis, faction conflict, CUSTODIAN site, major character event |
+
+The road pulls from the appropriate pool based on **region + route + time + weather + previous choices + resources + crew state.**
+
+## Selection logic (locked): not pure RNG
+- Some encounters are random.
+- Some are **seeded** (fixed to a location or mileage on first pass).
+- Some **require conditions** (a crew member, an item, a flag, a season, a route choice).
+- Some happen **only once**.
+- Some become **impossible** because of an earlier decision.
+- Some **appear different** because of who is in the crew or what the player carries.
+
+## Categories
+
+### Wildlife
+Sixty years without wildlife management: coyotes circling camp, feral dog packs, wild hogs, rattlesnakes, mountain lions, black bears in Colorado, elk blocking mountain roads, injured animals, livestock descended from escaped ranch stock.
+**Animals don't always mean combat.** Hear something circling camp — burn fuel on a fire? Use food as bait? Spend ammo on a warning shot? Stay quiet? Move camp and gain fatigue? **Sometimes the correct outcome is: you never find out what was out there.** That's creepier.
+
+### Human threats
+Raiders, highway robbers, desperate scavengers — with procedural variants: road ambush, fake injury, toll scam, camp robbery, vehicle pursuit, bridge trap, night attack, false distress signal. **Sometimes the "raiders" are three starving teenagers with one barely functional rifle** — a very different decision than twelve organized killers.
+**Cannibals: use sparingly.** One isolated encounter can be horrifying precisely because the game doesn't announce it — a camp, food cooking, friendly people, something not adding up, Mara noticing something, the slow realization. Never cartoon villains; sixty years on, a tiny group may have developed a survival practice everyone else considers unthinkable. Believable, dangerous, horrifying.
+
+### Disease & injury
+Built on the Alpha 0.3 survival systems — meaningful episodes, not constant sickness: food poisoning, infected cuts, fever, respiratory illness, contaminated water, heat exhaustion, hypothermia, altitude sickness near Colorado, sprains, broken ribs, tooth infection, animal bites.
+**Sickness creates story decisions:** Mara develops a fever; a settlement lies 20 miles east; you're traveling north. Detour? Lose a day? **Mercy has nineteen.** Survival mechanics and story talk to each other.
+
+### Environmental trials
+Flash flood, thunderstorm, dust storm, wildfire, extreme heat, cold snap, snowstorm, rockslide, washed-out bridge, collapsed tunnel, mud, flooded roadway, lightning, closing mountain pass, a river whose bridge vanished decades ago.
+**These make the vehicle choice matter:** the Raptor might have an option the M4 doesn't; the M4 might outrun what the Wagoneer can't; the Wagoneer might carry the equipment that saves everyone; the Eagle stays balanced. **No vehicle is secretly "the correct one."**
+
+### Mechanical disasters
+The vehicle is practically another character: flat tire, overheating, broken belt, damaged suspension, dead battery, fuel leak, stuck vehicle, engine trouble, broken windshield, blocked radiator.
+**Named-item integration (300-item catalog):** not "PARTS −2" but — the temperature needle climbs, Hank kills the engine, *"Pop the hood,"* and the player has a RoadKing Radiator Hose, a Federal Repair Kit, an Ironclad Wrecking Bar. The catalog becomes the solution space.
+
+### Strange road encounters
+The ones that matter most. **Not everything needs an explanation:** a radio repeating the same six seconds nightly; a freshly painted highway sign reading TURN AROUND; an intact house in the middle of nowhere; a car parked across the road, driver's door open; someone watching from a distant overpass; a town where every building bears the same painted symbol; a child's bicycle in the middle of a highway; a still-warm campfire; a working vending machine; cattle walking an abandoned interstate; a buried 2027 time capsule; a still-transmitting weather station; an old emergency siren suddenly activating.
+**Some are nothing. Some lead to loot. Some lead to people. A tiny number eventually connect to CUSTODIAN. The player must never know which category they're in at first.** That uncertainty is critical — and it complies with the crew-knowledge rule: the game never explains what the crew couldn't understand.
+
+### Ordinary people
+Traveling families, hunters, scavengers, old couples, groups moving south, wounded travelers, kids fishing, traders, grieving parents, people asking directions, a woman repairing her truck. Ten lines, then gone forever — usually.
+
+## Anti-patterns (locked)
+- No "random encounter → lose 5 HP" filler. Every encounter is a situation.
+- Cannibals used once, sparingly, never as a settlement twist (Haven is explicitly not this).
+- No cartoon villains anywhere in the encounter pool.
+- No secretly-correct vehicle.
+- Strange encounters are never labeled by category.
+- Encounters must not resolve any of the four frozen mysteries.
+
+## Implementation notes (for build time, not now)
+- The existing `randomEvent()` 4-event pool is the prototype this system replaces — superseded, not contradicted.
+- The flat 30% encounter chance in `travel()` gets replaced by the tiered/conditional selection logic.
+- Ambient-tier encounters can be log-only or single-choice; heavier tiers use the existing `event()`/choice primitives.
+- Encounter state (seen-once flags, seeded placements, conditional availability) lives in `g.flags` / save blob per the existing systems — no new architecture required.
+
+## Scale target
+~100 authored NPCs **plus** potentially hundreds of encounter variants across tiers and categories. Chapter 2 is written with this layer in mind from the beginning.

@@ -31,6 +31,12 @@
 - Audit: zero name collisions (one flagged catalog adjacency: Ada Vale / Grandma Vale's Fig Jam — undecided); ages/relationships verified; WORLD.md compliance confirmed; neither settlement objectively good/evil; four mysteries untouched; Tomas/Abel documented as unlinked; route exclusivity compatible with 7–9 location target
 - index.html, Alpha 0.3 gameplay/save code untouched; stopped after #030, Chapter 2 not begun
 
+## Encounter System v1 (2026-10-05) — docs only, no code changes
+- New: `docs/ENCOUNTERS.md` (tiers, selection logic, seven categories, anti-patterns, scale target, implementation notes)
+- `docs/GAME_DESIGN.md`: new permanent principle — THE ROAD SHOULD CREATE STORIES, NOT INTERRUPT THEM
+- `docs/DECISIONS.md`: system v1 locked (100-NPC scope clarification, tiers, selection logic, category rules)
+- Chapter 2 will be written with this encounter layer in mind from the beginning
+
 ## Alpha 0.3 — Expanded Survival (in development on `alpha-0.3-dev`)
 - Fatigue: +25 per travel/scavenge (x0.7 story, x1.3 hard); tiers Rested/Tired (-15% travel)/Exhausted (-25% travel, -2 combat dmg, -1 scavenge); collapse at 100 costs a day, -10 HP, resets to 60
 - Wounds & infection: combat hits, clinic doors, dust storms can wound; wounded halves rest healing and can turn infected; TREAT on crew screen (1 meds: +30 HP, clears wound, revives at 25; 1 antibiotic cures infection); combat MEDKIT unchanged

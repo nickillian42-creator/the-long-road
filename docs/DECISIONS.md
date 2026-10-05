@@ -63,3 +63,12 @@ Locked with Nic. Added to `docs/NPCS.md`: Redwater #016–022 (Ada Vale, Dr. Sam
 - **Flagged, undecided:** "Ada Vale" vs. catalog `food_040` "Grandma Vale's Fig Jam" — plausible family connection (Ada b. ~2035 could be Grandma Vale's granddaughter) or coincidence. Needs Nic's decision before any writing implies a link.
 - Tomas Wren's undefined origin and Abel Rusk's undefined agenda are separate unresolved threads; not connected unless explicitly decided.
 - Next: Chapter 2 playable narrative before further roster expansion.
+
+## 10. Encounter System v1 (2026-10-05)
+Locked with Nic. Full bible: `docs/ENCOUNTERS.md`.
+- The ~100 NPC roster counts **authored named characters only**; unnamed/minor encounter characters are a separate population and don't count against it.
+- Four tiers: Ambient (30s–2min), Road Event (3–10min), Story Encounter (10–30min), Major Encounter (30–60+min); pool selected by region + route + time + weather + previous choices + resources + crew state.
+- Selection is not pure RNG: random, seeded, conditional, once-only, decision-gated, and crew/item-dependent encounters.
+- Categories: wildlife (not always combat; "you never find out what was out there" is a valid outcome), human threats (raider variants; cannibals used once and sparingly, never cartoonish), disease & injury (built on 0.3 systems; sickness creates story decisions against the 19-day clock), environmental trials (vehicle choice matters; no secretly-correct vehicle), mechanical disasters (named-item solutions from the 300 catalog), strange road encounters (some nothing, some loot, some people, a tiny number CUSTODIAN-adjacent — never labeled), ordinary people.
+- New permanent rule in `docs/GAME_DESIGN.md`: **THE ROAD SHOULD CREATE STORIES, NOT INTERRUPT THEM.**
+- Existing `randomEvent()` 4-event pool is the superseded prototype; encounters must not resolve the four frozen mysteries.
