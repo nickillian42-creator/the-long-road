@@ -51,6 +51,7 @@ function fresh() {
   lootLabel, discoveryPanel, discoveryTakeAll, discoveryChoose,
   discoveryTakeOne, discoveryLeaveOne, discoveryLeaveAll,
   itemArt, artTag, blip, packIcon, takeAnimDone, discoveryHeroIdx,
+  areaArt, areaArtTag, areaArtId,
   openInventory, invScreen, invShow, invSelect, invDo,
   has: (n) => typeof globalThis[n] !== 'undefined',
   getG: () => g, setG: v => { g = v; },
@@ -526,6 +527,64 @@ console.log('M2J item art wiring');
   // blips appear at gameplay moments
   const z = fresh(); z.scavProtoStart(); z.scavArea('shelves');
   check('area tap shows calm blip', z.lastScreen().indexOf('blip-calm') >= 0);
+}
+
+// ---------- M2I: illustrated searchable-area cards (visual pass) ----------
+console.log('M2I illustrated area cards');
+{
+  const t = fresh();
+
+  // area-art id mapping covers all five prototype areas
+  const areas = ['shelves', 'fridge', 'backpack', 'cabinet', 'glovebox'];
+  const arts = ['store_shelves', 'refrigerator', 'backpack', 'cabinet', 'glovebox'];
+  areas.forEach(function (a, i) {
+    check('areaArtId maps ' + a, t.areaArtId(a) === arts[i]);
+  });
+  check('areaArtId unknown area -> null', t.areaArtId('moon') === null);
+
+  // areaArt: asset-path fallback when no AREA_ART map is inlined
+  check('areaArt falls back to asset path', t.areaArt('shelves') === 'assets/areas/store_shelves.webp');
+  check('areaArt unknown area -> null (graceful)', t.areaArt('moon') === null);
+
+  // areaArt: data-URI branch when a preview build inlines AREA_ART
+  {
+    const vm2 = require('vm');
+    const c2 = { AREA_ART: { store_shelves: 'data:image/webp;base64,BBB' },
+      SCAV_AREAS: { shelves: { name: 'Store shelves' } },
+      escapeHtml: (s) => String(s) };
+    vm2.createContext(c2);
+    vm2.runInContext(fs.readFileSync(path.join(__dirname, '..', 'src', 'sim', 'art.js'), 'utf8'), c2);
+    check('areaArt prefers inlined data URI', vm2.runInContext('areaArt("shelves")', c2) === 'data:image/webp;base64,BBB');
+    check('areaArtTag embeds data URI', vm2.runInContext('areaArtTag("shelves")', c2).indexOf('src="data:image/webp;base64,BBB"') >= 0);
+  }
+
+  // areaArtTag: landscape card markup with alt text; fallback glyph when missing
+  const tag = t.areaArtTag('fridge', 'focus-art');
+  check('areaArtTag renders img with area name alt', tag.indexOf('<img') >= 0 && tag.indexOf('alt="Refrigerator"') >= 0 && tag.indexOf('area-art') >= 0 && tag.indexOf('focus-art') >= 0);
+  check('areaArtTag unknown area -> fallback glyph', t.areaArtTag('moon').indexOf('art-fallback') >= 0);
+
+  // scav scene renders illustrated cards, not text buttons
+  const a = fresh(); a.scavProtoStart();
+  const scr = a.lastScreen();
+  check('scene renders area cards', scr.indexOf('area-card') >= 0 && scr.indexOf('area-grid') >= 0);
+  check('cards carry area art', scr.indexOf('assets/areas/store_shelves.webp') >= 0);
+  check('card names integrated', scr.indexOf('Store shelves') >= 0 && scr.indexOf('Abandoned pickup') >= 0);
+  check('no plain text area buttons remain', scr.indexOf("scavArea('shelves')\">Store shelves<") < 0);
+
+  // searched areas stay visual: dim + searched treatment, never plain text
+  a.scavSearch('roadside', 'shelves', 'quiet');
+  a.discoveryTakeAll(); a.takeAnimDone();
+  const scr2 = a.lastScreen();
+  check('searched card keeps art but marked done', scr2.indexOf('area-card done') >= 0 && scr2.indexOf('SEARCHED') >= 0);
+  check('searched card still shows artwork', scr2.indexOf('assets/areas/store_shelves.webp') >= 0);
+
+  // focus view: tap -> zoom transition, art hero, blip decisions
+  const b = fresh(); b.scavProtoStart(); b.scavArea('glovebox');
+  const fscr = b.lastScreen();
+  check('focus view shows area art large', fscr.indexOf('focus-art') >= 0 && fscr.indexOf('assets/areas/glovebox.webp') >= 0);
+  check('focus view names the area', fscr.indexOf('Abandoned pickup') >= 0);
+  check('focus offers quiet + force as blip decisions', fscr.indexOf('SEARCH QUIETLY') >= 0 && fscr.indexOf('FORCE IT') >= 0 && fscr.indexOf('blip-calm') >= 0 && fscr.indexOf('blip-urgent') >= 0);
+  check('focus view has step back', fscr.indexOf('STEP BACK') >= 0);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
