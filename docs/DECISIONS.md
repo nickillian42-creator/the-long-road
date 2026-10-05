@@ -33,3 +33,14 @@ Locked with Nic. Full canon: `docs/CAMPAIGN.md`, `docs/CHARACTERS.md`, `docs/PRO
 - Four mysteries stay unresolved: who added AVOID INTERSTATE 40; what the spouse was about to say; C-07's ultimate role; CUSTODIAN's moral interpretation.
 - Permanent principle: **THE PLAYER SHOULD KNOW ONLY WHAT THE CREW KNOWS.**
 - 300-item Master Catalog v1.0 frozen (audit passed 2026-10-05; firearm damage table still pending Nic's explicit lock).
+
+## 7. World Route / Settlement Framework v1 (2026-10-05)
+Locked with Nic. Full bible: `docs/WORLD.md`.
+- 12 major locations, mile 0–780: Mercy (0) · Crossroads (70) · Redwater (150) **or** Haven (175) · Tollway (250) · Blackridge (330) · I-40/C-07 **or** Free Roads (330–450) · Last Stop (450) · Republic of Morrow (520) · Hollow Creek (620) · The Relay (690) · Station Seven (780) · The Core.
+- Two route splits (Redwater/Haven, I-40/Free Roads); routes rejoin; splits create different-not-better experiences.
+- Route design principle: ~7–9 major communities per typical run; missing content is desirable; no route holds all lore, every route carries enough for the main story.
+- Factions: Mercy, Redwater Authority, Haven, Tollkeepers, Republic of Morrow, Free Caravans, CUSTODIAN-related systems (CUSTODIAN is not a conventional faction; intentions ambiguous).
+- Micro-settlement principle: small communities between majors; listed examples are direction, not mandatory canon.
+- ~100 authored NPCs populated through locations; ~30–45 encountered per run; no generic survivors — name, motivation, reason for being there.
+- Spouse-trail pacing: Crossroads (vague memory) → Last Stop (recent encounter) → Relay (proof, THEY'RE CLOSE) → Station Seven (FOUND).
+- Haven is ideological conflict, never a cult/cannibal twist. Redwater is morally complicated, never villainous. Morrow's politics have no objectively correct side.

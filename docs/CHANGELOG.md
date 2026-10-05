@@ -10,6 +10,12 @@
 - `docs/ASSET_MANIFEST.md`: `portrait-claire.webp` / `portrait-daniel.webp` specs added to manifest + character bible entries for Jack, Evelyn, Claire, Daniel
 - 300-item Master Catalog v1.0: audit passed; firearm damage table pending Nic's explicit lock
 
+## World Route / Settlement Framework v1 (2026-10-05) — docs only, no code changes
+- New: `docs/WORLD.md` (12 major locations mile 0–780, two route splits, factions, micro-settlement principle, route-design and NPC-design rules, spouse-trail pacing, integration notes for existing encounters)
+- `docs/CAMPAIGN.md`: references the world bible
+- `docs/DECISIONS.md`: framework v1 locked (location roster, splits, factions, principles)
+- Audit findings: no hard contradictions with frozen canon; sentry encounter (~330) should fold into the Blackridge approach; mountain passage (~590) flows into Hollow Creek (~620); consider a mid-trail breadcrumb near Morrow (~520)
+
 ## Alpha 0.3 — Expanded Survival (in development on `alpha-0.3-dev`)
 - Fatigue: +25 per travel/scavenge (x0.7 story, x1.3 hard); tiers Rested/Tired (-15% travel)/Exhausted (-25% travel, -2 combat dmg, -1 scavenge); collapse at 100 costs a day, -10 HP, resets to 60
 - Wounds & infection: combat hits, clinic doors, dust storms can wound; wounded halves rest healing and can turn infected; TREAT on crew screen (1 meds: +30 HP, clears wound, revives at 25; 1 antibiotic cures infection); combat MEDKIT unchanged

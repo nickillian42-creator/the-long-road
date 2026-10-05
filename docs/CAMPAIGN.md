@@ -42,6 +42,8 @@ The existing water-vote choice and its flags/trust effects are preserved as one 
 ## The journey
 The ~780-mile road structure, regions, and existing authored encounters (stranger, Custodian sentry, mountain passage) stand. Spouse breadcrumbs are layered across the journey — never on a schedule: someone remembers them, a campsite holds something recognizable, a trader carries their object, a name appears somewhere impossible, a radio recording, a CUSTODIAN system reacting to the surname Mercer.
 
+Full route bible — settlements, route splits, factions, micro-settlements, NPC design rules: `docs/WORLD.md`.
+
 ## The reunion (final quarter)
 Per `docs/CHARACTERS.md`: genuine reunion, no dialogue wheel, no exposition. Guaranteed once the player reaches that story point.
 
