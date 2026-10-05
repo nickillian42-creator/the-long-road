@@ -44,3 +44,12 @@ Locked with Nic. Full bible: `docs/WORLD.md`.
 - ~100 authored NPCs populated through locations; ~30–45 encountered per run; no generic survivors — name, motivation, reason for being there.
 - Spouse-trail pacing: Crossroads (vague memory) → Last Stop (recent encounter) → Relay (proof, THEY'RE CLOSE) → Station Seven (FOUND).
 - Haven is ideological conflict, never a cult/cannibal twist. Redwater is morally complicated, never villainous. Morrow's politics have no objectively correct side.
+
+## 8. NPC Roster v1 — #001–015 (2026-10-05)
+Locked with Nic. Full roster: `docs/NPCS.md`. Covers Mercy (#001–010), early road (#011), Crossroads (#012–015).
+- NPC design rule: people first, not quest dispensers; eventual importance must not be obvious on first encounter; no gamey telegraphing of consequential choices.
+- **Surname rule (locked):** Mercer is reserved for the protagonist/spouse trail. #011 was renamed from "Cal Mercer" to **Cal Danner** before freezing.
+- New Mercy NPCs: Ruth Calder (58, council leader), Mara Velez (33, medic — clinical honesty, privately records lost patients' names), Eli Boone (24, coming-of-age arc, Lucy mountain beat), Hank Rourke (~68, I-40 reaction significant, connection unresolved), June Bell (46, radio operator), Amos Bell (49, water engineer — the 19-day estimate was "after nineteen days, I don't know what happens"), Lucy Bell (9), Silas Reed (52, rational council critic), Nora Pike (71, archivist — "bring me something true," lore-catalog hook), Wes Dalton (29, mechanic).
+- Crossroads: Mae Holloway (61, information broker — delivers "There was another Mercer."), Owen Voss (44, Free Caravan driver — trustworthy-but-stale information principle), Tess Navarro (17, scavenger — independent off-screen life), Abel Rusk (56, ambiguous northbound stranger — identity and "who else is asking" unresolved by rule).
+- **Flagged (not changed pending Nic):** Eli's draft age was 21, set to 24 to match the "mid-20s" portrait bible. Hank at ~68 conflicts with the portrait bible's "late 70s" but matches the deeper canon (child in 2029 → ~60–68); `docs/ASSET_MANIFEST.md` correction proposed, not yet applied.
+- Roster continues at #016 (Redwater/Haven — route-exclusive characters begin).

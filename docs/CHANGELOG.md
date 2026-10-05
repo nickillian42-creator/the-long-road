@@ -16,6 +16,13 @@
 - `docs/DECISIONS.md`: framework v1 locked (location roster, splits, factions, principles)
 - Audit findings: no hard contradictions with frozen canon; sentry encounter (~330) should fold into the Blackridge approach; mountain passage (~590) flows into Hollow Creek (~620); consider a mid-trail breadcrumb near Morrow (~520)
 
+## NPC Roster v1 — #001–015 (2026-10-05) — docs only, no code changes
+- New: `docs/NPCS.md` (Mercy #001–010, early road #011, Crossroads #012–015; design rule, surname rule, continuity/audit notes)
+- `docs/DECISIONS.md`: roster freeze logged (design rule, Mercer surname protection, Cal Danner rename, full name/role list, two flagged age items)
+- Audit: zero surname collisions; Mercy families consistent; existing Ruth/Mara/Eli/Hank characterization preserved (additive only); Hank item hooks intact; no crew-knowledge violations; none of the four mysteries weakened
+- Adjustments: Eli 21→24 (portrait-bible alignment); Hank ~68 flagged vs. manifest "late 70s" (deeper 2029-child canon favors ~68; manifest fix proposed, not applied)
+- index.html, Alpha 0.3 implementation, and save code untouched
+
 ## Alpha 0.3 — Expanded Survival (in development on `alpha-0.3-dev`)
 - Fatigue: +25 per travel/scavenge (x0.7 story, x1.3 hard); tiers Rested/Tired (-15% travel)/Exhausted (-25% travel, -2 combat dmg, -1 scavenge); collapse at 100 costs a day, -10 HP, resets to 60
 - Wounds & infection: combat hits, clinic doors, dust storms can wound; wounded halves rest healing and can turn infected; TREAT on crew screen (1 meds: +30 HP, clears wound, revives at 25; 1 antibiotic cures infection); combat MEDKIT unchanged
