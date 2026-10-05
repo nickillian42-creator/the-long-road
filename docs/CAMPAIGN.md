@@ -39,6 +39,9 @@ Establishes: Mercy and its 19-day crisis · the marriage and the expedition back
 
 The existing water-vote choice and its flags/trust effects are preserved as one beat inside the expansion.
 
+## Chapter 2 — STRANGERS (~2–3 hours)
+Establishes: what the road actually feels like · Crossroads and the world beyond Mercy · Cal Danner · the spouse's first trail confirmation (Mae: "There was another Mercer"; personal quest FIND THEM → FOLLOW THE TRAIL) · Owen's route knowledge and I-40 avoidance · Abel's warning · the Redwater/Haven route choice (unchosen branch normally unavailable) · the fail-forward principle. Full implementation-ready blueprint: `docs/CHAPTER_02_STRANGERS.md`.
+
 ## The journey
 The ~780-mile road structure, regions, and existing authored encounters (stranger, Custodian sentry, mountain passage) stand. Spouse breadcrumbs are layered across the journey — never on a schedule: someone remembers them, a campsite holds something recognizable, a trader carries their object, a name appears somewhere impossible, a radio recording, a CUSTODIAN system reacting to the surname Mercer.
 

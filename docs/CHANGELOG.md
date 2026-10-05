@@ -37,6 +37,13 @@
 - `docs/DECISIONS.md`: system v1 locked (100-NPC scope clarification, tiers, selection logic, category rules)
 - Chapter 2 will be written with this encounter layer in mind from the beginning
 
+## Chapter 2: STRANGERS design spec v1 (2026-10-05) — docs only, no code changes
+- New: `docs/CHAPTER_02_STRANGERS.md` — full implementation-ready blueprint (identity, structure, 20+ scenes/encounters, both settlement branches, fail-forward, survival/vehicle/protagonist differentiation, crew reactions, state concepts, pacing, success test, audit record, frozen decisions, implementation risks)
+- 15-point audit vs CHARACTERS/CAMPAIGN/WORLD/NPCS/ENCOUNTERS/GAME_DESIGN/300-item catalog/Chapter 1 mileage/engine: **no hard contradictions**; one integration gap (existing stranger encounter needs a Chapter 2 home); one soft note (trust display vs narrative memory)
+- Newly frozen: Chapter 2 blueprint; `food_040` ↔ Ada Vale family connection; fail-forward (chapter-scoped); fixed-spine + variable-road structure
+- `docs/CAMPAIGN.md`: chapter 2 entry points to the spec
+- `docs/DECISIONS.md`: §11 records the freeze and implementation-risk summary
+
 ## Alpha 0.3 — Expanded Survival (in development on `alpha-0.3-dev`)
 - Fatigue: +25 per travel/scavenge (x0.7 story, x1.3 hard); tiers Rested/Tired (-15% travel)/Exhausted (-25% travel, -2 combat dmg, -1 scavenge); collapse at 100 costs a day, -10 HP, resets to 60
 - Wounds & infection: combat hits, clinic doors, dust storms can wound; wounded halves rest healing and can turn infected; TREAT on crew screen (1 meds: +30 HP, clears wound, revives at 25; 1 antibiotic cures infection); combat MEDKIT unchanged

@@ -62,7 +62,15 @@ Locked with Nic. Added to `docs/NPCS.md`: Redwater #016–022 (Ada Vale, Dr. Sam
 - Route exclusivity locked: normal playthrough does not see both branches fully; campaign-critical information stays branch-independent.
 - **Flagged, undecided:** "Ada Vale" vs. catalog `food_040` "Grandma Vale's Fig Jam" — plausible family connection (Ada b. ~2035 could be Grandma Vale's granddaughter) or coincidence. Needs Nic's decision before any writing implies a link.
 - Tomas Wren's undefined origin and Abel Rusk's undefined agenda are separate unresolved threads; not connected unless explicitly decided.
-- Next: Chapter 2 playable narrative before further roster expansion.
+
+## 11. Chapter 2: STRANGERS spec v1 (2026-10-05)
+Frozen blueprint in `docs/CHAPTER_02_STRANGERS.md` (implementation NOT authorized).
+- Five movements, mile ~0–230; authored spine fixed, road content variable via Encounter System slots A/B/C.
+- Mae's breadcrumb advances personal quest FIND THEM → FOLLOW THE TRAIL (THEY'RE CLOSE withheld).
+- Redwater/Haven route-exclusive; unchosen normally unavailable; neither labeled correct.
+- Grandma Vale's Fig Jam (`food_040`) ↔ Ada Vale connection frozen: pre-Collapse regional brand run by Ada's grandmother; mundane family continuity, not a quest hook (resolves flagged adjacency).
+- Fail-forward principle (chapter-scoped): check failures create new situations, not reload prompts.
+- §31 state concepts + §39 implementation risks recorded for Chapter 1 tightening and Alpha 0.4 planning (inventory system is the critical dependency; conditional choice rendering; Crossroads hub phase; encounter pool; save-v4 extensions; day budget; stranger integration).
 
 ## 10. Encounter System v1 (2026-10-05)
 Locked with Nic. Full bible: `docs/ENCOUNTERS.md`.
