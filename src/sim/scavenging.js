@@ -21,6 +21,16 @@
    the location's ground; re-entering never regenerates loot. Prototype saves
    under the isolated key 'longroad_proto' — real saves are never touched.
 
+   DISCOVERY interstitial (Milestone 2 polish): a search that produces loot
+   shows a prominent FOUND result BEFORE anything enters inventory. The
+   player explicitly decides: TAKE ALL / CHOOSE ITEMS / LEAVE. Taking
+   confirms which character's pack received it ("Added to Josh's pack").
+   g.discovery = { who, loc, loot:[{item,qty}], choosing } is transient and
+   saved with the proto state like everything else. Full-pack overflow still
+   routes through the existing FOUND state (grantLoot -> setFound) after
+   TAKE ALL. If risk boils over on the search, there is no time to sort —
+   the loot stays where it fell (ground) and the complication fires.
+
    Loot here is authored and fixed (no RNG in Chapter One, and none needed
    for this proof-of-concept); difficulty adjusts quantity via lootQtyFor. */
 
@@ -214,6 +224,8 @@ function scavScene() {
 
   if (g.found) {
     h += foundPanel();
+  } else if (g.discovery) {
+    h += discoveryPanel();
   } else {
     h += '<div class="eyebrow">SEARCHABLE AREAS — tap one</div><div class="actions">';
     def.areas.forEach(function (a) {
@@ -267,13 +279,119 @@ function scavSearch(locId, areaId, mode) {
     .filter(function (l) { return l.qty > 0 && itemDef(l.item); });
   log(cfg.text + ' Risk +' + riskGain + ', noise +' + noiseGain + '.');
   const who = g.invWho || 'josh';
-  const allFit = grantLoot(who, loot, locId);
+  if (loc.risk >= 100) {
+    // No time to sort anything — what was found stays where it fell.
+    loot.forEach(function (l) { scavGroundAdd(locId, l.item, l.qty); });
+    g.discovery = null;
+    saveProto();
+    scavComplication();
+    return { ok: true };
+  }
+  g.discovery = loot.length ? { who: who, loc: locId, loot: loot, choosing: false } : null;
   saveProto();
-  if (loc.risk >= 100) { scavComplication(); return { ok: true }; }
-  if (!allFit) notify('No room — decide what to do with it.');
   if (notes.length) notify(notes[0]);
   scavScene();
   return { ok: true };
+}
+
+/* --- DISCOVERY interstitial ----------------------------------------------
+   Prominent FOUND result shown before anything enters inventory. The player
+   explicitly decides what happens to the discovered loot. Full-pack
+   overflow still routes through the existing FOUND state (grantLoot ->
+   setFound); risk/noise/capacity mechanics are untouched. */
+function lootLabel(l) {
+  const def = itemDef(l.item);
+  return (def ? def.name : l.item) + ' ×' + l.qty;
+}
+
+function discoveryPanel() {
+  const d = g.discovery, who = d.who;
+  let h = '<div class="found discovery"><div class="eyebrow">✦ FOUND ✦</div>';
+  if (!d.choosing) {
+    h += '<p class="muted">' + charName(who) + ' found:</p>';
+    d.loot.forEach(function (l) { h += '<h3>' + lootLabel(l) + '</h3>'; });
+    h += '<div class="actions">' + btn('TAKE ALL', 'discoveryTakeAll()', 'primary');
+    if (d.loot.length > 1) h += btn('CHOOSE ITEMS', 'discoveryChoose()', 'choice');
+    h += btn('LEAVE IT ALL', 'discoveryLeaveAll()', 'choice') + '</div>';
+  } else {
+    h += '<p class="muted">Take or leave each one — nothing moves until you decide.</p>';
+    d.loot.forEach(function (l, i) {
+      h += '<div class="loot-row"><span>' + lootLabel(l) + '</span>' +
+        '<span class="loot-btns"><button onclick="discoveryTakeOne(' + i + ')">TAKE</button>' +
+        '<button onclick="discoveryLeaveOne(' + i + ')">LEAVE</button></span></div>';
+    });
+    h += '<div class="actions">' + btn('TAKE ALL THE REST', 'discoveryTakeAll()', 'primary') +
+      btn('LEAVE THE REST', 'discoveryLeaveAll()', 'choice') + '</div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+function discoveryTakeAll() {
+  const d = g.discovery;
+  if (!d) { scavScene(); return ''; }
+  const names = d.loot.map(lootLabel).join(', ');
+  g.discovery = null;
+  const allFit = grantLoot(d.who, d.loot, d.loc);
+  saveProto();
+  const msg = allFit
+    ? 'Added to ' + charName(d.who) + '\'s pack: ' + names + '.'
+    : 'No room — decide what to do with it.';
+  notify(msg);
+  scavScene();
+  return msg;
+}
+
+function discoveryChoose() {
+  if (g.discovery) { g.discovery.choosing = true; saveProto(); }
+  scavScene();
+}
+
+function discoveryLeaveAll() {
+  const d = g.discovery;
+  if (!d) { scavScene(); return ''; }
+  d.loot.forEach(function (l) { scavGroundAdd(d.loc, l.item, l.qty); });
+  g.discovery = null;
+  const msg = 'Left where it lay.';
+  notify(msg);
+  saveProto();
+  scavScene();
+  return msg;
+}
+
+function discoveryTakeOne(i) {
+  const d = g.discovery;
+  if (!d || !d.loot[i]) { scavScene(); return ''; }
+  const l = d.loot.splice(i, 1)[0];
+  const r = invAdd(d.who, l.item, l.qty);
+  let msg;
+  if (r.leftover > 0) {
+    // Partial fit: the remainder goes through the existing FOUND flow;
+    // anything still undecided drops to the ground so nothing is lost
+    // and nothing is silently auto-granted.
+    d.loot.forEach(function (x) { scavGroundAdd(d.loc, x.item, x.qty); });
+    g.discovery = null;
+    setFound(d.who, l.item, r.leftover, [], d.loc);
+    msg = 'No room for all of it — decide what to do with it.';
+  } else {
+    msg = 'Added to ' + charName(d.who) + '\'s pack: ' + lootLabel(l) + '.';
+    if (!d.loot.length) g.discovery = null;
+  }
+  notify(msg);
+  saveProto();
+  scavScene();
+  return msg;
+}
+
+function discoveryLeaveOne(i) {
+  const d = g.discovery;
+  if (!d || !d.loot[i]) { scavScene(); return ''; }
+  const l = d.loot.splice(i, 1)[0];
+  scavGroundAdd(d.loc, l.item, l.qty);
+  if (!d.loot.length) g.discovery = null;
+  saveProto();
+  scavScene();
+  return '';
 }
 
 function scavRest() {
