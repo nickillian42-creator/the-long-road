@@ -28,16 +28,16 @@ Preserve: **THE WORLD REMEMBERS WHAT YOU DO. THE CONSEQUENCES DON'T ALWAYS ARRIV
 ### #003 — ELI BOONE
 - **Age:** 24 *(audit adjustment: draft said 21; set to 24 to match the established "mid-20s" portrait bible — flagged in freeze report)*. **Location:** Mercy / traveling crew.
 - Born in Mercy; never traveled far from it. Old America fascinates him — highways, cities, airports, technology, everyday things older survivors take for granted. Provides humor without becoming comic relief.
-- *"Did everybody really have cars?" / "Pretty much." / "Where'd they put them all?" / Hank looks at the ruined highway. "Apparently here."*
+- *"Did everybody really have cars?" / "Pretty much." / "Where'd they put them all?" / Josh looks at the ruined highway. "Apparently here."*
 - **Long arc:** partially a coming-of-age story. The protagonist's behavior influences who Eli becomes — never as an obvious morality meter. (Productive tension, not a contradiction: he distrusts machines yet is fascinated by what old America built.)
 - **Lucy beat:** Lucy Bell asks Eli about the mountains before departure. If Eli returns to Mercy, her repeated question and his answer reflect who he became. If he doesn't return, someone else may have to answer. Do not predetermine Eli's death.
 
-### #004 — HANK ROURKE
+### #004 — JOSH ROURKE
 - **Age:** late 60s, approximately 68.
 - **Location:** Mercy / traveling crew. **Role:** Mechanic / old-road knowledge.
 - Funny, stubborn, exceptionally capable. His hands may shake slightly at rest but steady when working.
 - Knows substantially more about old roads, Colorado, and certain infrastructure than he initially admits. His immediate reaction to AVOID INTERSTATE 40 is significant. He refuses to fully explain why.
-- **Do NOT resolve** Hank's underlying connection to I-40, CUSTODIAN, C-07, Colorado, or Hollow Creek yet.
+- **Do NOT resolve** Josh's underlying connection to I-40, CUSTODIAN, C-07, Colorado, or Hollow Creek yet.
 - Personal objects: his Tire Iron (`melee_020`, `story:hank_tire_iron`) and his Old Road Atlas (`rare_013`) remain important.
 - Existing characterization preserved: elderly mechanic; heard the Station voice as a child; `flags.hankSecret` (worked at a Custodian facility).
 
@@ -63,14 +63,14 @@ Preserve: **THE WORLD REMEMBERS WHAT YOU DO. THE CONSEQUENCES DON'T ALWAYS ARRIV
 
 ### #009 — NORA PIKE
 - **Age:** 71. **Location:** Mercy. **Role:** Teacher / archivist.
-- Teaches Mercy's children reading, mathematics, history. Deeply concerned that reliable knowledge of the Collapse is disappearing: sixty years on, testimony has become history, history folklore, and surviving documents contradict one another. (Born ~2018 — she was a child in 2029, like Hank; this gives her archival authority.)
+- Teaches Mercy's children reading, mathematics, history. Deeply concerned that reliable knowledge of the Collapse is disappearing: sixty years on, testimony has become history, history folklore, and surviving documents contradict one another. (Born ~2018 — she was a child in 2029, like Josh; this gives her archival authority.)
 - Her request: *"Bring me something true."* Not valuables — verifiable evidence. Natural hook into the Story/Lore item catalog (`lore_001`–`lore_020`).
 - Evidence recovered may change what Nora believes. **Nora must never become an omniscient lore dump.**
 
 ### #010 — WES DALTON
 - **Age:** 29. **Location:** Mercy. **Role:** Mechanic.
-- Works alongside Hank. Talented, confident, convinced he may already be better than Hank. Hank strongly disagrees. Warmth underneath the arguing. (If the player selects the M4: Wes — *"Good choice."* Hank — *"Don't encourage this."*)
-- **Long shadow:** remains in Mercy; inherits responsibility as infrastructure deteriorates. Hank taught Wes something years ago that may eventually matter — **exact detail stays unresolved for now.**
+- Works alongside Josh. Talented, confident, convinced he may already be better than Josh. Josh strongly disagrees. Warmth underneath the arguing. (If the player selects the M4: Wes — *"Good choice."* Josh — *"Don't encourage this."*)
+- **Long shadow:** remains in Mercy; inherits responsibility as infrastructure deteriorates. Josh taught Wes something years ago that may eventually matter — **exact detail stays unresolved for now.**
 
 ---
 
@@ -112,15 +112,15 @@ Preserve: **THE WORLD REMEMBERS WHAT YOU DO. THE CONSEQUENCES DON'T ALWAYS ARRIV
 ---
 
 ## Continuity & audit notes (freeze report, 2026-10-05)
-- **Ages:** Ruth 58, Mara 33 (matches "early 30s" portrait), Eli 24 (adjusted from 21 — see above), Hank ~68 (see manifest conflict note), all others as drafted. No conflicts with existing material beyond the two flagged.
+- **Ages:** Ruth 58, Mara 33 (matches "early 30s" portrait), Eli 24 (adjusted from 21 — see above), Josh ~68 (see manifest conflict note), all others as drafted. No conflicts with existing material beyond the two flagged.
 - **Surnames:** zero collisions across canon; Mercer reserved per the surname rule.
 - **Mercy families:** June + Amos Bell → Lucy (9); all other relationships as drafted. 10 named Mercy NPCs of ~186 population.
-- **Existing characterization:** Ruth (council leader), Mara (compassionate medic), Eli (scout), Hank (elderly mechanic, heard the voice as a child, worked at a Custodian facility) — all preserved; new details are additive only.
-- **Hank item hooks:** Tire Iron (`melee_020`) and Old Road Atlas (`rare_013`) referenced; `flags.hankSecret` untouched.
+- **Existing characterization:** Ruth (council leader), Mara (compassionate medic), Eli (scout), Josh (elderly mechanic, heard the voice as a child, worked at a Custodian facility) — all preserved; new details are additive only.
+- **Josh item hooks:** Tire Iron (`melee_020`) and Old Road Atlas (`rare_013`) referenced; `flags.hankSecret` untouched.
 - **Chapter 1:** roster populates the planned THE VOICE expansion; current `opening()` Ruth/Mara scene is preserved as one beat within it.
 - **Breadcrumb pacing:** Mae (#012) delivers the Crossroads beat per `docs/WORLD.md`.
 - **Crew knowledge:** June, Nora, Abel, and Owen's stale-information principle all comply; no NPC reveals beyond evidence.
-- **Four mysteries:** none answered or weakened. Hank's I-40 connection, Abel's identity, and Wes's lesson all stay unresolved by rule.
+- **Four mysteries:** none answered or weakened. Josh's I-40 connection, Abel's identity, and Wes's lesson all stay unresolved by rule.
 - **Lucy/Eli mountain beat:** defined by this roster (not pre-existing canon) — recorded here as its source of truth.
 
 *Roster continues at #016 below (Redwater/Haven — route-exclusive characters begin).*
@@ -330,7 +330,7 @@ All 31 collision cleanups approved by Nic with final names below; IDs #031–100
 
 ### HIGH COUNTRY / HOLLOW CREEK
 ### #073 — MABEL KADE
-- **Age:** 63. **Location:** Hollow Creek. **Role:** Leader. Recognizes Hank.
+- **Age:** 63. **Location:** Hollow Creek. **Role:** Leader. Recognizes Josh.
 ### #074 — MASON IVERS
 - **Age:** 61. **Location:** Hollow Creek. **Role:** Elder. Former long-haul driver who knew the mountain roads before the Collapse.
 ### #075 — CALLIE FROST
@@ -342,7 +342,7 @@ All 31 collision cleanups approved by Nic with final names below; IDs #031–100
 ### #078 — NOAH BRIGGS
 - **Age:** 18. **Location:** Hollow Creek. **Role:** Inexperienced scout. Wants to prove himself.
 ### #079 — MAEVE KINCAID
-- **Age:** 71. **Location:** Hollow Creek. **Role:** Old survivor. Knows pieces of Hank's earlier expedition.
+- **Age:** 71. **Location:** Hollow Creek. **Role:** Old survivor. Knows pieces of Josh's earlier expedition.
 ### #080 — TUCKER WYNN
 - **Age:** 35. **Location:** High Country. **Role:** Recovery driver. Retrieves stranded vehicles from mountain roads.
 

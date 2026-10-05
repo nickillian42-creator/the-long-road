@@ -127,7 +127,7 @@ Story stays true to its name: you will rarely see Exhausted and will finish with
 
 **Companion skills (only while that companion is healthy — not wounded, infected, incapacitated, or dead):**
 - **Mara (medic):** TREAT heals 35 instead of 30.
-- **Hank (mechanic):** REST / SLEEP repairs 25% vehicle condition instead of 22% (still costs 1 part).
+- **Josh (mechanic):** REST / SLEEP repairs 25% vehicle condition instead of 22% (still costs 1 part).
 - **Eli (scout):** wound chance from hazards (clinic doors, dust storm) halved.
 
 **Vehicle condition:**
@@ -187,7 +187,7 @@ Current saves are v2 (quests/discoveries). Migration backfills:
 ## 15. Design safeguards (incorporated per Nic + ChatGPT review, Oct 5, 2026)
 1. **Decisions, not maintenance.** Routine consumption is automatic (§2). The only manual controls are the RATIONING toggle and the travel/scavenge/rest choice. No per-meal clicking, ever.
 2. **Systems tell stories.** Wounds, infection, fatigue, and treatment produce narrative, not just numbers:
-   - First wound → a companion reacts in dialogue (Mara/Hank comment; sets a flag).
+   - First wound → a companion reacts in dialogue (Mara/Josh comment; sets a flag).
    - First infection → a campfire decision event: spend the antibiotic tonight or risk the night (branching choice, recorded).
    - Exhausted travel → small chance of a "weary argument" event: trust −1 with a random conscious companion, or push through together for trust +1 (your call).
    - Treating a companion → trust +1 (gratitude is remembered); leaving someone wounded 3+ days → trust −1.
@@ -211,7 +211,7 @@ Current saves are v2 (quests/discoveries). Migration backfills:
 2. Fatigue gain/relief/tiers/collapse in `dayCost()`, `travel()`, `rest()`, `combat()`.
 3. Injury states + wound sources + TREAT UI + antibiotics item + caps.
 4. Rationing toggle + drain formula per living equivalents.
-5. Companion bonuses (Mara/Hank/Eli) + LIMPING vehicle state.
+5. Companion bonuses (Mara/Josh/Eli) + LIMPING vehicle state.
 6. HUD additions (fatigue, LOW/LIMPING tags, condition markers).
 7. Full flow test + scripted 780-mile balance run per difficulty.
 8. Update CHANGELOG, ROADMAP (0.3 marked complete), ASSET_MANIFEST if needed.
