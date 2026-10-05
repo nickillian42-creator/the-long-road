@@ -265,5 +265,50 @@ console.log('D13 crew motivations');
   check('eli calls out reluctance', /You don't even want to go/.test(c.lastScreen()));
 }
 
+// ---------- D14: polish pass ----------
+console.log('D14 polish pass');
+{
+  const a = fresh(); a.reachMercyDay();
+  // reachMercyDay ends at mercyDay; rewind to check ruthCrisis text via fresh play
+  const b = fresh();
+  b.newGame('Male'); b.hankRepairChoice(0); b.mercyHub();
+  b.mercyWorkshop(); b.mercyClinic(); b.mercyWater(); b.mercyHub();
+  b.ruthCrisis();
+  check('no stale fifty-eight', !/fifty-eight years of decisions/.test(b.lastScreen()));
+  check('sixty years of decisions', /sixty years of decisions/.test(b.lastScreen()));
+  check('HUD DAY 2 at mercyDay', a.getG().day === 2);
+  a.mercyDay();
+  check('HUD renders DAY 2', />DAY 2</.test(a.lastScreen()));
+  // hub blurbs vary
+  const c = fresh(); c.newGame('Male'); c.hankRepairChoice(0);
+  c.mercyHub(); const h1 = c.lastScreen();
+  c.mercyWorkshop(); c.mercyHub(); const h2 = c.lastScreen();
+  check('day1 blurb varies', h1 !== h2 && /Patchwork walls/.test(h1) && !/Patchwork walls/.test(h2));
+  c.mercyClinic(); c.mercyHub(); const h3 = c.lastScreen();
+  check('day1 blurb progresses', h3 !== h2 && h3 !== h1);
+  // day2 blurbs
+  const d = fresh(); d.reachMercyDay();
+  d.mercyDay(); const m1 = d.lastScreen();
+  d.dayJosh(); d.dayJoshChoice(0); d.mercyDay(); const m2 = d.lastScreen();
+  check('day2 blurb varies', m1 !== m2);
+  // knee-high rewritten
+  const e = fresh(); e.newGame('Male'); e.hankRepairChoice(0);
+  check('no knee-high', !/knee-high when you started/.test(e.lastScreen()));
+  check('twenty-year history preserved', /since I got here/.test(e.lastScreen()));
+  // departure breathing beat
+  const f = fresh(); f.reachMercyDay();
+  f.dayJosh(); f.dayJoshChoice(0); f.mercyDay();
+  f.dayMara(); f.dayMaraChoice(0); f.mercyDay();
+  f.dayRuth(); f.dayRuthChoice(0); f.mercyDay();
+  f.dayEli(); f.dayEliChoice(0); f.mercyDay();
+  f.departure();
+  check('breathing beat present', /dog barks/.test(f.lastScreen()) && /the gate/.test(f.lastScreen()));
+  check('breathing beat before packing', f.lastScreen().indexOf('dog barks') < f.lastScreen().indexOf('Packing is quick'));
+  // protected lines intact
+  const p = f.lastScreen();
+  check('protected: Forty', /I'll get you through Forty/.test(p));
+  check('protected: bring her back', /bring her back too/.test(p));
+}
+
 console.log(`\nRESULT: ${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
