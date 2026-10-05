@@ -22,10 +22,14 @@ Flexible milestones, not promises. Updated as work lands.
 - [ ] Narrative content extracted to a data model (encounter/choice/effect schema) so content can be authored without touching game logic
 - [ ] Core docs established (this set)
 
-## Alpha 0.3 — Expanded Survival
+## Alpha 0.3 — Expanded Survival (IN DEVELOPMENT on branch `alpha-0.3-dev`)
 - Hunger, thirst, sleep/fatigue, health/injury/infection, treatment choices
 - Improved inventory; more encounters; deeper crew interactions; expanded combat UI
-- Gameplay-balance proposal reviewed by Nic BEFORE implementation
+- Gameplay-balance proposal reviewed by Nic BEFORE implementation — approved Oct 5, 2026 with 7 safeguards
+- [x] Fatigue system (gain/tiers/collapse), wounds & infection, TREAT UI, rationing, resource caps
+- [x] Companion bonuses, LIMPING state, narrative beats, attrition floor at 1 HP
+- [x] Save schema v3 + additive migration; 41 survival tests passing
+- [ ] Nic + ChatGPT review before merge to main
 
 ## Alpha 0.4 — World Interaction
 - Explorable locations, trading posts, settlements
