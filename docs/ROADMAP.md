@@ -37,7 +37,7 @@ Flexible milestones, not promises. Updated as work lands.
 - Functional card and slot minigames with real rules, bets, payouts, balancing
 
 ## Later Alpha / Beta
-- Expanded branching narrative; complete Texas-to-Colorado campaign
+- Expanded branching narrative under THE LONG SHADOW OF CHOICE (see GAME_DESIGN.md); complete Texas-to-Colorado campaign
 - Multiple endings; endless mode; larger encounter library
 - **PREVIOUSLY ON THE LONG ROAD** — cinematic save recap generated from actual player history (requires quest tracker + narrative history from 0.2.2; never invents or spoils)
 - Advanced animation + environmental systems; performance and save-system testing

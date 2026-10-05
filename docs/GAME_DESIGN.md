@@ -7,6 +7,31 @@ Living design document for THE LONG ROAD. Systems are documented here when appro
 
 Consequences must be persistent, visible, and traceable to the player's own choices.
 
+## DESIGN PRINCIPLE: THE LONG SHADOW OF CHOICE
+**Status:** APPROVED — guiding philosophy for all narrative implementation.
+
+**THE WORLD REMEMBERS WHAT YOU DO. THE CONSEQUENCES DON'T ALWAYS ARRIVE WHEN YOU EXPECT THEM.**
+
+Not every decision should have an immediate or obvious consequence. The Long Road features layered consequences that can emerge:
+
+- Immediately after a decision.
+- Several encounters later.
+- Days or weeks into the journey.
+- During a later chapter.
+- At the campaign's conclusion.
+- During a second playthrough, when players recognize connections they previously missed.
+
+Examples of the intended feel: a stranger helped early returns much later; stolen supplies leave another settlement unable to survive; an insignificant conversation changes how a companion responds at a critical moment; a decision made hundreds of miles earlier determines who helps near Station Seven; some consequences become clear only on replay with different choices.
+
+### Implementation requirements
+1. Track meaningful choices through persistent narrative flags and event history (the `g.flags` + discoveries + quest systems established in Alpha 0.2.2 are the foundation).
+2. Allow future encounters to check combinations of previous decisions, not just single flags.
+3. Support delayed, conditional, and mutually exclusive consequences.
+4. Avoid telegraphing every outcome with obvious GOOD/BAD choice indicators.
+5. Keep consequences logically connected to the original decisions, even when the connection is initially hidden.
+6. Never manufacture consequences by contradicting established player history.
+7. Include delayed consequences in the Previously on The Long Road recap only after the player has actually discovered them.
+
 ---
 
 ## FEATURE: PREVIOUSLY ON THE LONG ROAD
