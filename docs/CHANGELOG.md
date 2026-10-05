@@ -23,6 +23,14 @@
 - Adjustments: Eli 21→24 (portrait-bible alignment); Hank ~68 flagged vs. manifest "late 70s" (deeper 2029-child canon favors ~68; manifest fix proposed, not applied)
 - index.html, Alpha 0.3 implementation, and save code untouched
 
+## NPC Roster — #016–030 (2026-10-05) — docs only, no code changes
+- `docs/NPCS.md`: Redwater #016–022 and Haven #023–030 appended, with route-exclusivity lock, Leah/Micah delayed-consequence design, and full audit notes
+- `docs/GAME_DESIGN.md`: new permanent principle — surprising timing, never arbitrary causality
+- `docs/ASSET_MANIFEST.md`: Hank corrected to late 60s (≈68)
+- `docs/DECISIONS.md`: causality principle, continuity fixes, roster freeze, Vale collision flagged as open
+- Audit: zero name collisions (one flagged catalog adjacency: Ada Vale / Grandma Vale's Fig Jam — undecided); ages/relationships verified; WORLD.md compliance confirmed; neither settlement objectively good/evil; four mysteries untouched; Tomas/Abel documented as unlinked; route exclusivity compatible with 7–9 location target
+- index.html, Alpha 0.3 gameplay/save code untouched; stopped after #030, Chapter 2 not begun
+
 ## Alpha 0.3 — Expanded Survival (in development on `alpha-0.3-dev`)
 - Fatigue: +25 per travel/scavenge (x0.7 story, x1.3 hard); tiers Rested/Tired (-15% travel)/Exhausted (-25% travel, -2 combat dmg, -1 scavenge); collapse at 100 costs a day, -10 HP, resets to 60
 - Wounds & infection: combat hits, clinic doors, dust storms can wound; wounded halves rest healing and can turn infected; TREAT on crew screen (1 meds: +30 HP, clears wound, revives at 25; 1 antibiotic cures infection); combat MEDKIT unchanged

@@ -44,6 +44,13 @@ Examples of the intended feel: a stranger helped early returns much later; stole
 6. Never manufacture consequences by contradicting established player history.
 7. Include delayed consequences in the Previously on The Long Road recap only after the player has actually discovered them.
 
+## DESIGN PRINCIPLE: SURPRISING TIMING, NEVER ARBITRARY CAUSALITY
+**Status:** APPROVED — permanent, complements the consequence principles above.
+
+**DELAYED CONSEQUENCES MUST FEEL SURPRISING IN TIMING, NOT ARBITRARY IN CAUSALITY.**
+
+A player may be surprised that a decision from ten hours earlier returns — but when the consequence is revealed, they must be able to understand how their actions contributed to it. Do not use arbitrary punishment merely to make choices feel dark. The surprise is *when* the world remembers, never *whether the remembering makes sense*.
+
 ---
 
 ## FEATURE: PREVIOUSLY ON THE LONG ROAD

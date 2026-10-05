@@ -123,4 +123,110 @@ Preserve: **THE WORLD REMEMBERS WHAT YOU DO. THE CONSEQUENCES DON'T ALWAYS ARRIV
 - **Four mysteries:** none answered or weakened. Hank's I-40 connection, Abel's identity, and Wes's lesson all stay unresolved by rule.
 - **Lucy/Eli mountain beat:** defined by this roster (not pre-existing canon) — recorded here as its source of truth.
 
-*Roster continues at #016 (Redwater/Haven — route-exclusive characters begin).*
+*Roster continues at #016 below (Redwater/Haven — route-exclusive characters begin).*
+
+---
+
+## REDWATER (~mile 150) — NPC #016–022
+*Route-exclusive branch 3A. Redwater represents survival through controlled resources. Its people must NOT be reduced to villains withholding water.*
+
+### #016 — ADA VALE
+- **Age:** 54. **Location:** Redwater. **Role:** Redwater leader.
+- Established the modern policy: outsiders do not receive reservoir water without Redwater receiving something in return. Years earlier, Redwater opened its reservoir during a severe regional drought; refugees arrived in unsustainable numbers, reservoir levels fell dangerously, rationing began, violence followed — and Ada's husband died in the crisis.
+- Defining sentiment: *"I have buried people because I couldn't say no."*
+- She can respect or even like Jack/Evelyn while still refusing their request. Player actions may influence whether Ada grows more open or more convinced isolation is necessary.
+- *(Audit note: "Vale" collides with the frozen catalog's `food_040` "Grandma Vale's Fig Jam" (`collector:vale_jam`, "a regional brand older than anyone in the crew"). Ada (54, born ~2035) could plausibly be the granddaughter of "Grandma Vale" — a deliberate thread or a coincidence. **Undecided — flagged for Nic.** Do not imply a connection in writing until decided.)*
+
+### #017 — DR. SAMIR KESS
+- **Age:** 47. **Location:** Redwater. **Role:** Physician.
+- Quietly disagrees with portions of Redwater's policy. Sometimes treats outsiders; may falsify small amounts of medical inventory to do so.
+- Philosophical tension with Mara — **neither position framed as objectively correct:** Samir — *"If I have medicine and someone is dying, what exactly do you expect me to do?"* Mara — *"Count how many people die tomorrow because you used it today."*
+
+### #018 — GIDEON VALE
+- **Age:** 27. **Location:** Redwater. **Role:** Guard captain. Ada's son (she was ~27 at his birth ✓).
+- Survived the drought crisis as a child; remembers outsiders fighting his father over water. Believes his mother's policies are necessary, sometimes favors stricter ones.
+- **Do NOT make Gideon sadistic.** Disciplined, polite, protective of Redwater's children — and completely capable of pointing a rifle at a desperate family if he believes admitting them threatens the settlement.
+
+### #019 — ROSA MENDOZA
+- **Age:** 39. **Location:** Redwater. **Role:** Reservoir technician.
+- Has evidence suggesting the reservoir may finally be recovering enough to support limited outside trade or humanitarian distribution. **Her projections are uncertain — if she is wrong, Redwater endangers its own survival.** This makes Redwater's debate technical/resource-based, not purely ideological.
+- **Do not establish the reservoir as definitely safe to open yet.**
+
+### #020 — BENNY SHAW
+- **Age:** 64. **Location:** Redwater. **Role:** Farmer.
+- Supported Ada during the original crisis; now believes Redwater has grown too isolated: *"A rule that saves you once can kill you twenty years later."* May become politically influential or challenge Ada's policy — but they are old friends, not simplistic enemies.
+
+### #021 — KIRA SHAW
+- **Age:** 23. **Location:** Redwater. **Role:** Farmer. Benny's granddaughter.
+- Belongs to a generation that never personally experienced the catastrophe justifying Redwater's restrictions. Tired of being governed by other people's memories. Wants to travel — Morrow, Mercy, farther north. Gideon considers this dangerously naive.
+- Possible affection/romantic tension with Gideon, but it must **never replace their ideological disagreement.** Kira may leave Redwater independently of the protagonist.
+
+### #022 — TOMAS WREN
+- **Age:** 36. **Location:** Outside Redwater. **Role:** Outsider.
+- Tomas and his sick daughter are outside Redwater when the crew arrives — denied entry, needing clean water. He becomes the human face of Redwater's policy **before** the player understands Redwater's history.
+- **However, Tomas has lied about where he and his daughter came from. Do NOT yet determine why.** Helping him may be compassionate while creating legitimate risk.
+- His daughter is not separately numbered unless future writing makes her an independent authored character.
+- *(Audit note: Tomas's undefined origin and Abel Rusk's (#015) undefined agenda are documented as **separate unresolved threads with no linkage.** They are NOT connected unless explicitly decided later. Player speculation is fine; canon linkage is not established.)*
+
+---
+
+## HAVEN (~mile 175) — NPC #023–030
+*Route-exclusive branch 3B. Haven represents security through collective obligation and restricted individual freedom.*
+
+**ANTI-CLICHÉ LOCK:** Haven is NOT secretly a cannibal settlement, cartoon cult, sadistic dictatorship, or obvious horror-town reveal. Many residents genuinely love living there. **Haven works — that's what makes the restriction on leaving difficult.**
+
+### #023 — ELIAS WARD
+- **Age:** 62. **Location:** Haven. **Role:** First Steward.
+- Warm, intelligent, soft-spoken. Receives no obvious luxury; his family works alongside everyone else. Genuinely believes extreme individualism contributed to the destruction of the old world. Underlying philosophy: *you owe something to the people keeping you alive* — therefore joining Haven creates permanent obligations. He does not describe residents as prisoners. He considers them citizens.
+
+### #024 — MIRIAM WARD
+- **Age:** 59. **Location:** Haven. **Role:** Agricultural coordinator. Elias's wife.
+- Largely responsible for Haven's agricultural success; may wield as much practical influence as Elias. Genuinely loves Haven. If the protagonist assumes she secretly wants freedom from Elias or the settlement, she rejects the assumption.
+- Key exchange — Player: *"Can you choose to leave?"* Miriam: *"Why would I?"*
+- **Preserve the distinction between lacking a freedom and having no desire to exercise it.**
+
+### #025 — LEAH HARROW
+- **Age:** 28. **Location:** Haven. **Role:** Seamstress. Jonah's sister; Micah's mother (was ~20 at his birth ✓).
+- Quietly approaches the protagonist after learning the crew intends to leave: *"You're leaving tomorrow?"* → *"Take us with you."*
+- Leah attempted to leave Haven before and was brought back. She is not tortured, starved, or abused — she has a home, work, friends, food, security. She simply is not permitted to leave. She believes freedom is worth the danger outside.
+
+### #026 — JONAH HARROW
+- **Age:** 31. **Location:** Haven. **Role:** Carpenter. Leah's brother (3 years apart ✓); Micah's uncle.
+- Does NOT want Leah and Micah to leave. Their parents died outside Haven; he sincerely believes leaving will get his sister and nephew killed. Asks the protagonist not to help her. His argument is not *"She belongs here"* — it is *"She's alive here."*
+- **If the protagonist helps Leah escape, Jonah remembers** (world-remembers rule).
+
+### #027 — DAVID QUILL
+- **Age:** 42. **Location:** Haven. **Role:** Gatekeeper.
+- Enforces Haven's departure restrictions; may initially read as the obvious antagonist. But David arrived at Haven starving with two children — Haven saved all three. His children are now healthy. He sincerely believes in Haven's system and considers enforcing it part of protecting his family and community. **Not merely following Elias's orders.**
+
+### #028 — SADIE QUILL
+- **Age:** 16. **Location:** Haven. **Role:** Haven resident. David's daughter.
+- Never lived outside Haven. Fascinated by Eli — he represents another young person who has actually traveled beyond his home. **This does NOT need to become a romance.** Their conversations should pressure-test Eli's lifelong desire to leave Mercy against Sadie's upbringing, where leaving is considered irresponsible or wrong. (Feeds Eli's coming-of-age arc from #003.)
+
+### #029 — EZRA COLE
+- **Age:** 73. **Location:** Haven. **Role:** Musician / storyteller.
+- Plays an old acoustic guitar at evening gatherings. His presence establishes Haven's genuine warmth, culture, music, community. Survived extremely difficult years outside before arriving. Willing to criticize Haven despite choosing to remain. Asked whether residents should be allowed to leave: *"Of course."* Then: *"And I think most of them would come crawling back."*
+
+### #030 — MICAH HARROW
+- **Age:** 8. **Location:** Haven. **Role:** Haven child. Leah's son; Jonah's nephew.
+- Micah transforms Leah's escape request into a much harder decision: she wants to take her eight-year-old son. Inside Haven: reliable food, education, friends, shelter, medical care. Outside: none guaranteed. Leah believes she has the right to choose freedom for herself and her child. Jonah believes she is gambling with Micah's life. Elias believes Haven has an obligation to prevent that. **The game does not tell the player which position is correct.**
+
+### LEAH/MICAH DELAYED CONSEQUENCE (locked design)
+If the player helps Leah and Micah leave, their outcome is **never** determined by a simplistic good/bad flag or arbitrary tragedy. Their future depends on **concrete assistance**: food, water, medicine, useful equipment, accurate route information, directing them toward Crossroads or another known settlement, escorting them, and other contextual decisions. Their story may surface later around Last Stop, Morrow, or elsewhere — survival, joining another community, separation, injury, death, or other believable developments, **but no specific outcome is canonized yet.** The result must be causally understandable once revealed, per the timing/causality principle. **Helping them escape is not the "good ending." Refusing is not the "bad ending."**
+
+---
+
+## ROUTE EXCLUSIVITY (locked)
+Redwater (#016–022) and Haven (#023–030) belong to the first significant route split. A normal playthrough does not automatically experience both branches' full content. **Replayability is preserved.** Information necessary to understand the overall campaign remains obtainable regardless of branch (the spouse trail runs through pre-split Crossroads and post-rejoin Last Stop). Branch-specific characters and consequences are encouraged.
+
+## Continuity & audit notes — #016–030 (freeze report, 2026-10-05)
+- **Names:** zero collisions across repo docs, NPC #001–015, and character/world docs. One flagged item-catalog adjacency: **Ada Vale vs. `food_040` "Grandma Vale's Fig Jam"** — see #016 note. Undecided; needs Nic's call.
+- **Ages/relationships:** all check out (Ada 54 → Gideon 27; Benny 64 → granddaughter Kira 23; Leah 28 → Micah 8; Jonah 31 / Leah 28 siblings; David 42 → Sadie 16).
+- **WORLD.md compliance:** Redwater (reservoir, morally complicated, never villainous) and Haven (ideological conflict, anti-cliché lock) match exactly.
+- **Moral balance:** neither settlement is objectively good or evil — verified across all 15 entries. Samir/Mara, Ada/Benny/Rosa, Elias/Leah/Jonah tensions all hold both sides.
+- **Four mysteries:** untouched. No I-40, spouse-sentence, C-07, or CUSTODIAN-moral content in this batch.
+- **Tomas/Abel:** documented as separate unresolved threads; no canonical linkage.
+- **7–9 location target:** route exclusivity is compatible — a run sees one branch, keeping the count in range.
+- **Crew knowledge:** no violations. Rosa's projections are explicitly uncertain; Tomas's lie is flagged without explanation; Abel stays ambiguous.
+
+*Roster continues at #031+ (next: Chapter 2 playable narrative before further roster expansion, per Nic).*

@@ -53,3 +53,13 @@ Locked with Nic. Full roster: `docs/NPCS.md`. Covers Mercy (#001–010), early r
 - Crossroads: Mae Holloway (61, information broker — delivers "There was another Mercer."), Owen Voss (44, Free Caravan driver — trustworthy-but-stale information principle), Tess Navarro (17, scavenger — independent off-screen life), Abel Rusk (56, ambiguous northbound stranger — identity and "who else is asking" unresolved by rule).
 - **Flagged (not changed pending Nic):** Eli's draft age was 21, set to 24 to match the "mid-20s" portrait bible. Hank at ~68 conflicts with the portrait bible's "late 70s" but matches the deeper canon (child in 2029 → ~60–68); `docs/ASSET_MANIFEST.md` correction proposed, not yet applied.
 - Roster continues at #016 (Redwater/Haven — route-exclusive characters begin).
+
+## 9. NPC Roster — #016–030 + causality principle (2026-10-05)
+Locked with Nic. Added to `docs/NPCS.md`: Redwater #016–022 (Ada Vale, Dr. Samir Kess, Gideon Vale, Rosa Mendoza, Benny Shaw, Kira Shaw, Tomas Wren) and Haven #023–030 (Elias Ward, Miriam Ward, Leah Harrow, Jonah Harrow, David Quill, Sadie Quill, Ezra Cole, Micah Harrow).
+- New permanent design principle in `docs/GAME_DESIGN.md`: **DELAYED CONSEQUENCES MUST FEEL SURPRISING IN TIMING, NOT ARBITRARY IN CAUSALITY.**
+- Continuity fixes approved and applied: Eli Boone = 24; Hank Rourke ≈ 68; `docs/ASSET_MANIFEST.md` corrected ("late 70s" → "late 60s"), preserving the 2029→2089 chronology.
+- Leah/Micah delayed-consequence design locked: outcome depends on concrete assistance (supplies, equipment, route info, escort, directing to settlements), never a good/bad flag; no outcome canonized yet; helping ≠ good ending, refusing ≠ bad ending.
+- Route exclusivity locked: normal playthrough does not see both branches fully; campaign-critical information stays branch-independent.
+- **Flagged, undecided:** "Ada Vale" vs. catalog `food_040` "Grandma Vale's Fig Jam" — plausible family connection (Ada b. ~2035 could be Grandma Vale's granddaughter) or coincidence. Needs Nic's decision before any writing implies a link.
+- Tomas Wren's undefined origin and Abel Rusk's undefined agenda are separate unresolved threads; not connected unless explicitly decided.
+- Next: Chapter 2 playable narrative before further roster expansion.
