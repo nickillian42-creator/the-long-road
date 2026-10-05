@@ -13,7 +13,7 @@ Flexible milestones, not promises. Updated as work lands.
 - [x] Main quest tracker: THE LAST TRANSMISSION (8 event-driven objectives)
 - [x] Discoveries log + Story So Far recap in journal
 - [x] Save schema v2 (quests/discoveries backfilled for old saves)
-- [x] 6 prologue images + revised Hank portrait uploaded to `assets/`
+- [x] 6 prologue images + revised Josh portrait uploaded to `assets/`
 - [x] Cinematic presentation pass: full-bleed art, overlaid title cards, hidden header, scrollable narration, thumb-friendly controls, reduced-motion preserved
 - [x] Mobile playtest QA on iPhone Safari (prologue + artwork confirmed)
 
@@ -49,7 +49,7 @@ Flexible milestones, not promises. Updated as work lands.
 
 ## Campaign Master Plan v1.0 (FROZEN 2026-10-05)
 - [x] `docs/CAMPAIGN_MASTER_PLAN.md` — campaign target, chapter pacing, consequence web, character death, ending montage, final choice architecture, no-filler rule, north star
-- [x] `docs/MYSTERIES.md` — backstage truth as writer-only canon (CUSTODIAN, C-07, I-40 warning, Hank, spouse's line, MERCER recognition, human seekers) + reveal schedule
+- [x] `docs/MYSTERIES.md` — backstage truth as writer-only canon (CUSTODIAN, C-07, I-40 warning, Josh, spouse's line, MERCER recognition, human seekers) + reveal schedule
 - [x] `docs/CHAPTERS_03_10.md` — chapter outlines for 3–10 (full specs to be written per chapter before implementation)
 - [x] `docs/ENCOUNTERS.md` — campaign-wide encounter plan: distribution by chapter, wildlife library, civilians/traders, raiders, environment, sickness, mechanical, strange encounters
 - [x] `docs/WORLD.md` — Tollway philosophy, Relay partial function, endgame runtime clarification, Core writer-canon pointer

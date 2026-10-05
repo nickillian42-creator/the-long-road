@@ -74,7 +74,7 @@ A voice emerges from the static. Calm. Clear. Almost impossibly familiar.
 
 The transmission repeats. Its origin appears to be somewhere in Colorado, nearly eight hundred miles away.
 
-Hank, Mercy's aging mechanic, goes pale when he hears it.
+Josh, Mercy's aging mechanic, goes pale when he hears it.
 
 He recognizes the voice.
 
@@ -95,7 +95,7 @@ A pause. Static swallowing the words.
 The signal is lost.
 
 ### Design note — the two-voice rule (permanent)
-The Station Seven broadcast voice and the spouse's break-in are **two separate voices**, and the writing must never let the player confuse them. Hank finds something about the Station voice familiar; the protagonist **instantly recognizes** Claire/Daniel. The Station voice is calm and steady; the spouse's voice is raw and fragmenting. This distinction is permanent campaign canon (see `docs/CHARACTERS.md`).
+The Station Seven broadcast voice and the spouse's break-in are **two separate voices**, and the writing must never let the player confuse them. Josh finds something about the Station voice familiar; the protagonist **instantly recognizes** Claire/Daniel. The Station voice is calm and steady; the spouse's voice is raw and fragmenting. This distinction is permanent campaign canon (see `docs/CHARACTERS.md`).
 
 ### Final transition — MAIN QUEST UNLOCKED: THE LAST TRANSMISSION
 Your home is running out of water.
@@ -126,11 +126,11 @@ Eight objectives, completed by story events — never by bare distance traveled:
 | 7 | Discover the truth behind the transmission | An ending is chosen |
 | 8 | Decide the fate of Mercy | An ending is chosen |
 
-Discoveries log notable finds (C-07 tag, access frequency, broadcast terminal, Hank's secret). The journal's Story So Far recap is generated from the player's actual flags.
+Discoveries log notable finds (C-07 tag, access frequency, broadcast terminal, Josh's secret). The journal's Story So Far recap is generated from the player's actual flags.
 
 ## Design notes
 - Timeline is locked: 2029 → 2089 is **sixty years**. Never state as objective fact that CUSTODIAN initiated the Collapse; the cause and CUSTODIAN's role remain deliberately ambiguous (see `docs/CAMPAIGN.md`).
 - Permanent principle: **THE PLAYER SHOULD KNOW ONLY WHAT THE CREW KNOWS.** Inventory names, descriptions, quests, dialogue, and UI must never reveal what the crew hasn't discovered.
 - Mercy's nineteen-day water reserve is an estimate at departure, not an automatic game-over timer. Time-passage consequences are a future milestone.
-- Hank was a child when he first heard the voice; he is now an elderly mechanic. Portrait, dialogue, and backstory follow that timeline.
+- Josh was a child when he first heard the voice; he is now an elderly mechanic. Portrait, dialogue, and backstory follow that timeline.
 - Quest state lives in the save blob (`g.quests`, `g.discoveries`), schema v2, backfilled for older saves.

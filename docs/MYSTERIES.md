@@ -10,8 +10,8 @@ Not a second evil AI. A fractured CUSTODIAN continuity process/subsystem created
 ## The I-40 warning
 Answered above. The warning sits inside Station Seven's own status broadcast ("CONTINUITY STATION SEVEN OPERATIONAL / MEDICAL FACILITIES ACTIVE. CLEAN WATER AVAILABLE") as the one line that does not sound like the station — which is precisely why it draws attention. The crew understands the warning was not superstition by the end of Chapter 4; they still do not understand who inserted it until much later.
 
-## Hank's history
-Hank Rourke (~68) heard the Station Seven voice as a child in 2029. As a young survivor he later worked with people attempting to understand, salvage, or disable parts of the surviving continuity network. He saw enough to understand I-40 was dangerous. He carries guilt because one of those expeditions ended badly — people died after he pushed them farther than they should have gone. This is why he reacts strongly to the protagonist chasing Claire/Daniel into the same territory. **His secrecy is rooted in guilt, not betrayal.** He did not create CUSTODIAN; he is not its mastermind, agent, or android. Exact technical knowledge stays limited per crew-knowledge rules. His Tire Iron (`melee_020`) and Old Road Atlas (`rare_013`) remain emotionally important.
+## Josh's history
+Josh Rourke (~68) heard the Station Seven voice as a child in 2029. As a young survivor he later worked with people attempting to understand, salvage, or disable parts of the surviving continuity network. He saw enough to understand I-40 was dangerous. He carries guilt because one of those expeditions ended badly — people died after he pushed them farther than they should have gone. This is why he reacts strongly to the protagonist chasing Claire/Daniel into the same territory. **His secrecy is rooted in guilt, not betrayal.** He did not create CUSTODIAN; he is not its mastermind, agent, or android. Exact technical knowledge stays limited per crew-knowledge rules. His Tire Iron (`melee_020`) and Old Road Atlas (`rare_013`) remain emotionally important.
 
 ## The spouse's interrupted line
 "And if you're hearing this—" was an attempt to warn Jack/Evelyn **not to come blindly to Station Seven just because Claire/Daniel is there.** By the time of the broadcast, the spouse had learned Station Seven's signal was being generated/repeated through systems whose objectives they did not fully trust. They wanted Mercy to know they were alive while preventing the signal from being read as a simple rescue beacon. The interruption came from unstable/contested access to the broadcast path — not a deliberate stop. **The tragedy: their attempt to say "I'm alive" is exactly what caused Jack/Evelyn to come.**
@@ -23,10 +23,10 @@ Claire/Daniel's expedition interacted with C-07-linked systems; their identity b
 Multiple interested humans learned a Mercer interacted with functioning continuity infrastructure. At least one Morrow-linked information network and independent scavenger/mercenary interests seek the spouse, believing Claire/Daniel knows how to access Station Seven systems. Abel Rusk (#015) knows pieces of this; **his exact allegiance stays flexible** until his later authored scenes are locked.
 
 ## Reveal schedule (writer guidance, not player promises)
-- Chapters 1–2: warnings without explanations (transmission, Owen, Hank's reactions, Abel).
+- Chapters 1–2: warnings without explanations (transmission, Owen, Josh's reactions, Abel).
 - Chapter 3: first delayed consequences; Tollway shows infrastructure has human costs.
 - Chapter 4: I-40 is genuinely dangerous (experienced, not explained); the warning was not superstition.
 - Chapters 5–6: CUSTODIAN-linked infrastructure becomes harder to dismiss; human seekers emerge (Morrow networks, Abel's pieces).
-- Chapter 7: Hank's history comes due at Hollow Creek.
+- Chapter 7: Josh's history comes due at Hollow Creek.
 - Chapter 8: systems respond to the crew's presence; MERCER is recognized.
 - Chapters 9–10: full truth becomes available through play — CUSTODIAN's moral ambiguity, C-07's fallibility, the spouse's warning, and the final choice. **No single reveal should feel like a late rewrite**; every answer must land as the resolution of an old question.

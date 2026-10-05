@@ -14,7 +14,7 @@ Authoritative campaign structure locked by Nic (2026-10-05). Revisit only with N
 - NPC catalog target: **~100 authored NPCs**, roughly 30–45 encountered in a typical run.
 
 ## Preserved canon
-2029 Collapse / 2089 setting · Mercy, Texas · 19-day sustainability crisis (an estimate, not a game-over timer) · ~780-mile journey · Continuity Station Seven, Colorado · **AVOID INTERSTATE 40** warning · CUSTODIAN / C-07 mystery · Mara, Eli, Hank, Ruth · existing quests, discoveries, and flags where compatible · 300-item Master Catalog v1.0 · "The world remembers what you do" · "Previously On The Long Road."
+2029 Collapse / 2089 setting · Mercy, Texas · 19-day sustainability crisis (an estimate, not a game-over timer) · ~780-mile journey · Continuity Station Seven, Colorado · **AVOID INTERSTATE 40** warning · CUSTODIAN / C-07 mystery · Mara, Eli, Josh, Ruth · existing quests, discoveries, and flags where compatible · 300-item Master Catalog v1.0 · "The world remembers what you do" · "Previously On The Long Road."
 
 ## The four unresolved mysteries (do NOT answer yet)
 1. Who inserted **AVOID INTERSTATE 40** into the transmission.
@@ -35,7 +35,7 @@ Two tracks, separate and both visible:
 Exact stage transitions are established during campaign writing. The final transformation (FOUND → GET HOME TOGETHER) reframes the quest: the objective is no longer searching, but choosing what the couple does together.
 
 ## Chapter 1 — THE VOICE (~90–120 minutes)
-Establishes: Mercy and its 19-day crisis · the marriage and the expedition backstory (one-per-household rule, the "Don't go" argument) · Ruth, Mara, Eli, Hank · the Station Seven transmission **with the spouse's voice break-in** · the I-40 warning · expedition authorization · vehicle selection · inventory preparation · departure · first road encounter · first camp.
+Establishes: Mercy and its 19-day crisis · the marriage and the expedition backstory (one-per-household rule, the "Don't go" argument) · Ruth, Mara, Eli, Josh · the Station Seven transmission **with the spouse's voice break-in** · the I-40 warning · expedition authorization · vehicle selection · inventory preparation · departure · first road encounter · first camp.
 
 The existing water-vote choice and its flags/trust effects are preserved as one beat inside the expansion.
 
