@@ -30,6 +30,18 @@ All artwork is original. WebP format. Naming: lowercase, hyphenated. Never use m
 | `portrait-stranger.webp` | The dehydrated traveler | Generated, pending upload |
 | `portrait-custodian.webp` | Custodian sentry | Generated, pending upload |
 
+## Prologue backgrounds — 1400×700
+| Filename | Page | Status |
+|---|---|---|
+| `bg-prologue-before-silence.webp` | 1 — Before the Silence | Generated, pending upload |
+| `bg-prologue-cascade.webp` | 2 — The Cascade | Generated, pending upload |
+| `bg-prologue-last-exodus.webp` | 3 — The Last Exodus | Generated, pending upload |
+| `bg-prologue-sixty-years-later.webp` | 4 — Sixty Years Later | Generated, pending upload |
+| `bg-prologue-mercy.webp` | 5 — Mercy, Texas | Generated, pending upload |
+| `bg-prologue-transmission.webp` | 6 — The Transmission | Generated, pending upload |
+
+Note: `portrait-hank.webp` was revised (elderly, late sixties) to match canon — Hank was a child during the 2029 collapse. Re-upload overwrites the earlier version.
+
 ## Art direction
 Grounded post-apocalyptic realism. Natural human proportions, ordinary weathered vehicles, overgrown highways, practical clothing, cinematic lighting. The collapse was in 2029; the game is set in 2089 — six decades of wear. No futuristic vehicles, neon, glowing armor, or sci-fi excess.
 

@@ -8,6 +8,14 @@ Flexible milestones, not promises. Updated as work lands.
 - [ ] Assets uploaded to `assets/` (via GitHub web UI — API corrupts binaries)
 - [ ] Mobile playtest QA on iPhone Safari
 
+## Alpha 0.2.2 — Cinematic Prologue & Main Quest (in progress)
+- [x] Six-page illustrated prologue (canonical narrative, typewriter, Prev/Next/Skip)
+- [x] Main quest tracker: THE LAST TRANSMISSION (8 event-driven objectives)
+- [x] Discoveries log + Story So Far recap in journal
+- [x] Save schema v2 (quests/discoveries backfilled for old saves)
+- [ ] 6 prologue images + revised Hank portrait uploaded to `assets/`
+- [ ] Mobile playtest QA
+
 ## Alpha 0.3a — Foundation (next)
 - [x] Save versioning (`g.v` + `migrateSave()`)
 - [ ] Narrative content extracted to a data model (encounter/choice/effect schema) so content can be authored without touching game logic
