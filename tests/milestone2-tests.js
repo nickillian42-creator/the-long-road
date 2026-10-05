@@ -50,7 +50,8 @@ function fresh() {
   scavGroundAdd, scavTakeGround, saveProto, resumeProto, hasProtoSave, scavProto,
   lootLabel, discoveryPanel, discoveryTakeAll, discoveryChoose,
   discoveryTakeOne, discoveryLeaveOne, discoveryLeaveAll,
-  openInventory, invScreen, invShow, invDo,
+  itemArt, artTag, blip, packIcon, takeAnimDone, discoveryHeroIdx,
+  openInventory, invScreen, invShow, invSelect, invDo,
   has: (n) => typeof globalThis[n] !== 'undefined',
   getG: () => g, setG: v => { g = v; },
   setPlayerName: v => { playerName = v; }, setSexSel: v => { sex = v; },
@@ -433,6 +434,98 @@ console.log('M2H discovery interstitial');
   h.discoveryTakeOne(0); // Canned Food ×2, no room at all
   check('choose overflow opens FOUND, clears discovery', !!h.getG().found && h.getG().discovery === null);
   check('undecided item grounded, not lost', h.scavLocState('roadside').ground.some(s => s.item === 'water_bottle'));
+}
+
+// ---------- M2J: item art wiring (M2 UX pass) ----------
+console.log('M2J item art wiring');
+{
+  // schema: every item carries art + find; only dead_phone is major
+  const ids = ['water_bottle','canned_food','mre','bandage','antiseptic','medkit','splint','knife','tire_iron','flashlight','rope','ammo_9mm','dead_phone'];
+  const t = fresh();
+  check('all 13 items have art paths', ids.every(id => t.itemDef(id) && t.itemDef(id).art === 'assets/items/' + id + '.webp'));
+  check('find prominence: dead_phone major, rest minor',
+    t.itemDef('dead_phone').find === 'major' && ids.filter(id => id !== 'dead_phone').every(id => t.itemDef(id).find === 'minor'));
+  // mechanics untouched by the new fields
+  check('mechanics intact: equip/use still defined', t.itemDef('knife').equip === 'weapon' && t.itemDef('water_bottle').use.thirst === -1 && t.itemDef('bandage').use.cure === 'bleeding');
+
+  // itemArt: asset-path fallback when no ITEM_ART map is inlined
+  check('itemArt falls back to asset path', t.itemArt('knife') === 'assets/items/knife.webp');
+  check('itemArt unknown id -> null (graceful)', t.itemArt('nope') === null);
+
+  // itemArt: data-URI branch when a preview build inlines ITEM_ART
+  {
+    const c2 = { ITEM_ART: { knife: 'data:image/webp;base64,AAA' },
+      itemDef: (id) => id === 'knife' ? { art: 'assets/items/knife.webp' } : null,
+      escapeHtml: (s) => String(s) };
+    vm.createContext(c2);
+    vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'src/sim/art.js'), 'utf8'), c2);
+    check('itemArt prefers inlined data URI', vm.runInContext('itemArt("knife")', c2) === 'data:image/webp;base64,AAA');
+    check('itemArt data-URI artTag embeds it', vm.runInContext('artTag("knife")', c2).indexOf('src="data:image/webp;base64,AAA"') >= 0);
+  }
+
+  // artTag: img with alt text; fallback glyph when art missing
+  const tag = t.artTag('knife', 'hero-art');
+  check('artTag renders img with item name alt', tag.indexOf('<img') >= 0 && tag.indexOf('alt="Hunting Knife"') >= 0 && tag.indexOf('hero-art') >= 0);
+  check('artTag degrades gracefully', t.artTag('nope').indexOf('art-fallback') >= 0 && t.artTag('nope').indexOf('<img') < 0);
+
+  // blip variants
+  check('blip calm', t.blip('calm').indexOf('blip-calm') >= 0);
+  check('blip talk', t.blip('talk').indexOf('blip-talk') >= 0);
+  check('blip danger', t.blip('danger').indexOf('blip-danger') >= 0);
+  check('blip urgent', t.blip('urgent').indexOf('blip-urgent') >= 0);
+  check('blip unknown -> calm', t.blip('zzz').indexOf('blip-calm') >= 0);
+  check('blips never eat taps', t.blip('danger').indexOf('aria-hidden="true"') >= 0);
+
+  // glovebox: new searchable area, story-significant loot
+  const u = fresh(); u.scavProtoStart();
+  check('glovebox is a searchable area', u.lastScreen().indexOf('Abandoned pickup') >= 0);
+  u.scavSearch('roadside', 'glovebox', 'quiet');
+  check('glovebox search discovers the dead phone', !!u.getG().discovery && u.getG().discovery.loot.some(l => l.item === 'dead_phone'));
+  const gscr = u.lastScreen();
+  check('story find gets the major dramatic treatment', gscr.indexOf('discovery-major') >= 0);
+  check('discovery shows art + inspect line', gscr.indexOf('artwrap') >= 0 && gscr.indexOf('Dead Phone') >= 0 && gscr.indexOf('15&#39;s the one') >= 0);
+
+  // common find stays subtle (minor treatment, still unmistakable)
+  const v = fresh(); v.scavProtoStart();
+  v.scavSearch('roadside', 'shelves', 'quiet');
+  const vscr = v.lastScreen();
+  check('common find: no major treatment', vscr.indexOf('discovery-major') < 0);
+  check('common find: hero art + exact loot', vscr.indexOf('artwrap') >= 0 && vscr.indexOf('Canned Food ×2') >= 0 && vscr.indexOf('Bottled Water ×1') >= 0);
+
+  // take transition: art flies into the pack, confirmation names the character
+  const w = fresh(); w.scavProtoStart();
+  w.scavSearch('roadside', 'shelves', 'quiet');
+  const wmsg = w.discoveryTakeAll();
+  check('take all still grants + returns message', wmsg.indexOf("Added to Josh's pack:") === 0 && w.invCount('josh', 'canned_food') >= 2);
+  check('take transition state set', !!w.getG().takeAnim && w.getG().takeAnim.who === 'josh');
+  const wscr = w.lastScreen();
+  check('transition panel shows flying art + pack', wscr.indexOf('take-anim') >= 0 && wscr.indexOf('fly-art') >= 0 && wscr.indexOf('pack-svg') >= 0);
+  w.takeAnimDone();
+  check('transition done returns to scene', w.getG().takeAnim === null && w.lastScreen().indexOf('ROADSIDE STOP') >= 0);
+  check('transition done is idempotent', (w.takeAnimDone(), true));
+
+  // inventory renders recognizable art (visual continuity with discovery)
+  const x = fresh(); x.scavProtoStart(); x.openInventory('scav');
+  const xscr = x.lastScreen();
+  check('bag grid shows item art', xscr.indexOf('slot-art') >= 0 && xscr.indexOf('assets/items/water_bottle.webp') >= 0);
+  x.invSelect(0);
+  check('detail panel shows art', x.lastScreen().indexOf('detail-art') >= 0);
+  x.invShow('mara');
+  check('mara tab keeps art + tabs', x.lastScreen().indexOf('slot-art') >= 0 && x.lastScreen().indexOf('JOSH') >= 0 && x.lastScreen().indexOf('MARA') >= 0);
+
+  // full-inventory FOUND panel carries art too
+  const y = fresh(); y.scavProtoStart();
+  y.invRemove('josh', 'water_bottle', 2); y.invRemove('josh', 'canned_food', 2); y.invRemove('josh', 'flashlight', 1);
+  for (let i = 0; i < 10; i++) y.invAdd('josh', 'flashlight', 1);
+  y.getG().invWho = 'josh';
+  y.scavSearch('roadside', 'shelves', 'quiet');
+  y.discoveryTakeAll();
+  const yscr = y.lastScreen();
+  check('overflow FOUND panel shows art', !!y.getG().found && yscr.indexOf('found-art') >= 0);
+
+  // blips appear at gameplay moments
+  const z = fresh(); z.scavProtoStart(); z.scavArea('shelves');
+  check('area tap shows calm blip', z.lastScreen().indexOf('blip-calm') >= 0);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
