@@ -30,6 +30,7 @@ JS_MODULES = [
     'sim/survival.js',
     'sim/scavenging.js',
     'sim/invui.js',
+    'sim/art.js',
     'boot.js',
 ]
 

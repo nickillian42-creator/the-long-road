@@ -66,4 +66,38 @@ body.cinema main{max-width:100%;padding:0 0 44px}
 .loot-row>span:first-child{font-size:16px;color:#ffe9c4}
 .loot-btns{display:flex;gap:8px}
 .loot-btns button{min-height:44px;padding:10px 14px}
+/* ---- M2 UX pass: item art, discovery drama, comic blips ---- */
+.artwrap{position:relative;display:inline-block;background:#232d22;border:1px solid #5a6b4c;border-radius:6px;overflow:hidden}
+.artwrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.art-fallback{display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:44px;color:#5a6b4c;font-size:28px;background:#232d22;border:1px solid #3a4636;border-radius:6px}
+.artwrap .art-fallback{position:absolute;inset:0;border:0;border-radius:0}
+.hero-art{width:min(70vw,290px);aspect-ratio:1;margin:12px auto;border:2px solid #e8c96a;box-shadow:0 0 26px #e8c96a44}
+.hero-art.minor{width:min(54vw,200px)}
+.discovery-major .hero-art{width:min(84vw,360px);border-color:#f4dcb0;box-shadow:0 0 44px #f4dcb088;animation:heroPulse 2.6s ease-in-out infinite}
+@keyframes heroPulse{50%{box-shadow:0 0 64px #f4dcb0cc;transform:scale(1.015)}}
+.storyline{color:#f4dcb0;font-style:italic;line-height:1.55;margin:8px 0}
+.loot-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+.loot-mini{display:flex;align-items:center;gap:8px;background:#241f14;border:1px solid #4a3f28;border-radius:6px;padding:6px;font-size:13px;color:#ffe9c4}
+.mini-art{width:44px;height:44px;flex:none}
+.slot{display:flex;flex-direction:column;align-items:stretch}
+.slot-art{width:100%;aspect-ratio:1;margin-bottom:5px}
+.slot-name{font-size:12px;line-height:1.3}
+.detail-art{width:min(44vw,168px);aspect-ratio:1;margin:4px 0 8px}
+.found-art{width:120px;aspect-ratio:1;margin:10px auto}
+/* take transition: artwork flies into the pack */
+.take-anim{text-align:center;padding:14px 6px}
+.fly-wrap{position:relative;height:230px;margin:6px 0 2px}
+.fly-art{position:absolute;left:50%;top:0;width:150px;margin-left:-75px;aspect-ratio:1;animation:flyToBag 1.5s ease-in forwards}
+.pack-target{position:absolute;left:50%;bottom:0;transform:translateX(-50%)}
+.pack-svg{display:block;margin:0 auto;filter:drop-shadow(0 4px 8px #000a)}
+@keyframes flyToBag{to{transform:translateY(118px) scale(.22);opacity:.85}}
+/* comic-book interaction blips: mature, grounded, restrained */
+.blip{display:inline-block;width:38px;height:38px;pointer-events:none;vertical-align:middle;animation:blipIn .9s ease-out both}
+.blip-calm{background:#8ba888;border-radius:48% 52% 55% 45%/50% 46% 54% 50%;opacity:.55}
+.blip-talk{background:#7b93a8;clip-path:polygon(20% 0,80% 0,100% 70%,60% 70%,45% 100%,40% 70%,0 70%);opacity:.6}
+.blip-danger{background:#a8442f;clip-path:polygon(50% 0,63% 28%,92% 20%,70% 45%,98% 60%,66% 62%,72% 95%,50% 70%,28% 95%,34% 62%,2% 60%,30% 45%,8% 20%,37% 28%);animation-duration:.55s}
+.blip-urgent{background:#c99a3c;clip-path:polygon(50% 0,63% 28%,92% 20%,70% 45%,98% 60%,66% 62%,72% 95%,50% 70%,28% 95%,34% 62%,2% 60%,30% 45%,8% 20%,37% 28%);animation:blipUrgent 1.1s ease-out both}
+@keyframes blipIn{from{transform:scale(.4);opacity:0}40%{opacity:.8}to{transform:scale(1.12);opacity:0}}
+@keyframes blipUrgent{0%{transform:scale(.4);opacity:0}30%{transform:scale(1);opacity:.85}60%{transform:scale(.92);opacity:.5}100%{transform:scale(1.1);opacity:0}}
+@media(prefers-reduced-motion:reduce){.fly-art,.blip,.discovery-major .hero-art{animation:none}}
 </style></head><body><main><header><div class="eyebrow">CONTINUITY NETWORK // 2089</div><h1>THE LONG ROAD</h1><div class="row"><span class="muted">EVERY MILE COSTS SOMETHING.</span><span class="tag">ALPHA 0.2.2</span></div></header><div id="app"></div><div class="footer">An original prototype. Saves locally in this browser. No accounts or network required.</div></main><div id="toast" role="status"></div><script>

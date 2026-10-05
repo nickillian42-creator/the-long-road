@@ -65,13 +65,20 @@ const SCAV_AREAS = {
     quiet: { risk: 8, noise: 3, ticks: 2, text: 'You pick through the cabinet without rushing.' },
     force: { risk: 6, noise: 16, ticks: 1, text: 'You tear the cabinet doors off their hinges.' },
   },
+  glovebox: {
+    name: 'Abandoned pickup — glovebox',
+    desc: 'A pickup slumps by the pumps, driver door ajar. The glovebox hangs open on a dead latch. Inside: dust, a cracked plastic saint on the dash, and something heavier tucked under the manuals.',
+    loot: [['dead_phone', 1]],
+    quiet: { risk: 5, noise: 2, ticks: 1, text: 'You ease the glovebox down and feel underneath the manuals.' },
+    force: { risk: 4, noise: 9, ticks: 1, text: 'You yank the glovebox. The latch gives with a plastic crack.' },
+  },
 };
 
 const SCAV_LOCS = {
   roadside: {
     name: 'ROADSIDE STOP — PROTOTYPE',
     desc: 'A gas station dead longer than you\'ve been alive. The pumps are husks. The store door hangs open like a mouth. You don\'t have to go in. That\'s the whole decision.',
-    areas: ['shelves', 'fridge', 'backpack', 'cabinet'],
+    areas: ['shelves', 'fridge', 'backpack', 'cabinet', 'glovebox'],
   },
 };
 
@@ -219,10 +226,12 @@ function scavScene() {
   if (warns.length) h += '<p class="danger">' + escapeHtml(warns[0]) + '</p>';
   if (loc.noise >= 30 && !loc.noiseWarned) {
     loc.noiseWarned = true;
-    h += '<p class="danger">That was loud. If anything is out there, it heard that — staying longer just got riskier.</p>';
+    h += '<p class="danger">' + blip('urgent') + ' That was loud. If anything is out there, it heard that — staying longer just got riskier.</p>';
   }
 
-  if (g.found) {
+  if (g.takeAnim) {
+    h += takeAnimPanel();
+  } else if (g.found) {
     h += foundPanel();
   } else if (g.discovery) {
     h += discoveryPanel();
@@ -257,7 +266,7 @@ function scavScene() {
 function scavArea(areaId) {
   const area = SCAV_AREAS[areaId], loc = scavLocState(g.scavLoc);
   if (loc.searched[areaId]) { scavScene(); return; }
-  screen('<div class="panel"><h2>' + area.name + '</h2><p>' + area.desc + '</p>' +
+  screen('<div class="panel"><h2>' + area.name + ' ' + blip('calm') + '</h2><p>' + area.desc + '</p>' +
     '<p class="muted">How do you work it?</p>' +
     btn('SEARCH QUIETLY — slow, careful', 'scavSearch(\'' + g.scavLoc + '\',\'' + areaId + '\',\'quiet\')', 'choice') +
     btn('FORCE IT — fast, loud', 'scavSearch(\'' + g.scavLoc + '\',\'' + areaId + '\',\'force\')', 'choice') +
@@ -295,28 +304,52 @@ function scavSearch(locId, areaId, mode) {
 }
 
 /* --- DISCOVERY interstitial ----------------------------------------------
-   Prominent FOUND result shown before anything enters inventory. The player
-   explicitly decides what happens to the discovered loot. Full-pack
-   overflow still routes through the existing FOUND state (grantLoot ->
-   setFound); risk/noise/capacity mechanics are untouched. */
-function lootLabel(l) {
-  const def = itemDef(l.item);
-  return (def ? def.name : l.item) + ' ×' + l.qty;
+   Prominent FOUND result shown before anything enters inventory. The
+   discovered item's artwork is the hero of the moment: large for the
+   headline find, with its name and inspect/story line. Story-significant
+   finds (find:'major') get a bigger, more dramatic treatment; common loot
+   stays quicker and more subtle. The player explicitly decides:
+   TAKE ALL / CHOOSE ITEMS / LEAVE. Taking confirms which character's pack
+   received it, then the artwork visibly flies into the pack (takeAnim).
+   Full-pack overflow still routes through the existing FOUND state
+   (grantLoot -> setFound); risk/noise/capacity mechanics are untouched. */
+function discoveryHeroIdx(d) {
+  for (let i = 0; i < d.loot.length; i++) {
+    const def = itemDef(d.loot[i].item);
+    if (def && def.find === 'major') return i;
+  }
+  return 0;
 }
 
 function discoveryPanel() {
   const d = g.discovery, who = d.who;
-  let h = '<div class="found discovery"><div class="eyebrow">✦ FOUND ✦</div>';
+  const hi = discoveryHeroIdx(d), hero = d.loot[hi], hdef = itemDef(hero.item);
+  const major = hdef && hdef.find === 'major';
+  let h = '<div class="found discovery' + (major ? ' discovery-major' : '') + '">';
+  h += '<div class="eyebrow">✦ FOUND ✦</div>';
+  // the artwork is the hero: never wonder "did I actually find something?"
+  h += artTag(hero.item, major ? 'hero-art' : 'hero-art minor');
+  h += '<h3>' + escapeHtml(hdef.name) + (hero.qty > 1 ? ' ×' + hero.qty : '') + '</h3>';
+  h += '<p class="storyline">' + escapeHtml(invInspect(hero.item)) + '</p>';
   if (!d.choosing) {
-    h += '<p class="muted">' + charName(who) + ' found:</p>';
-    d.loot.forEach(function (l) { h += '<h3>' + lootLabel(l) + '</h3>'; });
+    const rest = d.loot.filter(function (l, i) { return i !== hi; });
+    if (rest.length) {
+      h += '<div class="eyebrow">ALSO HERE</div><div class="loot-list">';
+      rest.forEach(function (l) {
+        h += '<div class="loot-mini">' + artTag(l.item, 'mini-art') +
+          '<span>' + escapeHtml(lootLabel(l)) + '</span></div>';
+      });
+      h += '</div>';
+    }
+    h += '<p class="muted">' + charName(who) + ' found ' +
+      (d.loot.length > 1 ? 'these' : 'this') + ' — decide:</p>';
     h += '<div class="actions">' + btn('TAKE ALL', 'discoveryTakeAll()', 'primary');
     if (d.loot.length > 1) h += btn('CHOOSE ITEMS', 'discoveryChoose()', 'choice');
     h += btn('LEAVE IT ALL', 'discoveryLeaveAll()', 'choice') + '</div>';
   } else {
     h += '<p class="muted">Take or leave each one — nothing moves until you decide.</p>';
     d.loot.forEach(function (l, i) {
-      h += '<div class="loot-row"><span>' + lootLabel(l) + '</span>' +
+      h += '<div class="loot-row">' + artTag(l.item, 'mini-art') + '<span>' + lootLabel(l) + '</span>' +
         '<span class="loot-btns"><button onclick="discoveryTakeOne(' + i + ')">TAKE</button>' +
         '<button onclick="discoveryLeaveOne(' + i + ')">LEAVE</button></span></div>';
     });
@@ -327,18 +360,65 @@ function discoveryPanel() {
   return h;
 }
 
+/* --- take transition: artwork visibly flies into the pack ----------------
+   After TAKE, the item art animates into a pack icon and lands on the
+   "Added to <Name>'s pack" confirmation. g.takeAnim is transient (like
+   g.discovery); CONTINUE or a short auto-advance finalizes via
+   takeAnimDone(). Mechanics unchanged — the grant already happened. */
+function takeAnimPanel() {
+  const t = g.takeAnim, first = t.items[0];
+  let h = '<div class="take-anim"><div class="eyebrow">SECURED ' + blip('calm') + '</div>';
+  h += '<div class="fly-wrap">' + artTag(first.item, 'fly-art') +
+    '<div class="pack-target">' + packIcon() +
+    '<div class="muted">' + escapeHtml(charName(t.who)) + '\'s pack</div></div></div>';
+  h += '<h3>' + escapeHtml(t.msg) + '</h3>';
+  if (t.items.length > 1) {
+    h += '<div class="loot-list">';
+    t.items.slice(1).forEach(function (l) {
+      const dd = itemDef(l.item);
+      h += '<div class="loot-mini">' + artTag(l.item, 'mini-art') +
+        '<span>' + escapeHtml(dd.name) + (l.qty > 1 ? ' ×' + l.qty : '') + '</span></div>';
+    });
+    h += '</div>';
+  }
+  h += btn('CONTINUE', 'takeAnimDone()', 'primary') + '</div>';
+  return h;
+}
+
+function takeAnimDone() {
+  const t = g && g.takeAnim;
+  if (!t) return;
+  g.takeAnim = null;
+  if (t.msg) notify(t.msg);
+  saveProto();
+  scavScene();
+}
+function lootLabel(l) {
+  const def = itemDef(l.item);
+  return (def ? def.name : l.item) + ' ×' + l.qty;
+}
+
 function discoveryTakeAll() {
   const d = g.discovery;
   if (!d) { scavScene(); return ''; }
   const names = d.loot.map(lootLabel).join(', ');
+  const items = d.loot.map(function (l) { return { item: l.item, qty: l.qty }; });
   g.discovery = null;
   const allFit = grantLoot(d.who, d.loot, d.loc);
-  saveProto();
   const msg = allFit
     ? 'Added to ' + charName(d.who) + '\'s pack: ' + names + '.'
     : 'No room — decide what to do with it.';
-  notify(msg);
-  scavScene();
+  saveProto();
+  if (allFit) {
+    // artwork visibly flies into the pack before the confirmation lands
+    g.takeAnim = { items: items, who: d.who, msg: msg };
+    saveProto();
+    scavScene();
+    setTimeout(function () { takeAnimDone(); }, 1800);
+  } else {
+    notify(msg);
+    scavScene();
+  }
   return msg;
 }
 
@@ -375,11 +455,17 @@ function discoveryTakeOne(i) {
     msg = 'No room for all of it — decide what to do with it.';
   } else {
     msg = 'Added to ' + charName(d.who) + '\'s pack: ' + lootLabel(l) + '.';
+    g.takeAnim = { items: [{ item: l.item, qty: l.qty }], who: d.who, msg: msg };
     if (!d.loot.length) g.discovery = null;
   }
-  notify(msg);
   saveProto();
-  scavScene();
+  if (g.takeAnim) {
+    scavScene();
+    setTimeout(function () { takeAnimDone(); }, 1800);
+  } else {
+    notify(msg);
+    scavScene();
+  }
   return msg;
 }
 
@@ -411,7 +497,7 @@ function scavComplication() {
   const loc = scavLocState(g.scavLoc);
   log('Complication: movement outside. Time to go.');
   saveProto();
-  screen('<div class="panel"><div class="eyebrow">RISK BOILS OVER</div>' +
+  screen('<div class="panel"><div class="eyebrow">RISK BOILS OVER ' + blip('danger') + '</div>' +
     '<p>Headlights sweep the lot — or something that wants you to think they did. A cart tips over out by the pumps with a sound like the world clearing its throat.</p>' +
     '<p>Nobody argues. You take what you can carry and go, quiet as dust.</p>' +
     '<p class="muted">What you left behind stays where it fell.</p>' +
@@ -441,7 +527,8 @@ function scavEnd(fled) {
 function foundPanel() {
   const f = g.found, def = itemDef(f.item), acts = foundActions();
   const labels = { take: 'TAKE', give: 'GIVE TO ' + charName(invOther(f.who)).toUpperCase(), use: 'USE NOW', leave: 'LEAVE IT' };
-  let h = '<div class="found"><div class="eyebrow">FOUND — ' + charName(f.who).toUpperCase() + ' HAS NO ROOM</div>' +
+  let h = '<div class="found"><div class="eyebrow">FOUND — ' + charName(f.who).toUpperCase() + ' HAS NO ROOM ' + blip('urgent') + '</div>' +
+    artTag(f.item, 'found-art') +
     '<h3>' + f.qty + '× ' + def.name + '</h3><p class="muted">' + escapeHtml(def.desc) + '</p>' +
     '<p>Nothing is thrown away for you. Decide:</p><div class="actions">';
   acts.forEach(function (a) {

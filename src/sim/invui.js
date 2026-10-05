@@ -36,18 +36,19 @@ function invScreen() {
   ['weapon', 'utility'].forEach(function (slot) {
     const id = eq[slot];
     h += id
-      ? btn(itemDef(id).name + ' (' + slot + ') — tap to stow', 'invDo(\'unequip:' + slot + '\')', 'choice')
+      ? btn(artTag(id, 'mini-art') + ' ' + escapeHtml(itemDef(id).name) + ' (' + slot + ') — tap to stow', 'invDo(\'unequip:' + slot + '\')', 'choice')
       : '<button disabled>— ' + slot + ' empty —</button>';
   });
   h += '</div>';
 
-  // slots
+  // slots — DayZ-inspired bag grid: the same artwork as the discovery moment
   h += '<div class="eyebrow">PACK — ' + used + '/' + INV_SLOTS + ' SLOTS</div><div class="inv-grid">';
   inv.slots.forEach(function (s, i) {
     const d = itemDef(s.item);
     const sel = g.invSel && g.invSel.who === who && g.invSel.idx === i;
     h += '<button class="slot' + (sel ? ' sel' : '') + '" onclick="invSelect(' + i + ')">' +
-      escapeHtml(d.name) + (s.qty > 1 ? ' ×' + s.qty : '') +
+      artTag(s.item, 'slot-art') +
+      '<span class="slot-name">' + escapeHtml(d.name) + (s.qty > 1 ? ' ×' + s.qty : '') + '</span>' +
       (d.size > 1 ? '<small>' + d.size + ' slots</small>' : '') + '</button>';
   });
   for (let i = inv.slots.length; i < INV_SLOTS; i++) h += '<button class="slot empty" disabled>·</button>';
@@ -56,7 +57,8 @@ function invScreen() {
   // detail panel for the selected item
   if (g.invSel && g.invSel.who === who && inv.slots[g.invSel.idx]) {
     const s = inv.slots[g.invSel.idx], d = itemDef(s.item);
-    h += '<div class="detail"><h3>' + escapeHtml(d.name) + (s.qty > 1 ? ' ×' + s.qty : '') + '</h3>';
+    h += '<div class="detail">' + artTag(s.item, 'detail-art') +
+      '<h3>' + escapeHtml(d.name) + (s.qty > 1 ? ' ×' + s.qty : '') + '</h3>';
     h += '<p class="muted">' + escapeHtml(g.invInspecting ? invInspect(s.item) : d.desc) + '</p>';
     const acts = itemActions(who, s.item);
     const labels = { use: 'USE', equip: 'EQUIP', unequip: 'STOW', give: 'GIVE TO ' + charName(other).toUpperCase(), inspect: g.invInspecting ? 'HIDE DETAILS' : 'INSPECT', drop: 'DROP' };
