@@ -236,12 +236,14 @@ function scavScene() {
   } else if (g.discovery) {
     h += discoveryPanel();
   } else {
-    h += '<div class="eyebrow">SEARCHABLE AREAS — tap one</div><div class="actions">';
+    h += '<div class="eyebrow">SEARCHABLE AREAS — tap one</div><div class="area-grid">';
     def.areas.forEach(function (a) {
       const area = SCAV_AREAS[a], done = loc.searched[a];
       h += done
-        ? '<button disabled>✓ ' + area.name + ' — searched</button>'
-        : '<button onclick="scavArea(\'' + a + '\')">' + area.name + '</button>';
+        ? '<div class="area-card done" aria-disabled="true">' + areaArtTag(a) +
+          '<div class="area-name">✓ ' + escapeHtml(area.name) + ' <span class="searched-tag">SEARCHED</span></div></div>'
+        : '<div class="area-card" role="button" tabindex="0" onclick="scavArea(\'' + a + '\')">' + areaArtTag(a) +
+          '<div class="area-name">' + escapeHtml(area.name) + '</div></div>';
     });
     h += '</div>';
     if (loc.ground.length) {
@@ -263,13 +265,23 @@ function scavScene() {
   screen('<div class="panel">' + h + '</div>');
 }
 
+/* --- area focus ----------------------------------------------------------
+   Tapping an illustrated card moves attention toward the object: the card
+   art enlarges into a focus view (CSS zoom, staged so the interaction
+   choices arrive a beat later), then SEARCH QUIETLY / FORCE IT appear as
+   comic-blip decisions. Presentation only — the search mechanics below
+   are untouched. */
 function scavArea(areaId) {
   const area = SCAV_AREAS[areaId], loc = scavLocState(g.scavLoc);
   if (loc.searched[areaId]) { scavScene(); return; }
-  screen('<div class="panel"><h2>' + area.name + ' ' + blip('calm') + '</h2><p>' + area.desc + '</p>' +
+  screen('<div class="panel area-focus"><div class="eyebrow">FOCUS ' + blip('calm') + '</div>' +
+    '<div class="focus-zoom">' + areaArtTag(areaId, 'focus-art') + '</div>' +
+    '<h2>' + escapeHtml(area.name) + '</h2><p>' + area.desc + '</p>' +
     '<p class="muted">How do you work it?</p>' +
-    btn('SEARCH QUIETLY — slow, careful', 'scavSearch(\'' + g.scavLoc + '\',\'' + areaId + '\',\'quiet\')', 'choice') +
-    btn('FORCE IT — fast, loud', 'scavSearch(\'' + g.scavLoc + '\',\'' + areaId + '\',\'force\')', 'choice') +
+    '<div class="actions focus-choices">' +
+    btn(blip('calm') + ' SEARCH QUIETLY — slow, careful', 'scavSearch(\'' + g.scavLoc + '\',\'' + areaId + '\',\'quiet\')', 'choice') +
+    btn(blip('urgent') + ' FORCE IT — fast, loud', 'scavSearch(\'' + g.scavLoc + '\',\'' + areaId + '\',\'force\')', 'choice') +
+    '</div>' +
     btn('STEP BACK', 'scavScene()', 'choice') + '</div>');
 }
 

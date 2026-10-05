@@ -55,3 +55,38 @@ function packIcon() {
     '<rect x="22" y="29" width="20" height="13" rx="4" fill="#2a3828" stroke="#91b279" stroke-width="1.5"/>' +
     '<line x1="32" y1="18" x2="32" y2="29" stroke="#91b279" stroke-width="1.5"/></svg>';
 }
+
+/* --- Searchable-area artwork (M2 visual pass) --------------------------------
+   PRESENTATION ONLY. The five prototype areas each have an illustrated card
+   (`art-preview-areas/<id>.webp`, wide landscape, same gritty graphic-novel
+   style as the item art). areaArt(id) mirrors itemArt(): prefers an inlined
+   AREA_ART data-URI map when a preview build provides one, else falls back
+   to the asset path 'assets/areas/<id>.webp' (uploaded via GitHub web; the
+   connector must never push binaries). Unknown areas -> null; callers render
+   a styled placeholder, never a broken image. */
+const SCAV_ART = {
+  shelves: 'store_shelves',
+  fridge: 'refrigerator',
+  backpack: 'backpack',
+  cabinet: 'cabinet',
+  glovebox: 'glovebox',
+};
+
+function areaArtId(areaId) { return SCAV_ART[areaId] || null; }
+
+function areaArt(areaId) {
+  const artId = areaArtId(areaId);
+  if (!artId) return null;
+  if (typeof AREA_ART !== 'undefined' && AREA_ART && AREA_ART[artId]) return AREA_ART[artId];
+  return 'assets/areas/' + artId + '.webp';
+}
+
+function areaArtTag(areaId, cls) {
+  const src = areaArt(areaId);
+  const area = (typeof SCAV_AREAS !== 'undefined' && SCAV_AREAS[areaId]) || null;
+  const alt = escapeHtml(area ? area.name : String(areaId));
+  const c = cls ? ' ' + cls : '';
+  if (!src) return '<span class="art-fallback area-art' + c + '" aria-label="' + alt + '">◇</span>';
+  return '<span class="artwrap area-art' + c + '"><span class="art-fallback">◇</span>' +
+    '<img src="' + src + '" alt="' + alt + '" loading="lazy" onerror="this.remove()"></span>';
+}

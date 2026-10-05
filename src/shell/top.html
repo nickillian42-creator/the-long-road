@@ -100,4 +100,24 @@ body.cinema main{max-width:100%;padding:0 0 44px}
 @keyframes blipIn{from{transform:scale(.4);opacity:0}40%{opacity:.8}to{transform:scale(1.12);opacity:0}}
 @keyframes blipUrgent{0%{transform:scale(.4);opacity:0}30%{transform:scale(1);opacity:.85}60%{transform:scale(.92);opacity:.5}100%{transform:scale(1.1);opacity:0}}
 @media(prefers-reduced-motion:reduce){.fly-art,.blip,.discovery-major .hero-art{animation:none}}
+/* ---- M2 visual pass: illustrated searchable-area cards ---- */
+.area-grid{display:grid;grid-template-columns:1fr;gap:12px;margin:10px 0}
+@media(min-width:600px){.area-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.area-card{position:relative;border:1px solid #5a6b4c;border-radius:8px;overflow:hidden;background:#232d22;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,box-shadow .12s ease}
+.area-card:active{transform:scale(.97)}
+.area-card .artwrap{display:block;width:100%;aspect-ratio:16/10;border:0;border-radius:0}
+.area-card .art-fallback.area-art{aspect-ratio:16/10;min-height:120px;border:0;border-radius:0}
+.area-name{position:absolute;left:0;right:0;bottom:0;padding:30px 12px 10px;font-size:15px;font-weight:700;color:#f4ecd8;background:linear-gradient(#0000,#101510ee 72%);text-shadow:0 2px 8px #000;pointer-events:none}
+.area-card.done{cursor:default;filter:grayscale(.78) brightness(.58)}
+.area-card.done:active{transform:none}
+.area-card.done .area-name{color:#b9c4a8}
+.searched-tag{font-size:10px;letter-spacing:.18em;color:#9fc48a;border:1px solid #5a6b4c;border-radius:3px;padding:2px 6px;margin-left:8px;white-space:nowrap}
+/* focus view: attention moves toward the object, choices arrive a beat later */
+.area-focus .focus-zoom{animation:focusIn .45s ease-out both}
+@keyframes focusIn{from{transform:scale(.93);opacity:.35}to{transform:scale(1);opacity:1}}
+.focus-art{width:100%;aspect-ratio:16/10;margin:6px 0 10px}
+.area-focus .artwrap.focus-art{display:block}
+.focus-choices{animation:choicesIn .4s ease-out .16s both}
+@keyframes choicesIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.area-focus .focus-zoom,.focus-choices{animation:none}}
 </style></head><body><main><header><div class="eyebrow">CONTINUITY NETWORK // 2089</div><h1>THE LONG ROAD</h1><div class="row"><span class="muted">EVERY MILE COSTS SOMETHING.</span><span class="tag">ALPHA 0.2.2</span></div></header><div id="app"></div><div class="footer">An original prototype. Saves locally in this browser. No accounts or network required.</div></main><div id="toast" role="status"></div><script>
