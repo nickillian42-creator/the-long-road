@@ -1,5 +1,5 @@
 # Alpha 0.3 — Survival Gameplay Proposal (FULL)
-**Status:** PROPOSAL — for Nic's review. **Nothing here is implemented.** No code changes until Nic approves the balance.
+**Status:** APPROVED IN PRINCIPLE (Nic + ChatGPT, Oct 5, 2026) — direction, numbers, and the three recommendations (keep collapse, TREAT on crew screen only, 2 starting antibiotics) are accepted. **Design safeguards incorporated below per review.** Still **nothing implemented** — final go-ahead on this revised proposal starts work on branch `alpha-0.3-dev`, tested and presented for review before anything touches `main`.
 **Goal:** make survival a series of interesting decisions, not decorative stat bars. Every new number must change a decision the player makes.
 **Supersedes:** the earlier Alpha 0.3a fatigue/injury sketch (its core numbers are carried forward and expanded here).
 
@@ -38,7 +38,9 @@ Formula: `drain = ceil(0.5 × livingEquivalents × mult)` per resource, where `m
 Hunger/thirst are communicated in three stages — no new meters, just readability:
 - **SATED** (5+): normal.
 - **LOW** (1–4): HUD shows a LOW tag. Fair warning — one day to act before the damage lands.
-- **EMPTY** (0): starvation damage, unchanged: player −8 HP/day (−18 if water is the empty one), crew −6 HP/day (−13 if water). Water shortage hurts roughly twice as much as food shortage, as today.
+- **EMPTY** (0): starvation damage, unchanged: player −8 HP/day (−18 if water is the empty one), crew −6 HP/day (−13 if water). Water shortage hurts roughly twice as much as food shortage, as today. Subject to the attrition floor (§5).
+
+**No menu maintenance:** consumption is fully automatic inside the day's cost — there are no eat/drink menus and never will be. The player's knobs are strategic, not repetitive: the RATIONING toggle, and the choice of which days to travel, scavenge, or rest. TREAT is a deliberate spend of scarce supplies, not upkeep.
 
 ## 3. Rationing (new decision)
 A **RATIONING** toggle on the road screen. When ON:
@@ -58,7 +60,7 @@ REST is the game's sleep mechanic (framed in UI as **REST / SLEEP**). Fatigue is
   - **Rested (0–39):** no effect.
   - **Tired (40–74):** travel distance −15%.
   - **Exhausted (75–100):** travel distance −25%, combat damage −2 per hit, scavenging yields −1 (min 0).
-- **Collapse:** at 100, the party halts involuntarily — lose 1 day (full food/water drain applies), −10 HP to everyone conscious, fatigue resets to 60.
+- **Collapse:** at 100, the party halts involuntarily — lose 1 day (full food/water drain applies), −10 HP to everyone conscious, fatigue resets to 60. Subject to the attrition floor (§5) — collapse can break you, not kill you.
 
 *Why it matters:* the classic push-your-luck call — one more Tired travel day, or burn a day (and 2–4 food/water) sleeping? On Story, collapse is rare (×0.7 gain); on Hard, every rest day hurts against the Mercy clock.
 
@@ -87,7 +89,9 @@ Injuries give combat and hazardous events a multi-day arc instead of a one-line 
 
 **Combat keeps its existing MEDKIT button** (+30 HP for 1 meds, costs the turn, does **not** clear wounds). Fast field patch vs. proper camp treatment — different tools, different moments.
 
-**Antibiotics (new item):** start with **2** (recommendation, see Q3). Roadside clinics always carry 1. No other source until trading (Alpha 0.4). Cap: 3.
+**Antibiotics (new item):** start with **2** (approved). Roadside clinics always carry 1. No other source until trading (Alpha 0.4). Cap: 3.
+
+**The attrition floor (anti-death-spiral rule):** damage from hunger, thirst, infection, and fatigue collapse **cannot reduce any character below 1 HP**. Attrition can break the party — never kill it. Death still comes from combat, hazards, and choices, as today. Every condition is curable or recoverable: infections cure (antibiotics), wounds clear (meds/rest), fatigue clears (rest), HP restores (rest/treat). Recovery is always mathematically possible after one unlucky event.
 
 *Why it matters:* "force the clinic doors" stops being a one-line gamble and becomes a three-day story: wounded → rest half-healing → infection scare → spend the antibiotic or risk it. This is THE LONG SHADOW OF CHOICE at the systems level.
 
@@ -168,18 +172,41 @@ Current saves are v2 (quests/discoveries). Migration backfills:
 - **Road screen:** RATIONING toggle button (shows ON/OFF state); REST relabeled **REST / SLEEP**.
 - **Crew screen:** TREAT button per character, with disabled reasons ("no meds", "nothing to treat", "needs antibiotics").
 - **Journal:** fatigue collapses, infections, and treatments are logged like any other event (feeds the future PREVIOUSLY ON recap).
+- **First-time explainers:** the first time each system bites (first Tired, first wound, first LOW tag, first infection), a one-line toast explains it in plain words. Never twice — veterans aren't nagged.
 
 ## 13. Balance targets (what "correct" looks like)
 - **Story:** rest every 5–6 days, rarely see Exhausted, finish with meds to spare. Forgiving, as advertised.
 - **Survival:** resting every ~4 days is mandatory; antibiotics get spent, not stockpiled; at least one infection scare per campaign; rationing is a real consideration past the Panhandle.
 - **Hard:** every rest day is a painful trade against the Mercy clock; running wounded is sometimes the correct call; collapse is a live threat.
 
-## 14. Open questions — recommendations
+## 14. Open questions — recommendations (APPROVED Oct 5, 2026)
 1. **Is the forced-collapse penalty (lose a day + 10 HP) too harsh?** Recommendation: keep it. It's the only teeth fatigue has, and on Story (×0.7 gain) it's rare. Uniform across difficulties keeps the rule learnable.
 2. **Should TREAT work during combat, or crew-screen only?** Recommendation: **crew-screen only.** Combat keeps the existing MEDKIT button for fast patching (+30 HP, no wound clearing). Rationale: combat decisions must stay fast on mobile; wound care is a camp activity. Two tools, two moments, no confusion.
 3. **Start with 1 antibiotic or 2?** Recommendation: **2.** The first infection shouldn't be a death sentence before the player has learned the system. Clinics replenish; the cap is 3; scarcity still bites by mid-journey.
 
-## 15. Implementation plan (AFTER approval — not started)
+## 15. Design safeguards (incorporated per Nic + ChatGPT review, Oct 5, 2026)
+1. **Decisions, not maintenance.** Routine consumption is automatic (§2). The only manual controls are the RATIONING toggle and the travel/scavenge/rest choice. No per-meal clicking, ever.
+2. **Systems tell stories.** Wounds, infection, fatigue, and treatment produce narrative, not just numbers:
+   - First wound → a companion reacts in dialogue (Mara/Hank comment; sets a flag).
+   - First infection → a campfire decision event: spend the antibiotic tonight or risk the night (branching choice, recorded).
+   - Exhausted travel → small chance of a "weary argument" event: trust −1 with a random conscious companion, or push through together for trust +1 (your call).
+   - Treating a companion → trust +1 (gratitude is remembered); leaving someone wounded 3+ days → trust −1.
+   - New flags (`treated_<name>`, `neglected_<name>`, `infection_survived`) feed **THE LONG SHADOW OF CHOICE** — future encounters and the 0.4+ settlement systems can check them. Guiding line, retained: *The world remembers what you do. The consequences don't always arrive when you expect them.*
+   - All such beats are brief and never block progress.
+3. **No early death spirals.** The attrition floor (§5) guarantees one unlucky clinic visit can't cascade into a hopeless party. Two starting antibiotics answer the first infection. No condition is permanent.
+4. **Everything is communicated.** Fatigue bar with tier labels, LOW/LIMPING tags, wound/infection icons, travel buttons previewing penalties ("TRAVEL · STEADY — 40 mi (Tired −15%)"), TREAT buttons stating exact costs and effects, journal entries with numbers, first-time toasts (§12).
+5. **Difficulty stays meaningful.** The §7 table is the contract: Story's promise (forgiving, checkpoints) is protected by ×0.7 fatigue / 10% infection / 15% wound; Survival demands a rest rhythm and spends antibiotics; Hard makes every rest day a trade against Mercy's clock.
+6. **Preservation.** Migration is purely additive — new fields backfilled, existing flags, quests, discoveries, log, and endings untouched. v1→v2→v3 chain intact. Narrative flags ChatGPT authors against (`flags.*`) are never renamed or repurposed.
+7. **Test plan (required before review):**
+   - **T1 zero supplies:** food=0 & water=0 → damage applies, floors at 1 HP, LOW/EMPTY shown, game continues, no crash.
+   - **T2 incapacitated companions:** companion at 0 HP → half rations, no companion bonuses, TREAT revives to 25 HP.
+   - **T3 multiple simultaneous conditions:** one character wounded + infected + exhausted → stacking verified (infection damage applies; rest gives no HP but still clears 50 fatigue; no double infection roll while already infected).
+   - **T4 save migration:** crafted v1 and v2 saves → migrate → new fields present with correct defaults; old flags/quests/discoveries/log byte-identical.
+   - **T5 ending while injured:** wounded + infected party driven to arrival → `finish()` → ending renders, objectives 7–8 complete, no crash.
+   - Plus the full existing flow suite re-run (prologue, quests, combat, endings, migration).
+
+
+## 16. Implementation plan (AFTER final go-ahead — branch `alpha-0.3-dev`, not started)
 1. `g.v = 3` migration + new fields (fatigue, antibiotics, injury states, rationing flag).
 2. Fatigue gain/relief/tiers/collapse in `dayCost()`, `travel()`, `rest()`, `combat()`.
 3. Injury states + wound sources + TREAT UI + antibiotics item + caps.
