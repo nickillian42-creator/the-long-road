@@ -23,10 +23,10 @@ All artwork is original. WebP format. Naming: lowercase, hyphenated. Never use m
 ## Character portraits — 480×480
 | Filename | Character | Status |
 |---|---|---|
-| `portrait-ruth.webp` | Ruth, Mercy council leader | Generated, pending upload |
-| `portrait-mara.webp` | Mara, crew medic | Generated, pending upload |
-| `portrait-hank.webp` | Josh, crew mechanic | Generated, pending upload |
-| `portrait-eli.webp` | Eli, crew scout | Generated, pending upload |
+| `portrait-ruth.webp` | Ruth, Mercy council leader — RETCON 2026-10-05: now ~80; portrait age-mismatched, flagged for later art pass | Generated, pending upload |
+| `portrait-mara.webp` | Mara, crew medic — RETCON 2026-10-05: now ~24; portrait age-mismatched, flagged for later art pass | Generated, pending upload |
+| `portrait-hank.webp` | Josh, crew mechanic — RETCON 2026-10-05: now ~49; portrait age-mismatched, flagged for later art pass (filename retained for code compat) | Generated, pending upload |
+| `portrait-eli.webp` | Eli — RETCON 2026-10-05: now ~12 and stays in Mercy; portrait age-mismatched, flagged for later art pass | Generated, pending upload |
 | `portrait-stranger.webp` | The dehydrated traveler | Generated, pending upload |
 | `portrait-custodian.webp` | Custodian sentry | Generated, pending upload |
 | `portrait-claire.webp` | Claire Mercer — Jack's wife (see character bible) | To be generated |
