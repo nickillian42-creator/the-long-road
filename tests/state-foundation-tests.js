@@ -75,6 +75,9 @@ console.log('S2 v2->v4 flags + backfill');
   check('backfill kinds correct', kinds === 'decision,encounter,encounter,encounter,npc', kinds);
   check('backfill flagged', m.consequences.every(c => c.backfilled === true));
   check('mercy departure detail', m.consequences[0].label === 'Mercy departure' && /secretly took extra water/.test(m.consequences[0].detail));
+  const hankC = m.consequences.find(c => c.label === "Josh's secret");
+  check('hank backfill retconned', !!hankC && /lost people near the old interstate works/.test(hankC.detail));
+  check('hank backfill kills facility canon', !!hankC && !/worked inside/i.test(hankC.detail) && !/Custodian facility/i.test(hankC.detail));
   check('existing personal preserved', m.quests.personal.id === 'find-them');
   // re-migration must not duplicate
   const m2 = a.migrateSave(JSON.parse(JSON.stringify(m)));
