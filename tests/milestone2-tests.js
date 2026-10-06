@@ -52,7 +52,11 @@ function fresh() {
   discoveryTakeOne, discoveryLeaveOne, discoveryLeaveAll,
   itemArt, artTag, blip, packIcon, takeAnimDone, discoveryHeroIdx,
   areaArt, areaArtTag, areaArtId,
-  charArt, charArtTag, invUnequipSlot,
+  charLayerArt, charLayerImg, charBadge, renderCharacter,
+  charTestLayers, invToggleCharLayer, invUnequipSlot,
+  registerTestItems,
+  CHAR_CANVAS, CHAR_ANCHORS, CHAR_LAYER_ORDER, CHAR_ANCHOR_RULES,
+  CHAR_LAYER_SPEC, CHAR_EQUIP_BINDING,
   openInventory, invScreen, invShow, invSelect, invDo,
   has: (n) => typeof globalThis[n] !== 'undefined',
   getG: () => g, setG: v => { g = v; },
@@ -340,8 +344,8 @@ console.log('M2G render smoke');
   a.openInventory('scav');
   let s = a.lastScreen();
   check('inventory renders with tabs', s.indexOf('INVENTORY') >= 0 && s.indexOf('JOSH') >= 0 && s.indexOf('MARA') >= 0);
-  check('character + carrying + bag shown', s.indexOf('char-art') >= 0 && s.indexOf('ON JOSH — CARRYING') >= 0 && s.indexOf('IN THE BAG') >= 0);
-  check('equipment positions present', s.indexOf('HANDS') >= 0 && s.indexOf('BELT / UTILITY') >= 0 && s.indexOf('BACKPACK') >= 0);
+  check('character + layered figure shown', s.indexOf('char-figure') >= 0 && s.indexOf('LAYERS (TEST)') >= 0 && s.indexOf('IN THE BAG') >= 0);
+  check('layer toggles present', s.indexOf('JACKET:') >= 0 && s.indexOf('BACKPACK:') >= 0);
   a.invShow('mara');
   check('tab switch renders Mara', a.lastScreen().indexOf('Bandage') >= 0);
   a.invShow('josh');
@@ -590,73 +594,126 @@ console.log('M2I illustrated area cards');
 }
 
 // ---------- M2J: character + loadout inventory presentation ----------
-console.log('M2J character + loadout inventory');
+// ---------- M2K: modular layered character renderer ----------
+console.log('M2K layered character renderer');
 {
   const t = fresh();
 
-  // charArt resolution
-  check('charArt falls back to asset path (josh)', t.charArt('josh') === 'assets/chars/josh_fullbody.webp');
-  check('charArt falls back to asset path (mara)', t.charArt('mara') === 'assets/chars/mara_fullbody.webp');
-  check('charArt unknown character -> null (graceful)', t.charArt('ruth') === null);
+  // layer spec: canvas, anchors, order
+  check('canvas is 600x900', t.CHAR_CANVAS.w === 600 && t.CHAR_CANVAS.h === 900);
+  const anchors = ['head','torso','legs','beltLeft','beltRight','back','handR','handL','sling'];
+  check('all nine anchors defined', anchors.every(function (a) { return !!t.CHAR_ANCHORS[a]; }));
+  check('anchors normalized 0-1000', anchors.every(function (a) {
+    const p = t.CHAR_ANCHORS[a]; return p.x >= 0 && p.x <= 1000 && p.y >= 0 && p.y <= 1000;
+  }));
+  const order = t.CHAR_LAYER_ORDER;
+  check('layer order back->front', order.indexOf('base') < order.indexOf('jacket') &&
+    order.indexOf('jacket') < order.indexOf('backpack') &&
+    order.indexOf('backpack') < order.indexOf('slung') &&
+    order.indexOf('slung') < order.indexOf('belt') &&
+    order.indexOf('belt') < order.indexOf('held'));
 
-  // charArt: data-URI branch when a preview build inlines CHAR_ART
+  // equipment -> anchor mapping (weapon -> hands/sling/belt, utility -> belt)
+  const spec = t.CHAR_LAYER_SPEC, bind = t.CHAR_EQUIP_BINDING;
+  check('knife binds weapon -> beltRight', bind.knife.slot === 'weapon' && spec.knife.anchor === 'beltRight');
+  check('flashlight binds utility -> beltLeft', bind.flashlight.slot === 'utility' && spec.flashlight.anchor === 'beltLeft');
+  check('pistol binds weapon -> handR', bind.pistol_test.slot === 'weapon' && spec.pistol.anchor === 'handR');
+  check('longgun binds weapon -> sling', bind.longgun_test.slot === 'weapon' && spec.longgun.anchor === 'sling');
+
+  // inventory vs character-layer art are separate asset types; PoC reuse flagged
+  check('knife/flashlight reuse flagged', spec.knife.reusesItemArt === true && spec.flashlight.reusesItemArt === true);
+  check('layer art has own files', !!spec.pistol.file && !!spec.longgun.file && !!spec.backpack.file);
+
+  // charLayerArt resolution
+  check('charLayerArt falls back to asset path', t.charLayerArt('josh_base') === 'assets/charlayers/josh_base.webp');
+  check('charLayerArt backpack path', t.charLayerArt('backpack') === 'assets/charlayers/backpack.webp');
+  check('charLayerArt unknown id -> null', t.charLayerArt('nope') === null);
+  check('charLayerArt reuse-only layer -> null', t.charLayerArt('knife') === null);
+
+  // charLayerArt: data-URI branch when a preview build inlines CHAR_LAYER_ART
   {
-    const c2 = { CHAR_ART: { josh_fullbody: 'data:image/webp;base64,CCC' },
-      escapeHtml: (s) => String(s) };
+    const c2 = { CHAR_LAYER_ART: { josh_base: 'data:image/webp;base64,DDD' },
+      escapeHtml: function (s) { return String(s); } };
     vm.createContext(c2);
     vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'src/sim/art.js'), 'utf8'), c2);
-    check('charArt prefers inlined data URI', vm.runInContext('charArt("josh")', c2) === 'data:image/webp;base64,CCC');
-    check('charArt data-URI charArtTag embeds it', vm.runInContext('charArtTag("josh")', c2).indexOf('src="data:image/webp;base64,CCC"') >= 0);
+    check('charLayerArt prefers inlined data URI', vm.runInContext('charLayerArt("josh_base")', c2) === 'data:image/webp;base64,DDD');
   }
 
-  // charArtTag markup
-  const ctag = t.charArtTag('josh', 'char-full');
-  check('charArtTag renders img with portrait alt', ctag.indexOf('<img') >= 0 && ctag.indexOf('alt="Josh — full-body portrait"') >= 0 && ctag.indexOf('char-art') >= 0 && ctag.indexOf('char-full') >= 0);
-  check('charArtTag unknown character -> fallback glyph', t.charArtTag('ruth').indexOf('art-fallback') >= 0 && t.charArtTag('ruth').indexOf('<img') < 0);
+  // test items: prototype-only, never in the main catalog
+  t.registerTestItems();
+  check('pistol_test flagged testOnly', t.itemDef('pistol_test').testOnly === true);
+  check('longgun_test flagged testOnly', t.itemDef('longgun_test').testOnly === true);
+  const catalogSrc = fs.readFileSync(path.join(__dirname, '..', 'src/data/items.js'), 'utf8');
+  check('test items absent from main catalog', catalogSrc.indexOf('pistol_test') < 0 && catalogSrc.indexOf('longgun_test') < 0);
 
-  // rendered inventory: character art + hierarchy
+  // figure rendering: jacket XOR base (mutually exclusive full-canvas layers)
   const a = fresh(); a.scavProtoStart();
   a.openInventory('scav');
   let s = a.lastScreen();
-  check('josh tab shows his portrait', s.indexOf('josh_fullbody') >= 0);
-  check('carrying section labeled', s.indexOf('ON JOSH — CARRYING') >= 0);
-  check('equipment positions present', s.indexOf('HANDS') >= 0 && s.indexOf('BELT / UTILITY') >= 0 && s.indexOf('BACKPACK') >= 0 && s.indexOf('QUICK-ACCESS') >= 0);
-  check('bag section distinct', s.indexOf('IN THE BAG') >= 0);
-  a.invShow('mara');
-  s = a.lastScreen();
-  check('mara tab shows her portrait', s.indexOf('mara_fullbody') >= 0 && s.indexOf('josh_fullbody') < 0);
-  check('mara carrying section labeled', s.indexOf('ON MARA — CARRYING') >= 0);
-  a.invShow('josh');
+  check('figure renders', s.indexOf('char-figure') >= 0);
+  check('jacket on by default (base hidden)', s.indexOf('data-layer="josh_jacket"') >= 0 && s.indexOf('data-layer="josh_base"') < 0);
+  check('backpack badge on by default', s.indexOf('data-layer="backpack"') >= 0 && s.indexOf('data-anchor="back"') >= 0);
+  check('starter knife badge at beltRight', s.indexOf('data-layer="knife"') >= 0 && s.indexOf('data-anchor="beltRight"') >= 0);
+  check('knife badge flags item-art reuse', s.indexOf('data-reuse="item-art"') >= 0);
 
-  // equipment mapping: starter kit equips knife (weapon) -> HANDS
-  s = a.lastScreen();
-  check('equipped knife shown at HANDS', s.indexOf('HANDS') >= 0 && s.indexOf('Hunting Knife') >= 0);
+  // layer order in markup: base/jacket before backpack before belt badges
+  const iJ = s.indexOf('data-layer="josh_jacket"'), iB = s.indexOf('data-layer="backpack"'), iK = s.indexOf('data-layer="knife"');
+  check('z-order back->front in markup', iJ >= 0 && iJ < iB && iB < iK);
 
-  // EQUIP flow: flashlight (utility) from bag -> BELT, display updates
-  a.getG().invSel = { who: 'josh', idx: 2 }; // flashlight
+  // jacket toggle swaps the full-canvas layer
+  a.invToggleCharLayer('josh', 'jacket');
+  s = a.lastScreen();
+  check('jacket off shows base', s.indexOf('data-layer="josh_base"') >= 0 && s.indexOf('data-layer="josh_jacket"') < 0);
+  a.invToggleCharLayer('josh', 'jacket');
+
+  // backpack toggle adds/removes the layer
+  a.invToggleCharLayer('josh', 'backpack');
+  check('backpack off removes badge', a.lastScreen().indexOf('data-layer="backpack"') < 0);
+  a.invToggleCharLayer('josh', 'backpack');
+
+  // EQUIP pistol -> badge appears at handR immediately
+  // starter kit: water(0) food(1) flashlight(2) pistol_test(3) longgun_test(4)
+  a.getG().invSel = { who: 'josh', idx: 3 };
   a.invDo('equip');
-  const g1 = a.getG();
-  check('equip moves item bag -> equipment', g1.inv.josh.equipment.utility === 'flashlight' && a.invCount('josh', 'flashlight') === 0);
+  check('equip moves test pistol to equipment', a.getG().inv.josh.equipment.weapon === 'pistol_test');
   s = a.lastScreen();
-  check('equipped flashlight shown at BELT', s.indexOf('BELT / UTILITY') >= 0 && s.indexOf('Flashlight') >= 0);
+  check('pistol badge appears on figure', s.indexOf('data-layer="pistol"') >= 0 && s.indexOf('data-anchor="handR"') >= 0);
 
-  // UNEQUIP flow: tapping equipped item stows it back in the bag
+  // EQUIP longgun (swaps pistol back to bag) -> sling badge
+  const n = a.getG().inv.josh.slots.findIndex(function (x) { return x.item === 'longgun_test'; });
+  a.getG().invSel = { who: 'josh', idx: n };
+  a.invDo('equip');
+  s = a.lastScreen();
+  check('longgun badge at sling after swap', s.indexOf('data-layer="longgun"') >= 0 && s.indexOf('data-anchor="sling"') >= 0);
+  check('swapped pistol left the figure', s.indexOf('data-layer="pistol"') < 0);
+
+  // UNEQUIP via badge tap path -> badge removed, item back in bag
   a.invUnequipSlot('josh', 'weapon');
   const g2 = a.getG();
-  check('unequip returns item to bag', g2.inv.josh.equipment.weapon === null && a.invCount('josh', 'knife') === 1);
-  s = a.lastScreen();
-  check('hands show empty after stow', s.indexOf('HANDS') >= 0 && s.indexOf('— empty —') >= 0);
+  check('unequip returns rifle to bag', g2.inv.josh.equipment.weapon === null && a.invCount('josh', 'longgun_test') === 1);
+  check('rifle badge gone after stow', a.lastScreen().indexOf('data-layer="longgun"') < 0);
 
-  // full-bag UNEQUIP blocked: nothing discarded, item stays equipped
+  // per-character independence: josh's gear never renders on mara
+  a.getG().invSel = { who: 'josh', idx: a.getG().inv.josh.slots.findIndex(function (x) { return x.item === 'pistol_test'; }) };
+  a.invDo('equip');
+  a.invShow('mara');
+  s = a.lastScreen();
+  check('mara figure independent', s.indexOf('data-layer="mara_jacket"') >= 0 && s.indexOf('data-layer="pistol"') < 0);
+  a.invShow('josh');
+  check('josh keeps his pistol badge', a.lastScreen().indexOf('data-layer="pistol"') >= 0);
+
+  // full-bag UNEQUIP blocked: nothing discarded, badge stays
   const b = fresh(); b.scavProtoStart();
-  // josh: water+food+flashlight = 3 slots used, knife equipped (weapon)
-  ['bandage', 'antiseptic', 'ammo_9mm', 'dead_phone', 'mre'].forEach(id => b.invAdd('josh', id, 1));
-  b.invAdd('josh', 'rope', 1); // size 2 -> 10/10 used
+  b.getG().invSel = { who: 'josh', idx: 3 };
+  b.invDo('equip'); // pistol equipped
+  // josh used: water(1) food(1) flashlight(1) longgun(2) = 5; fill to 10
+  ['bandage', 'antiseptic', 'ammo_9mm', 'dead_phone', 'mre'].forEach(function (id) { b.invAdd('josh', id, 1); });
   check('bag filled to capacity', b.invUsedSlots('josh') === 10);
   b.invUnequipSlot('josh', 'weapon');
   const g3 = b.getG();
-  check('full-bag unequip keeps item equipped', g3.inv.josh.equipment.weapon === 'knife');
-  check('full-bag unequip discards nothing', b.invUsedSlots('josh') === 10 && b.invCount('josh', 'knife') === 0);
+  check('full-bag unequip keeps pistol equipped', g3.inv.josh.equipment.weapon === 'pistol_test');
+  check('full-bag unequip discards nothing', b.invUsedSlots('josh') === 10 && b.invCount('josh', 'pistol_test') === 0);
+  check('pistol badge stays on figure', b.lastScreen().indexOf('data-layer="pistol"') >= 0);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

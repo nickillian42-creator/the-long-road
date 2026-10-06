@@ -179,13 +179,42 @@ Nic saw the prototype on his iPhone and ordered the searchable areas themselves 
 - **Chapter One untouched:** `git diff 6a5c617 -- src/chapters/` is empty. No mechanics changes anywhere — presentation only.
 - **Transport (recurring):** `index.html` is now 133KB — still over the connector's 128KB argv ceiling, so it stays local-only again (Nic uploads via GitHub web; `tools/build.py` regenerates it deterministically).
 
-## 22. M2 presentation pass — character + loadout inventory (2026-10-05)
-Nic's final pass before the Milestone 2 freeze: the inventory screen should feel like looking at Josh or Mara and their actual survival loadout — CHARACTER → WHAT THEY'RE CARRYING → WHAT'S IN THEIR BAG — instead of a spreadsheet of items. DayZ's character+inventory usefulness, not its visuals; unmistakably THE LONG ROAD gritty graphic-novel style. Presentation only: the inventory/survival/scavenging mechanics and the `{weapon, utility}` equipment model are completely unchanged.
-- **Character art** (`src/sim/art.js`): full-body illustrated Josh and Mara (`art-preview-chars/josh_fullbody.webp`, `mara_fullbody.webp`, vertical, gritty graphic-novel; Mara matches her established portrait — dark tied-back hair, olive-drab jacket, medic patch, backpack; Josh is the ~49 mechanic — canvas jacket, tool belt, rope). `charArt(who)` mirrors `itemArt()`: prefers an inlined `CHAR_ART` data-URI map, else `assets/chars/<id>.webp`, else null; `charArtTag(who, cls)` with the same graceful fallback.
-- **Inventory layout** (`src/sim/invui.js` `invScreen`): the selected character's portrait is now prominent — compact height on phones, taller on wide screens, side-by-side with the loadout at ≥720px. JOSH | MARA tabs swap portrait + that character's independent inventory/equipment.
-- **Equipment positions:** HANDS ← weapon, BELT/UTILITY ← utility (pure presentation of the existing model — no new slots, stats, durability, armor, or Tetris). BACKPACK is a visual of their carried pack with a fill indicator (not a model slot); QUICK-ACCESS is a reserved, non-functional dashed slot. Equipped items render with their item artwork at those positions — equipped knife visibly at HANDS, flashlight at BELT.
-- **EQUIP/UNEQUIP flow:** bag item → detail panel → EQUIP unchanged (`invEquip` mechanics); the character/equipment display re-renders immediately so the equipped item is visible on the character. Tapping an equipped item stows it via the new `invUnequipSlot(who, slot)` dispatch, which calls the unchanged `invUnequip` mechanics (full-bag rule preserved: nothing is ever silently discarded) — it just no longer depends on a bag selection being active, so the tap always works. The old EQUIPPED-row buttons were the only casualty; their dead-tap-when-nothing-selected behavior is replaced by a working stow. GIVE / DROP / USE / INSPECT / FOUND / full-inventory handling untouched.
-- **Preview plumbing:** `preview-deploy/char-art.json` maps `josh_fullbody`/`mara_fullbody` to data-URIs of 480px-downscaled copies (0.2MB total); the parent uploads it and the preview builder inlines it as `CHAR_ART` before the game script.
-- **Tests:** 21 new M2J checks (charArt fallback + data-URI branch, charArtTag markup/fallback, portraits switch per tab, weapon→HANDS / utility→BELT mapping, EQUIP moves bag→equipment + display updates, UNEQUIP returns to bag, full-bag UNEQUIP blocked with nothing discarded). M2G smoke updated for the new labels. Full suite 425/425 (52 + 70 + 94 + 25 + 184).
-- **Chapter One untouched:** `git diff 2754f30 -- src/chapters/` is empty. No mechanics changes anywhere — presentation only.
-- **Transport (recurring):** `index.html` is now 138KB — still over the connector's 128KB argv ceiling, so it stays local-only again (Nic uploads via GitHub web; `tools/build.py` regenerates it deterministically).
+## 22. M2 presentation pass — modular layered character renderer (2026-10-05)
+Nic stopped the baked full-body portraits mid-pass and ordered a MODULAR visual equipment system instead: characters render as a composite of layers bound to equipment state. The baked-portrait code (charArt/charArtTag, preview-deploy/char-art.json) was removed and superseded the same night — char-art.json must never be uploaded; char-layers.json replaces it.
+
+### Layer spec (defined in code: src/sim/art.js)
+- **Canvas:** 600x900 portrait. Anchor coordinates normalized 0-1000.
+- **Locked pose:** standing 3/4 view, facing right — matches the reference full-body illustrations the base/jacket layers were painted from.
+- **Anchors:** head (500,110), torso (500,350), legs (500,700), beltLeft (400,500), beltRight (620,500), back (300,380), handR (650,560), handL (330,570), sling (480,330).
+- **Layer order back->front:** base outfit -> pants -> torso -> jacket -> backpack -> slung weapon -> belt/holster items -> headwear -> held items. (pants/torso/headwear are reserved slots; the PoC ships base, jacket, backpack, equipment.)
+- **Per-anchor scale/rotation rules** (CHAR_ANCHOR_RULES, tuned for the 3/4 pose): belt 0.17/0deg, back 0.30/0deg, hands 0.22/∓12deg, sling 0.44/-22deg. Scale = fraction of canvas width.
+- **PoC technique:** the media pipeline cannot produce transparency, so outfit variants (base vs jacket) are FULL-CANVAS mutually-exclusive layers — never pixel-composited. Backpack + equipment render as anchored overlay badges at their anchor points (framed item-art chips pinned to the figure; acceptable PoC technique, explicitly blessed in the brief). The architecture supports true cutout sprites later.
+
+### Asset types
+- Character-layer art is a SEPARATE asset type from inventory/FOUND art, tracked in CHAR_LAYER_SPEC even where the PoC reuses a file:
+  - knife / flashlight -> reuse existing item art as the badge sprite (reusesItemArt: true; distinct character-layer art later).
+  - pistol / longgun / backpack / josh_base / josh_jacket / mara_base / mara_jacket -> dedicated layer art in assets/charlayers/<id>.webp (uploaded via GitHub web; the connector never pushes binaries).
+- charLayerArt(id): prefers an inlined CHAR_LAYER_ART data-URI map (preview builds), else the asset path; unknown ids -> null with a styled placeholder, never a broken image.
+
+### Equipment binding (state -> visual)
+- CHAR_EQUIP_BINDING: knife -> beltRight (weapon), flashlight -> beltLeft (utility), pistol_test -> handR (weapon), longgun_test -> sling (weapon).
+- EQUIP adds the badge immediately; UNEQUIP removes it. Tapping an equipped badge stows it via invUnequipSlot (unchanged invUnequip mechanics — full-bag rule preserved, never silently discards). JOSH | MARA tabs render each character's OWN equipment.
+- Jacket/backpack are outfit layers, not equipment-model slots: the PoC exposes explicit LAYERS (TEST) toggle controls in the inventory (transient UI state, defensive defaults jacket+backpack ON, no migration, no gameplay effect).
+
+### Prototype-only test equipment (src/sim/testitems.js)
+- pistol_test + longgun_test: testOnly: true, PROTOTYPE TEST ITEM descriptions, registered into the item catalog ONLY by registerTestItems() called from the scavenging prototype start. Chapter One never calls it — Chapter One can never see these items. NOT in src/data/items.js (verified by test). Granted to Josh's prototype starter kit.
+
+### Files
+- src/sim/art.js: CHAR_CANVAS / CHAR_ANCHORS / CHAR_LAYER_ORDER / CHAR_ANCHOR_RULES / CHAR_LAYER_SPEC / CHAR_EQUIP_BINDING, charLayerArt(), charLayerImg(), charBadge(), renderCharacter(). (Baked charArt/charArtTag removed.)
+- src/sim/testitems.js (new): TEST_ITEMS + registerTestItems(). Wired into tools/build.py after data/items.js.
+- src/sim/scavenging.js: prototype start registers test items and grants pistol_test + longgun_test to Josh.
+- src/sim/invui.js: invScreen renders renderCharacter(who) + LAYERS (TEST) toggles; charTestLayers()/invToggleCharLayer(); invUnequipSlot kept (badge tap-to-stow). Dead eqSlotTag removed.
+- src/shell/top.html: .char-figure stage + .char-layer + .char-badge CSS (replaces baked .char-art rules).
+- preview-deploy/char-layers.json: 7 downscaled (<=480px) data URIs, 0.44MB total; parent uploads it and the preview builder inlines it as CHAR_LAYER_ART before the game script. preview-deploy/char-art.json DELETED (superseded).
+
+### Tests
+- 38 new M2K checks: canvas/anchors normalized, layer order, equipment->anchor mapping, reuse flags, charLayerArt fallback + data-URI branch, test items testOnly + absent from main catalog, figure renders, jacket XOR base mutual exclusivity + toggle, backpack toggle, z-order back->front in markup, EQUIP pistol -> badge at handR, EQUIP longgun swap -> sling badge + pistol badge gone, UNEQUIP -> badge removed + item back in bag, per-character independence, full-bag UNEQUIP blocked with nothing discarded + badge stays. M2G smoke updated. Full suite 442/442 (52 + 70 + 94 + 25 + 201).
+- Chapter One untouched: git diff <base> -- src/chapters/ is empty. No mechanics changes anywhere — presentation only.
+
+### Transport (recurring)
+- index.html is now ~145KB — still over the connector's 128KB argv ceiling, local-only again (Nic uploads via GitHub web; tools/build.py regenerates deterministically). preview-deploy/char-art.json removed; do not upload it.
