@@ -24,7 +24,7 @@ function notify(s){let t=$('#toast');t.textContent=s;t.style.display='block';set
 
 function log(s){g.log.unshift('DAY '+g.day+': '+s);g.log=g.log.slice(0,35)}
 
-function screen(s){app.innerHTML=s;window.scrollTo(0,0)}
+function screen(s){app.innerHTML=s;window.scrollTo(0,0);if(typeof paintKeyedLayers==='function'){try{paintKeyedLayers()}catch(e){}}}
 
 function stat(k,v){return `<div class="stat">${k}<b>${v}</b></div>`}
 

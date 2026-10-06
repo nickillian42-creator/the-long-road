@@ -118,8 +118,14 @@ function areaArtTag(areaId, cls) {
      tracked in CHAR_LAYER_SPEC even where the PoC reuses a file:
        knife / flashlight -> reuse their existing item art as the badge
          sprite (reusesItemArt: true; distinct character-layer art later).
-       pistol / longgun / backpack / josh_base / josh_jacket / mara_base /
-         mara_jacket -> dedicated layer art ('assets/charlayers/<id>.webp').
+         PENDING GEAR ART: these two still render as card badges on the
+         figure until their keyed gear art exists.
+       pistol / longgun / backpack -> KEYED gear art (keyed: true):
+         isolated objects on pure #00FF00, chroma-keyed at render time by
+         sim/keying.js and composited as cutouts on <canvas> at their
+         anchors -- no card chrome (no caption, no tilt, no frame).
+       josh_base / josh_jacket / mara_base / mara_jacket -> full-canvas
+         outfit layers (dedicated art, 'assets/charlayers/<id>.webp').
    - charLayerArt(id): prefers an inlined CHAR_LAYER_ART data-URI map (preview
      builds), else 'assets/charlayers/<id>.webp' (uploaded via GitHub web;
      the connector must never push binaries). Unknown ids -> null; callers
@@ -160,11 +166,11 @@ const CHAR_LAYER_SPEC = {
   mara_base:   { kind: 'base',     file: 'mara_base' },
   josh_jacket: { kind: 'jacket',   file: 'josh_jacket' },
   mara_jacket: { kind: 'jacket',   file: 'mara_jacket' },
-  backpack:    { kind: 'backpack', file: 'backpack', anchor: 'back' },
-  pistol:      { kind: 'held',     file: 'pistol',   anchor: 'handR', item: 'pistol_test' },
-  longgun:     { kind: 'slung',    file: 'longgun',  anchor: 'sling', item: 'longgun_test' },
-  knife:       { kind: 'belt',     file: null,       anchor: 'beltRight', item: 'knife', reusesItemArt: true },
-  flashlight:  { kind: 'belt',     file: null,       anchor: 'beltLeft',  item: 'flashlight', reusesItemArt: true },
+  backpack:    { kind: 'backpack', file: 'backpack-keyed', anchor: 'back', keyed: true },
+  pistol:      { kind: 'held',     file: 'pistol-keyed',   anchor: 'handR', item: 'pistol_test', keyed: true },
+  longgun:     { kind: 'slung',    file: 'rifle-keyed',    anchor: 'sling', item: 'longgun_test', keyed: true },
+  knife:       { kind: 'belt',     file: null,       anchor: 'beltRight', item: 'knife', reusesItemArt: true }, // PENDING GEAR ART
+  flashlight:  { kind: 'belt',     file: null,       anchor: 'beltLeft',  item: 'flashlight', reusesItemArt: true }, // PENDING GEAR ART
 };
 
 /* Equipment item -> layer binding. weapon -> hands/sling/belt per the item's
@@ -197,10 +203,22 @@ function charLayerImg(layerId) {
 }
 
 /* Anchored equipment badge. Equipment badges are tappable -> stow (slot);
-   pure-visual layers (backpack) render as spans. */
+   pure-visual layers (backpack) render as spans.
+   KEYED gear (spec.keyed): true cutout on <canvas>, painted by
+   sim/keying.js after render -- no card chrome (no caption, no tilt,
+   no frame). The unequip tap target is preserved (button wrapper). */
 function charBadge(layerId, who, slot) {
   const spec = CHAR_LAYER_SPEC[layerId];
   const a = CHAR_ANCHORS[spec.anchor], r = CHAR_ANCHOR_RULES[spec.anchor] || { scale: 0.2, rotate: 0 };
+  if (spec.keyed) {
+    const style = 'left:' + (a.x / 10) + '%;top:' + (a.y / 10) + '%;width:' + Math.round(r.scale * 100) +
+      '%;z-index:' + charLayerZ(spec.kind);
+    const attrs = 'class="char-keyed" data-layer="' + layerId + '" data-anchor="' + spec.anchor + '" style="' + style + '"';
+    const body = '<canvas data-keyed="' + layerId + '" width="320" height="320"></canvas>';
+    return slot
+      ? '<button ' + attrs + ' onclick="invUnequipSlot(\'' + who + '\',\'' + slot + '\')">' + body + '</button>'
+      : '<span ' + attrs + '>' + body + '</span>';
+  }
   const src = spec.reusesItemArt ? itemArt(spec.item) : charLayerArt(layerId);
   const def = spec.item ? itemDef(spec.item) : null;
   const label = escapeHtml(def ? def.name : layerId);

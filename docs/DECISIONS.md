@@ -218,3 +218,12 @@ Nic stopped the baked full-body portraits mid-pass and ordered a MODULAR visual 
 
 ### Transport (recurring)
 - index.html is now ~145KB — still over the connector's 128KB argv ceiling, local-only again (Nic uploads via GitHub web; tools/build.py regenerates deterministically). preview-deploy/char-art.json removed; do not upload it.
+
+### Addendum 2026-10-05 — keyed gear compositing replaces badge cards (Nic playtest verdict)
+- Nic: equipped gear as tilted item cards pasted over the portrait does not read as worn/carried. Fix: true cutout compositing for gear with keyed art.
+- New module src/sim/keying.js (wired in tools/build.py after sim/art.js): chroma-key cutout at render time. keyAlpha(r,g,b) keys near-pure #00FF00 (g>120, g-r>40, g-b>40); despillPixel pulls residual green fringe to neutral; keyOutImage draws to offscreen canvas, keys, trims transparent borders to a tight bounding box; paintKeyedLayers() paints each canvas[data-keyed] fitted/centered, cached per file, on img onload. Called from screen() after every render (guarded try/catch; no-ops when absent). Failures never break render.
+- CHAR_LAYER_SPEC: backpack/pistol/longgun flagged keyed:true with files backpack-keyed/pistol-keyed/rifle-keyed (pure-green keyed assets in art-preview-chars/, generated Oct 5; binaries never through the connector). Keyed layers render as <canvas> at their anchor/scale with NO card chrome: no caption, no tilt/rotate, no badge frame. Unequip tap target preserved (button wrapper). z-order unchanged.
+- Knife/flashlight keep card-badge rendering (reusesItemArt) — flagged PENDING GEAR ART in code comments until their keyed art exists. Bag-grid item cards unchanged everywhere. LAYERS (TEST) labeling kept so test-grade status is visible.
+- char-layers.json: backpack/pistol/longgun entries replaced with keyed versions (<=480px, 0.44MB total incl. 4 base/jacket layers). Originals untouched.
+- Tests: 18 new M2K-keyed checks (keyed flags + file pointers, keyAlpha on bg/gunmetal/wood samples, despill, canvas-not-img on figure, no card chrome on keyed layers, unequip target kept, knife still card badge with caption, unequip removes canvas). Full suite 465/465 (52 + 70 + 94 + 25 + 224). Chapter One byte-identical. No mechanics changes.
+- Transport: index.html ~151KB local-only (Nic uploads via GitHub web or regenerates via tools/build.py).

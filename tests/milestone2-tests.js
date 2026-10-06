@@ -54,7 +54,7 @@ function fresh() {
   areaArt, areaArtTag, areaArtId,
   charLayerArt, charLayerImg, charBadge, renderCharacter,
   charTestLayers, invToggleCharLayer, invUnequipSlot,
-  registerTestItems,
+  registerTestItems, keyAlpha, despillPixel, paintKeyedLayers,
   CHAR_CANVAS, CHAR_ANCHORS, CHAR_LAYER_ORDER, CHAR_ANCHOR_RULES,
   CHAR_LAYER_SPEC, CHAR_EQUIP_BINDING,
   openInventory, invScreen, invShow, invSelect, invDo,
@@ -626,7 +626,7 @@ console.log('M2K layered character renderer');
 
   // charLayerArt resolution
   check('charLayerArt falls back to asset path', t.charLayerArt('josh_base') === 'assets/charlayers/josh_base.webp');
-  check('charLayerArt backpack path', t.charLayerArt('backpack') === 'assets/charlayers/backpack.webp');
+  check('charLayerArt backpack path', t.charLayerArt('backpack') === 'assets/charlayers/backpack-keyed.webp');
   check('charLayerArt unknown id -> null', t.charLayerArt('nope') === null);
   check('charLayerArt reuse-only layer -> null', t.charLayerArt('knife') === null);
 
@@ -737,6 +737,65 @@ console.log('M2K resume backfill');
   a.invDo('equip');
   check('backfilled pistol equips', a.getG().inv.josh.equipment.weapon === 'pistol_test');
   check('pistol badge renders after resume-equip', a.lastScreen().indexOf('data-layer="pistol"') >= 0);
+}
+
+// M2K-keyed: chroma-key cutout compositing for gear layers
+console.log('M2K keyed gear compositing');
+{
+  const t = fresh();
+  const spec = t.CHAR_LAYER_SPEC;
+
+  // keyed flags + file pointers
+  check('backpack flagged keyed', spec.backpack.keyed === true && spec.backpack.file === 'backpack-keyed');
+  check('pistol flagged keyed', spec.pistol.keyed === true && spec.pistol.file === 'pistol-keyed');
+  check('longgun flagged keyed, rifle file', spec.longgun.keyed === true && spec.longgun.file === 'rifle-keyed');
+  check('knife/flashlight NOT keyed (pending gear art)', spec.knife.keyed !== true && spec.flashlight.keyed !== true);
+
+  // keyAlpha pixel math (background samples from the keyed assets)
+  check('keyAlpha keys pure green', t.keyAlpha(0, 255, 0) === 0);
+  check('keyAlpha keys near-green bg', t.keyAlpha(1, 251, 3) === 0 && t.keyAlpha(0, 250, 1) === 0);
+  check('keyAlpha keeps gunmetal', t.keyAlpha(110, 105, 100) === 255);
+  check('keyAlpha keeps wood', t.keyAlpha(139, 90, 60) === 255);
+  check('keyAlpha keeps dark edge', t.keyAlpha(20, 25, 18) === 255);
+  // despill: fringe green pulled to neutral, real colors untouched
+  const ds = t.despillPixel(100, 140, 100);
+  check('despill neutralizes fringe', ds[1] === 100 && ds[0] === 100 && ds[2] === 100);
+  const ds2 = t.despillPixel(139, 90, 60);
+  check('despill keeps wood', ds2[0] === 139 && ds2[1] === 90 && ds2[2] === 60);
+
+  // figure HTML: keyed layers render canvas, no card chrome
+  t.scavProtoStart();
+  const g = t.getG();
+  g.invSel = { who: 'josh', idx: g.inv.josh.slots.findIndex(function (x) { return x.item === 'pistol_test'; }) };
+  t.invDo('equip'); // pistol equipped -> handR
+  const fig = t.renderCharacter('josh');
+  check('keyed pistol renders canvas not img', fig.indexOf('<canvas data-keyed="pistol"') >= 0);
+  check('no card chrome on keyed pistol', (function () {
+    const s = fig.indexOf('data-layer="pistol"');
+    const el = fig.slice(s, fig.indexOf('</button>', s));
+    return el.indexOf('badge-cap') < 0 && el.indexOf('<img') < 0 && el.indexOf('rotate(') < 0;
+  })());
+  check('keyed pistol keeps unequip tap target', fig.indexOf("invUnequipSlot('josh','weapon')") >= 0);
+  check('keyed longgun renders canvas', (function () {
+    const g2 = t.getG();
+    g2.invSel = { who: 'josh', idx: g2.inv.josh.slots.findIndex(function (x) { return x.item === 'longgun_test'; }) };
+    t.invDo('equip');
+    return t.renderCharacter('josh').indexOf('<canvas data-keyed="longgun"') >= 0;
+  })());
+  // knife/flashlight still card badges with captions (pending gear art)
+  const k2 = t.getG();
+  k2.invSel = { who: 'josh', idx: k2.inv.josh.slots.findIndex(function (x) { return x.item === 'knife'; }) };
+  t.invDo('equip'); // knife back on the belt
+  const fig2 = t.renderCharacter('josh');
+  check('knife still card badge', (function () {
+    const s = fig2.indexOf('data-layer="knife"');
+    const el = fig2.slice(s, fig2.indexOf('</button>', s));
+    return s >= 0 && el.indexOf('<img') >= 0 && el.indexOf('badge-cap') >= 0 && el.indexOf('<canvas') < 0;
+  })());
+  // equip/unequip still re-renders the figure
+  t.invUnequipSlot('josh', 'weapon');
+  check('unequip removes keyed canvas', t.renderCharacter('josh').indexOf('<canvas data-keyed="longgun"') < 0);
+  check('paintKeyedLayers defined', t.has('paintKeyedLayers'));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
