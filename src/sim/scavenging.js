@@ -173,6 +173,10 @@ function scavProtoStart() {
   invAdd('josh', 'canned_food', 2);
   invAdd('josh', 'flashlight', 1);
   invAdd('josh', 'knife', 1); invEquip('josh', 'knife');
+  // prototype-only test equipment (M2 layer-renderer PoC; never Chapter One)
+  registerTestItems();
+  invAdd('josh', 'pistol_test', 1);
+  invAdd('josh', 'longgun_test', 1);
   invAdd('mara', 'water_bottle', 2);
   invAdd('mara', 'canned_food', 1);
   invAdd('mara', 'bandage', 2);

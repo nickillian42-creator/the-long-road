@@ -23,6 +23,7 @@ JS_MODULES = [
     'chapters/prologue.js',
     'chapters/chapter1.js',
     'data/items.js',
+    'sim/testitems.js',
     'sim/combat.js',
     'sim/rng.js',
     'sim/difficulty.js',

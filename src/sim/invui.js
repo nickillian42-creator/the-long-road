@@ -23,7 +23,6 @@ function invScreen() {
   const who = g.invWho || 'josh', inv = invState(who);
   const other = invOther(who);
   const used = invUsedSlots(who);
-  const eq = inv.equipment;
   const name = charName(who).toUpperCase();
 
   let h = '<h2>INVENTORY</h2>';
@@ -31,24 +30,17 @@ function invScreen() {
     '<button class="' + (who === 'josh' ? 'selected' : '') + '" onclick="invShow(\'josh\')">JOSH</button>' +
     '<button class="' + (who === 'mara' ? 'selected' : '') + '" onclick="invShow(\'mara\')">MARA</button></div>';
 
-  // CHARACTER — full-body portrait, prominent.
+  // CHARACTER — modular layered figure, bound to equipment state.
   // Visual hierarchy: CHARACTER -> WHAT THEY'RE CARRYING -> WHAT'S IN THE BAG.
-  h += '<div class="inv-top"><div class="inv-char">' + charArtTag(who, 'char-full') +
+  h += '<div class="inv-top"><div class="inv-char">' + renderCharacter(who) +
     '<div class="inv-char-name"><b>' + name + '</b><br><span class="muted">' +
-    escapeHtml(survStatusLine(who)) + '</span></div></div>';
-
-  // ON CHARACTER — equipment positions. PRESENTATION of the existing
-  // {weapon, utility} model: HANDS <- weapon, BELT/UTILITY <- utility.
-  // BACKPACK is a visual of their carried pack (fill indicator, not a slot
-  // in the model); QUICK-ACCESS is a reserved, non-functional slot.
-  h += '<div class="inv-side"><div class="eyebrow">ON ' + name + ' — CARRYING</div><div class="loadout">';
-  h += eqSlotTag(who, 'HANDS', eq.weapon, 'weapon');
-  h += eqSlotTag(who, 'BELT / UTILITY', eq.utility, 'utility');
-  h += '<div class="eq-slot"><div class="eyebrow eq-label">BACKPACK</div><div class="eq-pack">' + packIcon() +
-    '<span class="slot-name">' + used + '/' + INV_SLOTS + ' in the bag</span></div></div>';
-  h += '<div class="eq-slot reserved"><div class="eyebrow eq-label">QUICK-ACCESS</div>' +
-    '<div class="eq-empty">reserved</div></div>';
-  h += '</div></div></div>';
+    escapeHtml(survStatusLine(who)) + '</span></div>';
+  // PoC layer toggles (test controls — outfit layers are not equipment slots)
+  const tl = charTestLayers(who);
+  h += '<div class="layer-toggles"><span class="eyebrow">LAYERS (TEST)</span><div class="actions">' +
+    btn('JACKET: ' + (tl.jacket ? 'ON' : 'OFF'), 'invToggleCharLayer(\'' + who + '\',\'jacket\')', 'choice') +
+    btn('BACKPACK: ' + (tl.backpack ? 'ON' : 'OFF'), 'invToggleCharLayer(\'' + who + '\',\'backpack\')', 'choice') +
+    '</div></div></div></div>';
 
   // IN THE BAG — the same DayZ-style bag grid as before
   h += '<div class="eyebrow">IN THE BAG — ' + used + '/' + INV_SLOTS + ' SLOTS</div><div class="inv-grid">';
@@ -92,21 +84,22 @@ function invScreen() {
   screen('<div class="panel">' + h + '</div>');
 }
 
-/* Equipment-position markup. weapon -> HANDS, utility -> BELT/UTILITY.
-   Tap an equipped item to stow it (routes through invUnequipSlot, which uses
-   the unchanged invUnequip mechanics — full-bag rule preserved). */
-function eqSlotTag(who, label, itemId, slot) {
-  let h = '<div class="eq-slot"><div class="eyebrow eq-label">' + label + '</div>';
-  if (itemId) {
-    const d = itemDef(itemId);
-    h += '<button class="eq-item" onclick="invUnequipSlot(\'' + who + '\',\'' + slot + '\')">' +
-      artTag(itemId, 'eq-art') +
-      '<span class="slot-name">' + escapeHtml(d.name) + '</span>' +
-      '<small>tap to stow</small></button>';
-  } else {
-    h += '<div class="eq-empty">— empty —</div>';
-  }
-  return h + '</div>';
+/* Test-layer toggles (PoC ONLY): jacket and backpack are outfit layers, not
+   equipment-model slots, so the PoC exposes explicit toggle controls.
+   Transient UI state with defensive defaults; no migration, no gameplay
+   effect — pure presentation. */
+function charTestLayers(who) {
+  if (!g.charTestLayers) g.charTestLayers = {};
+  const k = (who === 'mara') ? 'mara' : 'josh';
+  if (!g.charTestLayers[k]) g.charTestLayers[k] = { jacket: true, backpack: true };
+  return g.charTestLayers[k];
+}
+
+function invToggleCharLayer(who, layer) {
+  const tl = charTestLayers(who);
+  if (layer === 'jacket' || layer === 'backpack') tl[layer] = !tl[layer];
+  saveProto();
+  invScreen();
 }
 
 /* invUnequipSlot: stow the equipped item directly. Same invUnequip mechanics
