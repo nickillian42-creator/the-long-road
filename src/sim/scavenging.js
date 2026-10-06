@@ -200,7 +200,11 @@ function resumeProto() {
     const s = JSON.parse(localStorage.getItem(PROTO_KEY));
     if (!s || !s.proto) throw Error();
     g = migrateSave(s);
+    registerTestItems(); // prototype-only items must be registered on resume, not just new runs
     initSimState(g);
+    // backfill PoC test equipment for saves created before it existed
+    if (!invHas('josh', 'pistol_test', 1)) invAdd('josh', 'pistol_test', 1);
+    if (!invHas('josh', 'longgun_test', 1)) invAdd('josh', 'longgun_test', 1);
     render();
   } catch (e) { notify('No prototype save found.'); scavProto(); }
 }

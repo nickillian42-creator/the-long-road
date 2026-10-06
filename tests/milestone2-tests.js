@@ -716,5 +716,28 @@ console.log('M2K layered character renderer');
   check('pistol badge stays on figure', b.lastScreen().indexOf('data-layer="pistol"') >= 0);
 }
 
+// M2K-resume: prototype-only test items are registered + backfilled on resume,
+// so saves created before they existed still get the full equipment set.
+console.log('M2K resume backfill');
+{
+  const a = fresh();
+  a.scavProtoStart();
+  a.saveProto();
+  // simulate a save from before test items existed: strip them from the stored JSON
+  const s = JSON.parse(a.getStore('longroad_proto'));
+  s.inv.josh.slots = s.inv.josh.slots.filter(function (x) { return x.item !== 'pistol_test' && x.item !== 'longgun_test'; });
+  a.setStore('longroad_proto', JSON.stringify(s));
+  a.resumeProto();
+  check('resume backfills pistol_test', a.invHas('josh', 'pistol_test', 1));
+  check('resume backfills longgun_test', a.invHas('josh', 'longgun_test', 1));
+  check('resume registers test catalog', a.itemDef('pistol_test') && a.itemDef('pistol_test').testOnly === true);
+  // backfilled pistol equips and renders its badge
+  const g4 = a.getG();
+  g4.invSel = { who: 'josh', idx: g4.inv.josh.slots.findIndex(function (x) { return x.item === 'pistol_test'; }) };
+  a.invDo('equip');
+  check('backfilled pistol equips', a.getG().inv.josh.equipment.weapon === 'pistol_test');
+  check('pistol badge renders after resume-equip', a.lastScreen().indexOf('data-layer="pistol"') >= 0);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
