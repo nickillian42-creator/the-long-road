@@ -20,29 +20,38 @@ function invSelect(idx) {
 function invScreen() {
   if (!g || !g.proto) return start();
   g.phase = 'inv';
-  const who = g.invWho || 'josh', inv = invState(who), surv = survOf(who);
+  const who = g.invWho || 'josh', inv = invState(who);
   const other = invOther(who);
   const used = invUsedSlots(who);
+  const eq = inv.equipment;
+  const name = charName(who).toUpperCase();
 
   let h = '<h2>INVENTORY</h2>';
   h += '<div class="inv-tabs">' +
     '<button class="' + (who === 'josh' ? 'selected' : '') + '" onclick="invShow(\'josh\')">JOSH</button>' +
     '<button class="' + (who === 'mara' ? 'selected' : '') + '" onclick="invShow(\'mara\')">MARA</button></div>';
-  h += '<p class="muted">' + escapeHtml(survStatusLine(who)) + '</p>';
 
-  // equipped: minimal Weapon + Utility model
-  const eq = inv.equipment;
-  h += '<div class="eyebrow">EQUIPPED</div><div class="actions">';
-  ['weapon', 'utility'].forEach(function (slot) {
-    const id = eq[slot];
-    h += id
-      ? btn(artTag(id, 'mini-art') + ' ' + escapeHtml(itemDef(id).name) + ' (' + slot + ') — tap to stow', 'invDo(\'unequip:' + slot + '\')', 'choice')
-      : '<button disabled>— ' + slot + ' empty —</button>';
-  });
-  h += '</div>';
+  // CHARACTER — full-body portrait, prominent.
+  // Visual hierarchy: CHARACTER -> WHAT THEY'RE CARRYING -> WHAT'S IN THE BAG.
+  h += '<div class="inv-top"><div class="inv-char">' + charArtTag(who, 'char-full') +
+    '<div class="inv-char-name"><b>' + name + '</b><br><span class="muted">' +
+    escapeHtml(survStatusLine(who)) + '</span></div></div>';
 
-  // slots — DayZ-inspired bag grid: the same artwork as the discovery moment
-  h += '<div class="eyebrow">PACK — ' + used + '/' + INV_SLOTS + ' SLOTS</div><div class="inv-grid">';
+  // ON CHARACTER — equipment positions. PRESENTATION of the existing
+  // {weapon, utility} model: HANDS <- weapon, BELT/UTILITY <- utility.
+  // BACKPACK is a visual of their carried pack (fill indicator, not a slot
+  // in the model); QUICK-ACCESS is a reserved, non-functional slot.
+  h += '<div class="inv-side"><div class="eyebrow">ON ' + name + ' — CARRYING</div><div class="loadout">';
+  h += eqSlotTag(who, 'HANDS', eq.weapon, 'weapon');
+  h += eqSlotTag(who, 'BELT / UTILITY', eq.utility, 'utility');
+  h += '<div class="eq-slot"><div class="eyebrow eq-label">BACKPACK</div><div class="eq-pack">' + packIcon() +
+    '<span class="slot-name">' + used + '/' + INV_SLOTS + ' in the bag</span></div></div>';
+  h += '<div class="eq-slot reserved"><div class="eyebrow eq-label">QUICK-ACCESS</div>' +
+    '<div class="eq-empty">reserved</div></div>';
+  h += '</div></div></div>';
+
+  // IN THE BAG — the same DayZ-style bag grid as before
+  h += '<div class="eyebrow">IN THE BAG — ' + used + '/' + INV_SLOTS + ' SLOTS</div><div class="inv-grid">';
   inv.slots.forEach(function (s, i) {
     const d = itemDef(s.item);
     const sel = g.invSel && g.invSel.who === who && g.invSel.idx === i;
@@ -81,6 +90,33 @@ function invScreen() {
   const back = g.invReturn === 'scavend' ? 'scavEnd(false)' : 'scavScene()';
   h += btn('BACK', back, 'choice');
   screen('<div class="panel">' + h + '</div>');
+}
+
+/* Equipment-position markup. weapon -> HANDS, utility -> BELT/UTILITY.
+   Tap an equipped item to stow it (routes through invUnequipSlot, which uses
+   the unchanged invUnequip mechanics — full-bag rule preserved). */
+function eqSlotTag(who, label, itemId, slot) {
+  let h = '<div class="eq-slot"><div class="eyebrow eq-label">' + label + '</div>';
+  if (itemId) {
+    const d = itemDef(itemId);
+    h += '<button class="eq-item" onclick="invUnequipSlot(\'' + who + '\',\'' + slot + '\')">' +
+      artTag(itemId, 'eq-art') +
+      '<span class="slot-name">' + escapeHtml(d.name) + '</span>' +
+      '<small>tap to stow</small></button>';
+  } else {
+    h += '<div class="eq-empty">— empty —</div>';
+  }
+  return h + '</div>';
+}
+
+/* invUnequipSlot: stow the equipped item directly. Same invUnequip mechanics
+   as before; unlike the old EQUIPPED-row buttons it does not depend on a bag
+   selection first, so tapping an equipped item always stows it. */
+function invUnequipSlot(who, slot) {
+  const r = invUnequip(invKey(who), slot);
+  if (r.msg) notify(r.msg);
+  saveProto();
+  invScreen();
 }
 
 /* invDo dispatches the tapped contextual action for the selected item. */

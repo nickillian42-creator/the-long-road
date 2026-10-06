@@ -52,6 +52,7 @@ function fresh() {
   discoveryTakeOne, discoveryLeaveOne, discoveryLeaveAll,
   itemArt, artTag, blip, packIcon, takeAnimDone, discoveryHeroIdx,
   areaArt, areaArtTag, areaArtId,
+  charArt, charArtTag, invUnequipSlot,
   openInventory, invScreen, invShow, invSelect, invDo,
   has: (n) => typeof globalThis[n] !== 'undefined',
   getG: () => g, setG: v => { g = v; },
@@ -339,7 +340,8 @@ console.log('M2G render smoke');
   a.openInventory('scav');
   let s = a.lastScreen();
   check('inventory renders with tabs', s.indexOf('INVENTORY') >= 0 && s.indexOf('JOSH') >= 0 && s.indexOf('MARA') >= 0);
-  check('pack + equipped shown', s.indexOf('PACK') >= 0 && s.indexOf('EQUIPPED') >= 0);
+  check('character + carrying + bag shown', s.indexOf('char-art') >= 0 && s.indexOf('ON JOSH — CARRYING') >= 0 && s.indexOf('IN THE BAG') >= 0);
+  check('equipment positions present', s.indexOf('HANDS') >= 0 && s.indexOf('BELT / UTILITY') >= 0 && s.indexOf('BACKPACK') >= 0);
   a.invShow('mara');
   check('tab switch renders Mara', a.lastScreen().indexOf('Bandage') >= 0);
   a.invShow('josh');
@@ -585,6 +587,76 @@ console.log('M2I illustrated area cards');
   check('focus view names the area', fscr.indexOf('Abandoned pickup') >= 0);
   check('focus offers quiet + force as blip decisions', fscr.indexOf('SEARCH QUIETLY') >= 0 && fscr.indexOf('FORCE IT') >= 0 && fscr.indexOf('blip-calm') >= 0 && fscr.indexOf('blip-urgent') >= 0);
   check('focus view has step back', fscr.indexOf('STEP BACK') >= 0);
+}
+
+// ---------- M2J: character + loadout inventory presentation ----------
+console.log('M2J character + loadout inventory');
+{
+  const t = fresh();
+
+  // charArt resolution
+  check('charArt falls back to asset path (josh)', t.charArt('josh') === 'assets/chars/josh_fullbody.webp');
+  check('charArt falls back to asset path (mara)', t.charArt('mara') === 'assets/chars/mara_fullbody.webp');
+  check('charArt unknown character -> null (graceful)', t.charArt('ruth') === null);
+
+  // charArt: data-URI branch when a preview build inlines CHAR_ART
+  {
+    const c2 = { CHAR_ART: { josh_fullbody: 'data:image/webp;base64,CCC' },
+      escapeHtml: (s) => String(s) };
+    vm.createContext(c2);
+    vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'src/sim/art.js'), 'utf8'), c2);
+    check('charArt prefers inlined data URI', vm.runInContext('charArt("josh")', c2) === 'data:image/webp;base64,CCC');
+    check('charArt data-URI charArtTag embeds it', vm.runInContext('charArtTag("josh")', c2).indexOf('src="data:image/webp;base64,CCC"') >= 0);
+  }
+
+  // charArtTag markup
+  const ctag = t.charArtTag('josh', 'char-full');
+  check('charArtTag renders img with portrait alt', ctag.indexOf('<img') >= 0 && ctag.indexOf('alt="Josh — full-body portrait"') >= 0 && ctag.indexOf('char-art') >= 0 && ctag.indexOf('char-full') >= 0);
+  check('charArtTag unknown character -> fallback glyph', t.charArtTag('ruth').indexOf('art-fallback') >= 0 && t.charArtTag('ruth').indexOf('<img') < 0);
+
+  // rendered inventory: character art + hierarchy
+  const a = fresh(); a.scavProtoStart();
+  a.openInventory('scav');
+  let s = a.lastScreen();
+  check('josh tab shows his portrait', s.indexOf('josh_fullbody') >= 0);
+  check('carrying section labeled', s.indexOf('ON JOSH — CARRYING') >= 0);
+  check('equipment positions present', s.indexOf('HANDS') >= 0 && s.indexOf('BELT / UTILITY') >= 0 && s.indexOf('BACKPACK') >= 0 && s.indexOf('QUICK-ACCESS') >= 0);
+  check('bag section distinct', s.indexOf('IN THE BAG') >= 0);
+  a.invShow('mara');
+  s = a.lastScreen();
+  check('mara tab shows her portrait', s.indexOf('mara_fullbody') >= 0 && s.indexOf('josh_fullbody') < 0);
+  check('mara carrying section labeled', s.indexOf('ON MARA — CARRYING') >= 0);
+  a.invShow('josh');
+
+  // equipment mapping: starter kit equips knife (weapon) -> HANDS
+  s = a.lastScreen();
+  check('equipped knife shown at HANDS', s.indexOf('HANDS') >= 0 && s.indexOf('Hunting Knife') >= 0);
+
+  // EQUIP flow: flashlight (utility) from bag -> BELT, display updates
+  a.getG().invSel = { who: 'josh', idx: 2 }; // flashlight
+  a.invDo('equip');
+  const g1 = a.getG();
+  check('equip moves item bag -> equipment', g1.inv.josh.equipment.utility === 'flashlight' && a.invCount('josh', 'flashlight') === 0);
+  s = a.lastScreen();
+  check('equipped flashlight shown at BELT', s.indexOf('BELT / UTILITY') >= 0 && s.indexOf('Flashlight') >= 0);
+
+  // UNEQUIP flow: tapping equipped item stows it back in the bag
+  a.invUnequipSlot('josh', 'weapon');
+  const g2 = a.getG();
+  check('unequip returns item to bag', g2.inv.josh.equipment.weapon === null && a.invCount('josh', 'knife') === 1);
+  s = a.lastScreen();
+  check('hands show empty after stow', s.indexOf('HANDS') >= 0 && s.indexOf('— empty —') >= 0);
+
+  // full-bag UNEQUIP blocked: nothing discarded, item stays equipped
+  const b = fresh(); b.scavProtoStart();
+  // josh: water+food+flashlight = 3 slots used, knife equipped (weapon)
+  ['bandage', 'antiseptic', 'ammo_9mm', 'dead_phone', 'mre'].forEach(id => b.invAdd('josh', id, 1));
+  b.invAdd('josh', 'rope', 1); // size 2 -> 10/10 used
+  check('bag filled to capacity', b.invUsedSlots('josh') === 10);
+  b.invUnequipSlot('josh', 'weapon');
+  const g3 = b.getG();
+  check('full-bag unequip keeps item equipped', g3.inv.josh.equipment.weapon === 'knife');
+  check('full-bag unequip discards nothing', b.invUsedSlots('josh') === 10 && b.invCount('josh', 'knife') === 0);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

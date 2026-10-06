@@ -90,3 +90,30 @@ function areaArtTag(areaId, cls) {
   return '<span class="artwrap area-art' + c + '"><span class="art-fallback">◇</span>' +
     '<img src="' + src + '" alt="' + alt + '" loading="lazy" onerror="this.remove()"></span>';
 }
+
+/* --- Character artwork (M2 presentation pass) --------------------------------
+   PRESENTATION ONLY. Full-body illustrated portraits of the two crew members
+   (`art-preview-chars/<id>.webp`, vertical, same gritty graphic-novel style as
+   the item and area art). charArt(who) mirrors itemArt(): prefers an inlined
+   CHAR_ART data-URI map when a preview build provides one, else falls back to
+   the asset path 'assets/chars/<id>.webp' (uploaded via GitHub web; the
+   connector must never push binaries). Unknown characters -> null; callers
+   render a styled placeholder, never a broken image. */
+const CHAR_ART_IDS = { josh: 'josh_fullbody', mara: 'mara_fullbody' };
+const CHAR_NAMES = { josh: 'Josh', mara: 'Mara' };
+
+function charArt(who) {
+  const artId = CHAR_ART_IDS[who] || null;
+  if (!artId) return null;
+  if (typeof CHAR_ART !== 'undefined' && CHAR_ART && CHAR_ART[artId]) return CHAR_ART[artId];
+  return 'assets/chars/' + artId + '.webp';
+}
+
+function charArtTag(who, cls) {
+  const src = charArt(who);
+  const alt = escapeHtml((CHAR_NAMES[who] || String(who)) + ' — full-body portrait');
+  const c = cls ? ' ' + cls : '';
+  if (!src) return '<span class="art-fallback char-art' + c + '" aria-label="' + alt + '">◇</span>';
+  return '<span class="artwrap char-art' + c + '"><span class="art-fallback">◇</span>' +
+    '<img src="' + src + '" alt="' + alt + '" loading="lazy" onerror="this.remove()"></span>';
+}
